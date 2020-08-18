@@ -1,0 +1,48 @@
+/* miniprogram/pages/otherInsideOrderList/otherInsideOrderList.wxss */
+@import "../../app.wxss";
+page{
+  background-color: #f1f1f1;
+}
+.slot-con{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.slot-con .slot-cell{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 68px;
+  font-size: 30rpx;
+  font-weight: bold;
+  /* padding:16rpx; */
+}
+/* .slot-con .slot-cell van-image{
+  margin-top:16rpx;
+} */
+.slot-con .slot-cell text{
+  line-height: 68px;
+}
+.change-text{
+  color:white;
+  background-color: #5A9367;
+}
+.delete-text{
+  color:white;
+  background-color: #ed556a;
+}
+/* 按钮样式 */
+.btn-style {
+  color: #fff;
+  background-color: #5A9367;
+  font-weight:bold;
+  font-size: 36rpx;
+  height: 100rpx;
+  width: 300rpx;
+  line-height: 100rpx;
+  padding: 0;
+  border-radius: 100rpx;
+  margin: 60rpx auto;
+  box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.1);
+}

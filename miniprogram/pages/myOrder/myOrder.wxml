@@ -1,0 +1,36 @@
+<!--miniprogram/pages/myOrder/myOrder.wxml-->
+<view class='cu-custom'>
+	<view class="cu-bar fixed bg-shadeTop" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+		<navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
+			<text class='cuIcon-back'></text> 返回
+		</navigator>
+		<view class='content' style='top:{{StatusBar}}px;'>我的订单</view>
+	</view>
+</view>
+<view style="height:{{CustomBar}}px;width:100%;">
+</view>
+<van-toast id="van-toast" />
+<van-dialog id="van-dialog" confirm-button-color="#5A9367"/>
+<van-cell title="选择查看日期" value="{{ date }}" bind:click="onCalendarShow" is-link />
+<van-calendar type="range" show="{{ calendarShow }}" default-date="{{defaultDate}}" min-date="{{ minDate }}" max-date="{{ maxDate }}" bind:close="onCalendarClose" bind:confirm="onCalendarConfirm" color="#5A9367" />
+<view wx:for-items="{{list}}" wx:for-index="index_list" wx:for-item="item_list">
+	<van-cell-group title="{{item_list.formatDate}}">
+	<view wx:for="{{item_list.items}}">
+		<!-- <view wx:for="{{item_list.items}}" wx:for-index="index_items" wx:fot-item="item_items"> -->
+			<van-cell>
+				<view slot="title">
+					<view class="van-cell-text bold text-title-in-cell">订单{{index+1}}</view>
+					<van-tag round color="#5A9367" size="medium">{{item.totalNum}}份</van-tag>
+				</view>
+				<view>
+					<view class="van-cell-text bold text-title-in-cell text-price text-red">{{item.totalPrice}}</view>
+					<view>{{item.completed==0?item.createdTime_format:(item.completed==1?'':item.completedTime_format)}} {{item.completed==0?'已下单':(item.completed==1?'正在处理':'已完成')}}</view>
+					<van-button data-item="{{item}}" data-idx1="{{index_list}}" bindtap="{{item.completed<2?'toShow':'toRate'}}" round size="small" color="{{item.completed!=2?'#5A9367':''}}" type="{{item.completed!=2?'primary':'default'}}">{{item.completed<2?'查看':'评价'}}</van-button>
+				</view>
+			</van-cell>
+		</view>
+
+	</van-cell-group>
+</view>
+
+<van-divider hairline contentPosition="center" textColor="#5A9367" borderColor="#39b54a">{{list.length!=0?('已消费'+totalPrice+'元'):'暂无订单记录'}}</van-divider>

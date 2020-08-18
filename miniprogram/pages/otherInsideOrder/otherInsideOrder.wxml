@@ -1,0 +1,42 @@
+<!--miniprogram/pages/otherInsideOrder/otherInsideOrder.wxml-->
+<view class='cu-custom'>
+	<view class="cu-bar fixed bg-shadeTop" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+		<navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
+			<text class='cuIcon-back'></text> 返回
+		</navigator>
+		<view class='content' style='top:{{StatusBar}}px;'>外部人员</view>
+	</view>
+</view>
+<view style="height:{{CustomBar}}px;width:100%;">
+</view>
+<van-toast id="van-toast" />
+<van-dialog id="van-dialog" confirm-button-color="#5A9367" />
+<van-notice-bar mode="closeable" text="请在当天的0:00-10:00内提交，过时不处理" />
+<form bindsubmit="onFormSubmit">
+	<view class="cu-form-group">
+		<view class="title">当前时间</view>
+		<view>{{now}}</view>
+	</view>
+	<view class="cu-form-group">
+		<view class="title">编号</view>
+		<input style="text-align:right;" name="userId" type="text" value="{{userInfo.userId==undefined?'':userInfo.userId}}" maxlength="{{8}}" placeholder="请输入编号"></input>
+	</view>
+	<view class="cu-form-group">
+		<view class="title">用餐人数</view>
+		<!-- <van-stepper name="number" value="{{ num }}" max="{{2000}}" bind:change="onStepChange" /> -->
+		<input style="text-align:right;" name="number" type="number" maxlength="{{4}}" value="{{num!=0?num:''}}" placeholder="请输入用餐人数"></input>
+	</view>
+	<view class="cu-form-group">
+		<view class="title">就餐类型</view>
+		<picker name="state" bindchange="eatPickerChange" value="{{eatIndex}}" range="{{eatList}}" range-key="value">
+			<view class="picker">
+				{{eatIndex!=3?eatList[eatIndex].value:'如需报备多餐需分开提交'}}
+			</view>
+		</picker>
+	</view>
+	<view class="cu-form-group">
+		<view class="title">食堂</view>
+		<view>杜家坎人民公社大食堂</view>
+	</view>
+	<button class="button-style bg-green" hover-class="hover-button-style" formType="submit" bindtap="toSend">提交</button>
+</form>

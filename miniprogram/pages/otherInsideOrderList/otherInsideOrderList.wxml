@@ -1,0 +1,53 @@
+<!--miniprogram/pages/otherInsideOrderList/otherInsideOrderList.wxml-->
+<view class='cu-custom'>
+	<view class="cu-bar fixed bg-shadeTop" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+		<navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
+			<text class='cuIcon-back'></text> 返回
+		</navigator>
+		<view class='content' style='top:{{StatusBar}}px;'>报备列表</view>
+	</view>
+</view>
+<view style="height:{{CustomBar}}px;width:100%;">
+</view>
+<van-toast id="van-toast" />
+<van-dialog id="van-dialog" confirm-button-color="#5A9367" />
+<!-- <van-cell-group>
+	<van-cell title="用餐日期" value="{{date}}" />
+	<van-cell wx:for="{{list}}" value="{{item.isAuto?'自动':item.formatTime}}提交" data-item="{{item}}" isLink="{{item.isLink}}" bind:click="onCellClick">
+		<view slot="title">
+			<view class="van-cell-text bold text-title-in-cell">{{item.state==1?'早餐':item.state==2?'午餐':'晚餐'}}
+				<view wx:if="{{item.others}}" class="cu-tag round bg-red"></view>
+			</view>
+			<van-tag round color="#39b54a" size="medium">{{item.others?item.number:'个'}}人</van-tag>
+		</view>
+	</van-cell>
+</van-cell-group> -->
+<van-cell title="用餐日期" value="{{date}}" />
+<van-swipe-cell disabled="{{!item.isLink}}" wx:for="{{list}}"  data-idx="{{index}}" data-item="{{item}}" right-width="{{ 65 }}" left-width="{{ 65 }}" async-close bind:close="onCellCase">
+<!-- <van-swipe-cell wx:for="{{list}}" data-idx="{{index}}" data-item="{{item}}" right-width="{{ 65 }}" left-width="{{ 65 }}" async-close bind:close="onCellCase"> -->
+	<view slot="left">
+		<view class="slot-con">
+			<view class="slot-cell delete-text">
+				<text>删除</text>
+			</view>
+		</view>
+	</view>
+	<van-cell-group>
+		<van-cell value="{{item.isAuto?'自动':item.formatTime}}提交">
+			<view slot="title">
+				<view class="van-cell-text bold text-title-in-cell">{{item.state==1?'早餐':item.state==2?'午餐':'晚餐'}}
+					<view wx:if="{{item.others}}" class="cu-tag round bg-red"></view>
+				</view>
+				<van-tag round color="#5A9367" size="medium">{{item.others?item.number:'个'}}人</van-tag>
+			</view>
+		</van-cell>
+	</van-cell-group>
+	<view slot="right">
+		<view class="slot-con">
+			<view class="slot-cell change-text">
+				<text>修改</text>
+			</view>
+		</view>
+	</view>
+</van-swipe-cell>
+<button class="btn-style bg-green" hover-class="hover-button-style" bindtap="toOthers">添加其他报备</button>

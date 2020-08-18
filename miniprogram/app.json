@@ -1,0 +1,65 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/otherInsideOrder/otherInsideOrder",
+    "pages/confirmMenu/confirmMenu",
+    "pages/otherInsideOrderList/otherInsideOrderList",
+    
+    "pages/updateOrder/updateOrder",
+    
+    "pages/menu/menu",
+    "pages/orderList/orderList",
+    "pages/eatNum/eatNum",
+    
+    "pages/myOrder/myOrder",
+    "pages/rate/rate",
+    "pages/takeAway/takeAway",
+    "pages/check/check",
+    "pages/confirmOrder/confirmOrder",
+    "pages/privacy/privacy",
+    "pages/protocol/protocol"
+    
+    
+  ],
+  "usingComponents": {
+    "cu-custom": "colorui/components/cu-custom",
+    "van-checkbox": "@vant/weapp/checkbox/index",
+    "van-checkbox-group": "@vant/weapp/checkbox-group/index",
+    "van-sidebar": "@vant/weapp/sidebar/index",
+    "van-sidebar-item": "@vant/weapp/sidebar-item/index",
+    "van-tree-select": "@vant/weapp/tree-select/index",
+    "van-submit-bar": "@vant/weapp/submit-bar/index",
+    "van-stepper": "@vant/weapp/stepper/index",
+    "van-card": "@vant/weapp/card/index",
+    "van-button": "@vant/weapp/button/index",
+    "van-field": "@vant/weapp/field/index",
+    "van-tab": "@vant/weapp/tab/index",
+    "van-tabs": "@vant/weapp/tabs/index",
+    "van-collapse": "@vant/weapp/collapse/index",
+    "van-collapse-item": "@vant/weapp/collapse-item/index",
+    "van-rate": "@vant/weapp/rate/index",
+    "van-notice-bar": "@vant/weapp/notice-bar/index",
+    "van-cell": "@vant/weapp/cell/index",
+    "van-cell-group": "@vant/weapp/cell-group/index",
+    "van-tag": "@vant/weapp/tag/index",
+    "van-calendar": "@vant/weapp/calendar/index",
+    "van-divider": "@vant/weapp/divider/index",
+    "van-panel": "@vant/weapp/panel/index",
+    "van-toast": "@vant/weapp/toast/index",
+    "van-dialog": "@vant/weapp/dialog/index",
+    "van-picker": "@vant/weapp/picker/index",
+    "van-overlay": "@vant/weapp/overlay/index",
+    "van-popup": "@vant/weapp/popup/index",
+    "van-loading": "@vant/weapp/loading/index",
+    "van-swipe-cell": "@vant/weapp/swipe-cell/index"
+  },
+  "window": {
+    "backgroundColor": "#c6dfc8",
+    "backgroundTextStyle": "light",
+    "navigationStyle": "custom",
+    "navigationBarBackgroundColor": "#c6dfc8",
+    "navigationBarTitleText": "杜家坎人民公社大食堂",
+    "navigationBarTextStyle": "white"
+  },
+  "sitemapLocation": "sitemap.json"
+}

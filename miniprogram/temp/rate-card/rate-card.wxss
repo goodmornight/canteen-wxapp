@@ -1,0 +1,58 @@
+/* @import "../../app.wxss"; */
+.rateCard-con{
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  padding: 20rpx 25rpx;
+  margin-bottom:2rpx;
+}
+.rateCard-con .top{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* justify-content: center; */
+  /* text-align: center; */
+  margin-top:10rpx;
+  margin-bottom: 20rpx;
+  /* align-items: flex-start; */
+}
+
+.rateCard-con .top .top-right{
+  /* display: inline-block; */
+  display: flex;
+  flex-direction: column;
+  margin-left: 20rpx;
+  width: 70%;
+}
+
+.rateCard-con .bottom{
+  position: relative;
+  border-top: 1px dashed #aaa;
+  padding: 20rpx 10rpx 10rpx 0;
+}
+.rateCard-con .bottom textarea{
+  height: 180rpx;
+  width: 100%;
+  padding: 0 10rpx;
+
+}
+.rateCard-con .bottom .van-btn-sm{
+  position: absolute;
+  bottom:0;
+  right: 0;
+}
+.btn-style{
+  color: #fff;
+  background-color: #5A9367;
+  font-weight:bold;
+  font-size: 36rpx;
+  height: 90rpx;
+  
+  line-height: 90rpx;
+  padding: 0;
+  border-radius: 90rpx;
+  box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.1);
+}
+.hover-btn-style{
+  opacity: 0.7;
+}

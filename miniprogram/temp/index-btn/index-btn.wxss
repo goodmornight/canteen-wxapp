@@ -1,0 +1,36 @@
+/* miniprogram/temp/index-btn/index-btn.wxss */
+@import "../../app.wxss";
+.indexBtn{
+  /* color: #77AF9C; */
+  color:#5A9367;
+  background-color: rgba(255,255,255);
+  width: 300rpx;
+  height: 200rpx;
+  border-radius: 15rpx;
+  box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.2);
+  position: relative;
+  margin: 15rpx;
+  /* padding:20rpx; */
+}
+.indexBtn .title{
+  top:30rpx;
+  left:30rpx;
+  font-weight: bold;
+  font-size: 34rpx;
+  position: absolute;
+}
+.indexBtn .others{
+  color: #77AF9C;
+  bottom:30rpx;
+  left:30rpx;
+  font-weight: bold;
+  font-size: 28rpx;
+  position: absolute;
+}
+.indexBtn image{
+  position: absolute;
+  bottom: 30rpx;
+  right: 30rpx;
+  width: 50rpx;
+  height: 50rpx;
+}

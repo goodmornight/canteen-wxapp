@@ -1,0 +1,68 @@
+/**index.wxss**/
+@import "../../temp/index-btn/index-btn.wxss";
+
+page {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  /* background-color: #f1f1f1; */
+}
+.bar-border{
+  box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.1);
+}
+.userInfo-con {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  /* margin-top: 50rpx; */
+}
+.margin-normal{
+  margin: 50rpx auto;
+}
+.userInfo-con .avatar {
+  width: 160rpx;
+  border-radius: 100%;
+  margin: 30rpx;
+  /* margin-top: 12%; */
+  overflow: hidden;
+  box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.2);
+}
+
+.userInfo-con .nickName {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #5A9367;
+  margin-bottom: 10rpx;
+}
+
+.userInfo-con .number {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #5A9367;
+  margin-bottom: 10rpx;
+}
+
+.btn-con {
+  margin: 20rpx auto 50rpx auto;
+}
+
+.btn-row {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  justify-content: center;
+}
+
+.state-con {
+  /* margin: 0 30px; */
+  color:#77AF9C;
+  font-weight: bold;
+  border-radius: 15rpx;
+  width: 630rpx;
+  margin:0 auto;
+}
+.text-green-dark{
+  color: #5A9367;
+}

@@ -1,0 +1,180 @@
+<!--miniprogram/pages/menu/menu.wxml-->
+<view class='cu-custom'>
+	<view class="cu-bar fixed bg-shadeTop" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+		<navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
+			<text class='cuIcon-back'></text> 返回
+		</navigator>
+		<view class='content' style='top:{{StatusBar}}px;'>今日菜谱</view>
+	</view>
+</view>
+<van-toast id="van-toast" />
+<van-dialog id="van-dialog" confirm-button-color="#5A9367"/>
+<swiper class="screen-swiper" indicator-dots="true" circular="true" autoplay="true" interval="5000" duration="500">
+	<swiper-item wx:for="{{2}}" wx:key>
+		<!-- <image src="https://image.weilanwl.com/img/4x3-{{index+1}}.jpg" mode='aspectFill'></image> -->
+		<image src="../../images/canteen-{{index+1}}.jpg" mode='aspectFill'></image>
+	</swiper-item>
+</swiper>
+
+<van-tabs tab-class="tabs-class" tab-active-class="active-class" color="#285943" active="{{ activeTab }}" sticky="{{true}}" bind:change="onTabsChange">
+	<van-tab wx:for="{{menuList}}" wx:for-index="index_w" wx:for-item="item_w" title="{{item_w.title_w}}">
+		<van-collapse value="{{ activeClassColNames }}" border="{{false}}" bind:change="onClassColChange">
+			<van-collapse-item wx:for="{{item_w.list_w}}" wx:for-index="index_c" wx:for-item="item_c" content-class="collapse-no-padding" title="{{item_c.title_c}}" name="{{index_c}}">
+				<van-cell-group wx:for="{{item_c.list_c}}" wx:for-index="index_d" wx:for-item="item_d" title="{{item_d.className}}">
+					<view class="cu-list menu-avatar">
+						
+						<view wx:for="{{item_d.list_d}}" class="cu-item">
+							<image class="cu-avatar radius lg" mode="aspectFill" src="{{item.imgSrc==''?'../../images/test.jpg':item.imgSrc}}"></image>
+							<view class="content">
+								<view class="text-theme-color">
+									<text class="text-cut">{{item.name}}</text>
+								</view>
+								<van-rate readonly value="{{ item.rate }}"/>
+
+							</view>
+							<view wx:if="{{item.isSpecial}}" class="action">
+								<view class="cu-tag round bg-red"></view>
+							</view>
+						</view>
+					</view>
+				</van-cell-group>
+			</van-collapse-item>
+		</van-collapse>
+	</van-tab>
+	<!-- <van-tab title="星期一">
+		<van-collapse value="{{ activeClassColNames }}" border="{{false}}" bind:change="onClassColChange">
+			<van-collapse-item content-class="collapse-no-padding" title="早餐" name="1">
+				<van-cell-group title="主食">
+
+					<view class="cu-list menu-avatar">
+
+						<view class="cu-item ">
+							<image class="cu-avatar radius lg" mode="aspectFill" src="../../images/test.jpg"></image>
+							<view class="content">
+								<view class="text-theme-color">
+									<text class="text-cut">宫保鸡丁</text>
+								</view>
+								<van-rate readonly value="{{ starValue }}" bind:change="onStarChange" />
+
+							</view>
+							<view class="action">
+								<view class="cu-tag round bg-red"></view>
+							</view>
+						</view>
+						<view class="cu-item grayscale">
+							<view class="cu-avatar radius lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big81007.jpg);"></view>
+							<view class="content">
+								<view>
+									<text class="text-cut">伊泽瑞尔</text>
+									<view class="cu-tag round bg-orange sm">断开连接...</view>
+								</view>
+								<view class="text-gray text-sm flex">
+									<text class="text-cut"> 等我回来一个打十个</text>
+								</view>
+							</view>
+							<view class="action">
+								<view class="text-grey text-xs">22:20</view>
+								<view class="cu-tag round bg-red sm">5</view>
+							</view>
+						</view>
+						<view class="cu-item cur">
+							<view class="cu-avatar radius lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big81020.jpg);">
+								<view class="cu-tag badge"></view>
+							</view>
+							<view class="content">
+								<view>
+									<text class="text-cut">瓦罗兰大陆-睡衣守护者-新手保护营</text>
+									<view class="cu-tag round bg-orange sm">6人</view>
+								</view>
+								<view class="text-gray text-sm flex">
+									<text class="text-cut"> 伊泽瑞尔：<text class="cuIcon-locationfill text-orange margin-right-xs"></text> 传送中...</text>
+								</view>
+							</view>
+							<view class="action">
+								<view class="text-grey text-xs">22:20</view>
+								<view class="cuIcon-notice_forbid_fill text-gray"></view>
+							</view>
+						</view>
+					</view>
+				</van-cell-group>
+			</van-collapse-item>
+			<van-collapse-item title="午餐" name="2">
+				网店吸粉获客、会员分层营销、一机多种收款，告别经营低效和客户流失
+			</van-collapse-item>
+			<van-collapse-item title="晚餐" name="3">
+				线上拓客，随时预约，贴心顺手的开单收银
+			</van-collapse-item>
+		</van-collapse>
+	</van-tab>
+	<van-tab title="星期二">
+		<van-collapse value="{{ activeClassColNames }}" border="{{false}}" bind:change="onClassColChange">
+			<van-collapse-item content-class="collapse-no-padding" title="早餐" name="1">
+				<van-cell-group title="主食">
+
+					<view class="cu-list menu-avatar">
+
+						<view class="cu-item ">
+							<image class="cu-avatar radius lg" mode="aspectFill" src="../../images/test.jpg"></image>
+							
+							<view class="content">
+								<view class="text-theme-color">
+									<text class="text-cut">宫保鸡丁</text>
+								</view>
+								<van-rate readonly value="{{ starValue }}" bind:change="onStarChange" />
+
+							</view>
+							<view class="action">
+								<view class="cu-tag round bg-red"></view>
+							</view>
+						</view>
+						<view class="cu-item grayscale">
+							<view class="cu-avatar radius lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big81007.jpg);"></view>
+							<view class="content">
+								<view>
+									<text class="text-cut">伊泽瑞尔</text>
+									<view class="cu-tag round bg-orange sm">断开连接...</view>
+								</view>
+								<view class="text-gray text-sm flex">
+									<text class="text-cut"> 等我回来一个打十个</text>
+								</view>
+							</view>
+							<view class="action">
+								<view class="text-grey text-xs">22:20</view>
+								<view class="cu-tag round bg-red sm">5</view>
+							</view>
+						</view>
+						<view class="cu-item cur">
+							<view class="cu-avatar radius lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big81020.jpg);">
+								<view class="cu-tag badge"></view>
+							</view>
+							<view class="content">
+								<view>
+									<text class="text-cut">瓦罗兰大陆-睡衣守护者-新手保护营</text>
+									<view class="cu-tag round bg-orange sm">6人</view>
+								</view>
+								<view class="text-gray text-sm flex">
+									<text class="text-cut"> 伊泽瑞尔：<text class="cuIcon-locationfill text-orange margin-right-xs"></text> 传送中...</text>
+								</view>
+							</view>
+							<view class="action">
+								<view class="text-grey text-xs">22:20</view>
+								<view class="cuIcon-notice_forbid_fill text-gray"></view>
+							</view>
+						</view>
+					</view>
+				</van-cell-group>
+			</van-collapse-item>
+			<van-collapse-item title="午餐" name="2">
+				网店吸粉获客、会员分层营销、一机多种收款，告别经营低效和客户流失
+			</van-collapse-item>
+			<van-collapse-item title="晚餐" name="3">
+				线上拓客，随时预约，贴心顺手的开单收银
+			</van-collapse-item>
+		</van-collapse>
+	</van-tab>
+	<van-tab title="星期三">内容 4</van-tab>
+	<van-tab title="星期四">内容 4</van-tab>
+	<van-tab title="星期五">内容 4</van-tab>
+	<van-tab title="星期六">内容 4</van-tab>
+	<van-tab title="星期日">内容 4</van-tab> -->
+</van-tabs>

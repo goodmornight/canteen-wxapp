@@ -1,0 +1,9 @@
+[
+  {
+    "name": "获取的对应A下的Bs",
+    "value": {
+      "action": "getBsinA",
+      "classA": "3a573aaa5e7dbaca001359a8564315f7"
+    }
+  }
+]

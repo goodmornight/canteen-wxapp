@@ -1,0 +1,60 @@
+<!--index.wxml-->
+<import src="../../temp/index-btn/index-btn.wxml" />
+
+<cu-custom bgColor="custom">
+	<view slot="content">杜家坎人民公社食堂</view>
+</cu-custom>
+<van-toast id="van-toast" />
+<van-dialog id="van-dialog" confirm-button-color="#5A9367"/>
+<van-notice-bar
+  mode="closeable"
+	speed="{{30}}"
+	color="#5A9367"
+	backgroundColor="#fff"
+	custom-class="bar-border"
+  text="1.特色外卖需前一天的16:00前下单。2.外部人员于食堂就餐，需当天0:00-10:00内，提交就餐报备。">
+<text slot="left-icon"><text class="cuIcon-notificationfill lg" style="color:#5A9367;"></text></text>
+</van-notice-bar>
+<view class="userInfo-con {{(userInfo.rank>0||userInfo.rank!=undefined)?'':'margin-normal'}}">
+	<open-data class="avatar" default-avatar="../../images/icons/{{userInfo.gender==2?'girl':'boy'}}.png" type="userAvatarUrl"></open-data>
+	<open-data class="nickName" default-text="用户" type="userNickName"></open-data>
+	<view class="number">{{userInfo.userId!=undefined?userInfo.userId:'未绑定'}}</view>
+</view>
+<view wx:if="{{userInfo.rank>0&&userInfo.rank!=undefined}}" class="padding flex text-center bg-white shadow-warp state-con">
+	<view class="flex flex-sub flex-direction solid-right">
+		<view class="text-green-dark">
+			早餐</view>
+		<view class="text-xxl margin-top-sm">{{recordingList[0]}}</view>
+
+	</view>
+	<view class="flex flex-sub flex-direction solid-right">
+		<view class="text-green-dark">
+			午餐</view>
+		<view class="text-xxl margin-top-sm">{{recordingList[1]}}</view>
+
+	</view>
+	<view class="flex flex-sub flex-direction">
+
+		<view class="text-green-dark">
+			晚餐</view>
+		<view class="text-xxl margin-top-sm">{{recordingList[2]}}</view>
+	</view>
+</view>
+<view class="btn-con">
+	<view wx:if="{{userInfo.rank>0&&userInfo.rank!=undefined}}" class="btn-row">
+		<template is="indexBtn-temp" data="{{item:eatNum}}"></template>
+		<template is="indexBtn-temp" data="{{item:orderList}}"></template>
+	</view>
+	<view class="btn-row">
+		<template is="indexBtn-temp" data="{{item:menu}}"></template>
+		<template is="indexBtn-temp" data="{{item:otherInsideOrder}}"></template>
+	</view>
+	<view class="btn-row">
+		<template is="indexBtn-temp" data="{{item:takeAway}}"></template>
+		<template is="indexBtn-temp" data="{{item:myOrder}}"></template>
+	</view>
+	<view class="btn-row">
+		<template is="indexBtn-temp" data="{{item:rate}}"></template>
+		<template is="indexBtn-temp" data="{{item:mySetting}}"></template>
+	</view>
+</view>

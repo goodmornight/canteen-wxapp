@@ -1,0 +1,8 @@
+<!--miniprogram/temp/index-btn/index-btn.wxml-->
+<template name="indexBtn-temp">
+  <view class="indexBtn" hover-class="hover-class" bindtap="{{item.bindtap}}">
+    <text class="title">{{item.title}}</text>
+    <text class="others">{{item.others}}</text>
+    <image src="{{item.imgSrc}}"></image>
+  </view>
+</template>

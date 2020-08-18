@@ -1,0 +1,5 @@
+/* miniprogram/pages/rate/rate.wxss */
+@import "../../temp/rate-card/rate-card.wxss";
+page{
+  background-color: #f1f1f1;
+}

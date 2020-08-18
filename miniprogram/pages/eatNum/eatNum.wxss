@@ -1,0 +1,7 @@
+/* miniprogram/pages/eatNum/eatNum.wxss */
+page{
+  background-color: #f1f1f1;
+}
+.collapse-no-padding{
+  padding:0!important;
+}

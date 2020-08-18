@@ -1,0 +1,17 @@
+<!--miniprogram/pages/updateOrder/updateOrder.wxml-->
+<view class='cu-custom'>
+	<view class="cu-bar fixed bg-shadeTop" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+		<navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
+			<text class='cuIcon-back'></text> 返回
+		</navigator>
+		<view class='content' style='top:{{StatusBar}}px;'>就餐报备</view>
+	</view>
+</view>
+<view style="height:{{CustomBar}}px;width:100%;">
+</view>
+<van-toast id="van-toast" />
+<van-dialog id="van-dialog" confirm-button-color="#5A9367"/>
+<view class="btn-con">
+	<button class="button-style" hover-class="hover-button-style" bindtap="toMe">个人</button>
+	<button class="button-style" hover-class="hover-button-style" bindtap="toOther">外部人员</button>
+</view>

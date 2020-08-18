@@ -1,0 +1,21 @@
+<!--miniprogram/pages/rate/rate.wxml-->
+<import src="../../temp/rate-card/rate-card.wxml" />
+<view class='cu-custom'>
+	<view class="cu-bar fixed bg-shadeTop" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+		<navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
+			<text class='cuIcon-back'></text> 返回
+		</navigator>
+		<view class='content' style='top:{{StatusBar}}px;'>意见建议</view>
+	</view>
+</view>
+<view style="height:{{CustomBar}}px;width:100%;">
+</view>
+<van-toast id="van-toast" />
+<van-dialog id="van-dialog" confirm-button-color="#5A9367"/>
+<van-cell title="选择日期" value="{{ date }}" bind:click="onCalendarShow" is-link />
+<van-calendar color="#5A9367" type="single" default-date="{{defaultDate}}" min-date="{{ minDate }}" max-date="{{ maxDate }}" show="{{ calendarShow }}" formatter="{{ formatter }}" bind:close="onCalendarClose" bind:confirm="onCalendarConfirm" />
+<van-tabs color="#5A9367" active="{{ activeTab }}" sticky="{{true}}" bind:change="onTabsChange">
+	<van-tab wx:for="{{rateList}}" wx:for-index="index_rateList" wx:for-item="item_rateList" title="{{item_rateList.tab}}">
+		<template wx:for="{{item_rateList.list}}" is="rateCard-temp" data="{{item:item,idx2:index,idx1:index_rateList}}"></template>
+	</van-tab>
+</van-tabs>

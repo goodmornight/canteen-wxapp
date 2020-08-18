@@ -1,0 +1,25 @@
+/* miniprogram/pages/protocol/protocol.wxss */
+page {
+  /* background-color: #d8e3e7; */
+}
+.privacy-title {
+  font-weight: bold;
+  font-size: 42rpx;
+  text-align: center;
+  margin: 30rpx;
+}
+
+.privacy-content {
+  /* display: block; */
+  font-size: 32rpx;
+  margin: 10rpx 30rpx;
+  text-indent: 2em;
+  text-align: left;
+}
+
+.bold-text {
+  font-weight: bold;
+}
+.underline-text{
+  text-decoration:underline;
+}

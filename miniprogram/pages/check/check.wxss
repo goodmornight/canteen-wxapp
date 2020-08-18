@@ -1,0 +1,84 @@
+/* miniprogram/pages/check/check.wxss */
+@import "../../app.wxss";
+
+swiper {
+  width: 100%;
+  height: 1200rpx;
+}
+swiper-item{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+.check-con {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  /* margin-top: 200rpx; */
+}
+.check-con .title {
+  color: #5A9367;
+  font-weight: 900;
+  font-size: 60rpx;
+  margin-bottom: 60rpx;
+}
+
+
+.checkbox-class {
+  font-size: 30rpx;
+  margin: 30rpx;
+}
+
+.link-text {
+  color: #5A9367;
+}
+.two-btn{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+  margin-top: 50rpx;
+}
+.two-btn .btn-img-style{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background-color: #5A9367;
+  font-size: 36rpx;
+  font-weight: bold;
+  height: 100rpx;
+  width: 250rpx;
+  line-height: 100rpx;
+  padding: 0 10rpx 0 30rpx;
+  border-radius: 80rpx;
+  box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.1);
+}
+.two-btn .btn-no-img-style{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background-color: #5A9367;
+  font-size: 34rpx;
+  height: 100rpx;
+  width: 220rpx;
+  line-height: 100rpx;
+  font-weight: bold;
+  /* padding: 0 10rpx 0 30rpx; */
+  border-radius: 80rpx;
+  box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.1);
+}
+.two-btn button text{
+  margin: 0 auto;
+}
+.two-btn button image{
+  width: 50rpx;
+  height: 50rpx;
+  margin: 0 auto;
+}

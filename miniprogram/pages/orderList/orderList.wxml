@@ -1,0 +1,19 @@
+<!--miniprogram/pages/orderList/orderList.wxml-->
+<view class='cu-custom'>
+	<view class="cu-bar fixed bg-shadeTop" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+		<navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
+			<text class='cuIcon-back'></text> 返回
+		</navigator>
+		<view class='content' style='top:{{StatusBar}}px;'>外卖订单</view>
+	</view>
+</view>
+
+<view style="height:{{CustomBar}}px;width:100%;">
+</view>
+
+<van-toast id="van-toast" />
+<van-cell title="时间" value="{{date}}" />
+
+<van-cell-group wx:for="{{totalList}}" wx:for-index="index_total" wx:for-item="item_total" title="{{item_total.className}}">
+	<van-cell wx:for="{{item_total.list}}" title="{{item.name}}" value="{{item.num}}份" />
+</van-cell-group>

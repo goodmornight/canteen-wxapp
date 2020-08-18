@@ -1,0 +1,9 @@
+/* miniprogram/pages/confirmMenu/confirmMenu.wxss */
+@import "../../app.wxss";
+page{
+  background-color: #f1f1f1;
+}
+.checkbox-class{
+  font-size: 32rpx;
+  line-height: 60rpx!important;
+}

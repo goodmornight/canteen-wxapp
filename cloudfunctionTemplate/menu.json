@@ -1,0 +1,29 @@
+[
+  {
+    "name": "测试addMenu",
+    "value": {
+      "action": "addMenu",
+      "state": 1,
+      "curTime": 8
+    }
+  },
+  {
+    "name": "getTodayMenu",
+    "value": {
+      "action": "getTodayMenu",
+      "today": "Tue Apr 21 2020 23:59:00 GMT+0800 (GMT+08:00)"
+    }
+  },
+  {
+    "name": "getWeekMenu",
+    "value": {
+      "action": "getWeekMenu"
+    }
+  },
+  {
+    "name": "getTomorrowMenu",
+    "value": {
+      "action": "getTomorrowMenu"
+    }
+  }
+]

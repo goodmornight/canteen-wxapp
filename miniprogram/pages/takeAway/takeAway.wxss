@@ -1,0 +1,86 @@
+/* miniprogram/pages/takeAway/takeAway.wxss */
+
+@import "../../app.wxss";
+page{
+  background-color: #e7ebed;
+}
+/* swiper {
+  position: absolute;
+  top:0;
+  right: 0;
+  height: 1000rpx;
+  width: 100%;
+} */
+/* pages/component/nav/nav.wxss */
+.VerticalNav.nav {
+  width: 200rpx;
+  white-space: initial;
+}
+
+.VerticalNav.nav .cu-item {
+  width: 100%;
+  background-color: #fff;
+  margin: 0;
+  border: none;
+  height: 50px;
+  position: relative;
+  /* justify-content: center;
+  display: flex;
+  flex-direction: column; */
+  text-align: center;
+
+}
+
+.VerticalNav.nav .cu-item.cur {
+  background-color: #f1f1f1;
+}
+
+.VerticalNav.nav .cu-item.cur::after {
+  content: "";
+  width: 8rpx;
+  height: 30rpx;
+  border-radius: 10rpx 0 0 10rpx;
+  position: absolute;
+  background-color: currentColor;
+  top: 0;
+  right: 0rpx;
+  bottom: 0;
+  margin: auto;
+}
+
+.VerticalBox {
+  display: flex;
+}
+
+.VerticalMain {
+  background-color: #f1f1f1;
+}
+/* van-submit-bar{
+  height: 60px;
+} */
+/*下面订单栏的高度*/
+.submit-bar-class{
+  height: 125rpx;
+}
+.cart-btn{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  font-size: 40rpx;
+}
+.cart-btn text{
+  font-size: 20rpx;
+}
+/* 商品栏标题的字体大小 */
+.card-title-class{
+  font-size: 32rpx;
+}
+/* 商品栏价格的大小 */
+.card-price-class{
+  font-size: 32rpx!important;
+}
+/* 购物车单元格内容 */
+.cell-title{
+  font-weight: bold;
+}

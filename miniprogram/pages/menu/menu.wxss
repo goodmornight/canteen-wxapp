@@ -1,0 +1,26 @@
+/* miniprogram/pages/menu/menu.wxss */
+@import "../../app.wxss";
+page{
+  background-color: #f1f1f1;
+}
+/* 标签栏 */
+.tabs-class{
+  /* background-color: #c6dfc8; */
+  color:#285943!important;
+
+}
+/* 选中标签 */
+.active-class{
+
+  font-weight: bold!important;
+}
+.collapse-bold{
+  font-weight: bold;
+}
+
+.collapse-custom-padding{
+  padding:0 20rpx!important;
+}
+.collapse-no-padding{
+  padding:0!important;
+}

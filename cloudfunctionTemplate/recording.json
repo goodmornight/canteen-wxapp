@@ -1,0 +1,30 @@
+[
+  {
+    "name": "addOutsideRecording",
+    "value": {
+      "action": "addOutsideRecording",
+      "createdTime": "Mon Apr 06 2020 13:29:26 GMT+0800",
+      "userId": "001",
+      "number": 1,
+      "state": 2,
+      "others": true
+    }
+  },
+  {
+    "name": "getRecordingNum",
+    "value": {
+      "action": "getRecordingNum",
+      "start": "Fri Apr 10 2020 00:00:00 GMT+0800 (GMT+08:00)",
+      "end": "Fri Apr 10 2020 23:00:00 GMT+0800 (GMT+08:00)"
+    }
+  },
+  {
+    "name": "isAutoRecording",
+    "value": {
+      "action": "isAutoRecording",
+      "userId": "001",
+      "start": "Mon Apr 13 2020 00:00:00 GMT+0800 (中国标准时间)",
+      "end": "Mon Apr 13 2020 18:00:00 GMT+0800 (中国标准时间)"
+    }
+  }
+]

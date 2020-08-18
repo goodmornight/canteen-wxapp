@@ -1,0 +1,12 @@
+/* miniprogram/pages/updateOrder/updateOrder.wxss */
+.btn-con{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  height: 1000rpx;
+}
+/* button{
+  margin: 0 auto;
+} */

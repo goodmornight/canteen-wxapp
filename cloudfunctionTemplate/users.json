@@ -1,0 +1,32 @@
+[
+  {
+    "name": "清除openid",
+    "value": {
+      "action": "clearOpenid",
+      "userId": "001"
+    }
+  },
+  {
+    "name": "修改用户密码",
+    "value": {
+      "action": "updatePPP",
+      "userId": "001",
+      "openid": "oWeLI5fhnF-9N8ayPdALYN3dq5YY",
+      "newPPP": "123"
+    }
+  },
+  {
+    "name": "获取用户信息",
+    "value": {
+      "action": "getUserInfo"
+    }
+  },
+  {
+    "name": "isTrueUser",
+    "value": {
+      "action": "isTrueUser",
+      "num": "001",
+      "pwd": "123456"
+    }
+  }
+]

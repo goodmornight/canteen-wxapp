@@ -1,0 +1,79 @@
+<!--miniprogram/pages/check/check.wxml-->
+<!-- <cu-custom bgColor="bg-gradual-pink" isCustom="{{true}}"><view slot="content">操作条</view></cu-custom> -->
+<cu-custom bgColor="custom" isCustom="{{true}}">
+	<!-- <navigator wx:if="{{userInfo.userId==undefined}}" class='action' open-type="reLaunch" url="../index/index" hover-class="none">
+		<text class='cuIcon-back'></text>
+	</navigator> -->
+	<!-- <navigator wx:else class='action' open-type="navigateBack" delta="1" hover-class="none">
+		<text class='cuIcon-back'></text>
+	</navigator> -->
+	<!-- <view slot="backText">返回</view> -->
+	<view slot="content">身份验证</view>
+</cu-custom>
+<van-toast id="van-toast" />
+<van-dialog id="van-dialog" confirm-button-color="#5A9367"/>
+
+<swiper current="{{currentData}}">
+	<swiper-item catchtouchmove="stopTouchMove">
+		<button class="button-style" hover-class="hover-button-style" bindtap="toChangePwd">修改密码</button>
+		<button class="button-style" hover-class="hover-button-style" bindtap="toUnTie">解除绑定</button>
+	</swiper-item>
+	<swiper-item catchtouchmove="stopTouchMove">
+		<view class="check-con">
+			<view class="title">
+				身份绑定
+			</view>
+			<form bindsubmit="checkIdSubmit">
+				<input bindinput="onNumInput" class="input-style" name="num" placeholder="请输入编号" type="number" maxlength="{{6}}"></input>
+				<input bindinput="onPwdInput" class="input-style" name="pwd" placeholder="请输入密码" type="text" password="{{true}}" maxlength="{{12}}">
+				<!-- <image class="pwd-inside-style" src="../../images/icons/{{isSee?'see':'nosee'}}.svg" bindtap="toSee"></image> -->
+				</input>
+
+				<van-checkbox-group value="{{ checkBox }}" bind:change="onCheckBoxChange">
+					<van-checkbox custom-class="checkbox-class" name="protocol" icon-size="22" checked-color="#5A9367">阅读并同意<text class="link-text" bindtap="toProtocol">《用户服务协议》</text></van-checkbox>
+					<van-checkbox custom-class="checkbox-class" name="privacy" icon-size="22" checked-color="#5A9367">阅读并同意<text class="link-text" bindtap="toPrivacy">《隐私政策》</text></van-checkbox>
+				</van-checkbox-group>
+
+
+				<view class="two-btn">
+					<button class="btn-no-img-style" hover-class="hover-button-style" bindtap="forgetPwd">
+						<text>忘记密码</text>
+					</button>
+					<button class="btn-no-img-style" hover-class="hover-button-style" formType="submit" disabled="{{ifSubmit}}">
+						<text>确认绑定</text>
+					</button>
+				</view>
+			</form>
+		</view>
+	</swiper-item>
+	<swiper-item catchtouchmove="stopTouchMove">
+		<view class="check-con">
+			<view class="title">
+				修改密码
+			</view>
+			<form bindsubmit="changePwdFormSubmit">
+				<input bindblur="onNewPwdInput" class="input-style" name="newPwd" placeholder="请输入新密码" type="text" password="{{true}}" maxlength="{{12}}">
+				<!-- <image class="pwd-inside-style" src="../../images/icons/nosee.svg"></image> -->
+				</input>
+				<input bindblur="onAgainPwdInput" class="input-style" name="againPwd" placeholder="请再次输入新密码" type="text" password="{{true}}" maxlength="{{12}}">
+				<!-- <image class="pwd-inside-style" src="../../images/icons/nosee.svg"></image> -->
+				</input>
+				<view class="two-btn">
+					<button class="btn-no-img-style" hover-class="hover-button-style" bindtap="toBack">
+						<text>返回主页</text>
+						<!-- <image src="../../images/icons/back.svg"></image> -->
+					</button>
+					<button class="btn-no-img-style" hover-class="hover-button-style" formType="submit">
+						<text>确认修改</text>
+						<!-- <image src="../../images/icons/completed.svg"></image> -->
+					</button>
+
+				</view>
+
+			</form>
+
+		</view>
+	</swiper-item>
+</swiper>
+<!-- <van-overlay show="{{ picker_show }}"/> -->
+<!-- <van-picker overlay wx:if="{{picker_show}}" columns="{{ classCols }}" loading="{{picker_loading}}" bind:change="onPickerChange" bind:cancel="onPickerCancel" bind:confirm="onPickerConfirm" toolbar-position="bottom"/> -->

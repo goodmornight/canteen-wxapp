@@ -1,0 +1,21 @@
+<!--miniprogram/pages/eatNum/eatNum.wxml-->
+<view class='cu-custom'>
+	<view class="cu-bar fixed bg-shadeTop" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
+		<navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
+			<text class='cuIcon-back'></text> 返回
+		</navigator>
+		<view class='content' style='top:{{StatusBar}}px;'>用餐人数</view>
+	</view>
+</view>
+<view style="height:{{CustomBar}}px;width:100%;">
+</view>
+<van-toast id="van-toast" />
+<van-collapse value="{{ activeNames }}" bind:change="onChange">
+	<van-collapse-item wx:for="{{totalList}}" wx:for-index = "index_total" wx:for-item="item_total" content-class="collapse-no-padding" name="{{index_total+1}}">
+		<view slot="title">{{item_total.title}}<van-tag wx:if="{{item_total.others!=0}}" round type="success">+{{item_total.others}}</van-tag></view>
+		<view slot="value">{{item_total.num}}人
+		</view>
+		<van-cell wx:for="{{item_total.list}}" title="编号:{{item.userId}}" value="{{item.number}}人" />
+	</van-collapse-item>
+</van-collapse>
+<van-divider hairline contentPosition="center" textColor="#5A9367" borderColor="#39b54a">截至{{deadline}}</van-divider>
