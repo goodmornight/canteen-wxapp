@@ -15,7 +15,7 @@ App({
       })
     }
     this.globalData = {
-      // StatusBar:0
+      requestURL: 'https://dingcan.meetingcn.cn/dingcan'
     }
     let today = wx.getStorageSync('today');
     wx.setStorageSync('otherInsideOrder', '');
