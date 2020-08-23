@@ -13,10 +13,10 @@ Page({
     activeNames: ['1'],
     checkBox: ['1', '2', '3'],
     stateList: [],
-    isBreakfast: true,//时间上是否允许
+    isBreakfast: true, //时间上是否允许
     isLunch: true,
     isDinner: true,
-    ifBreakfast: false,//记录上是否允许
+    ifBreakfast: false, //记录上是否允许
     ifLunch: false,
     ifDinner: false,
   },
@@ -25,6 +25,27 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: async function (options) {
+    console.log(app.globalData.requestURL)
+    // wx.request({
+    //   url: app.globalData.requestURL + '/Recording/insert',
+    //   method: 'POST',
+    //   data: {
+    //     createdTime: "2020-08-23 02:52:05",
+    //     time: "2020-08-23 02:52:05",
+    //     userId: "002",
+    //     number: 0,
+    //     menuId: "string",
+    //     state: 0,
+    //     other: true,
+    //     auto: true
+    //   },
+    //   header: {
+    //     'content-type': 'application/json' // 默认值
+    //   },
+    //   success(res) {
+    //     console.log(res)
+    //   }
+    // })
     //加载动画
     Toast.loading({
       duration: 0,
@@ -147,7 +168,7 @@ Page({
     console.log(e)
     let that = this;
     let list = that.data.list;
-    let value = e.detail.value;//选中内容
+    let value = e.detail.value; //选中内容
     let formatList = [];
     for (let i = 0; i < list.length; i++) {
       let state = list[i].state;
@@ -158,58 +179,58 @@ Page({
       formatList.push(temp);
     }
     console.log(formatList);
-    await wx.cloud.callFunction({
-      name: 'recording',
-      data: {
-        action: 'updateRecordingById',
-        now: new Date(),
-        formatList: formatList
-      }
-    }).then(async (res) => {
-      console.log(res);
-      if (res.result >= 0) {
-        if (res.result > 0) {
-          Toast.success('提交成功');
-          let sendValue = {
-            //预约产品，20字以内字符
-            thing1: {
-              value: '个人就餐报备'
-            },
-            //使用日期，年月日格式（支持+24小时制时间），支持填时间段，两个时间点之间用“~”符号连接
-            date2: {
-              value: that.formatDateStr(that.data.date)
-            },
-            //温馨提示，20个以内字符
-            thing3: {
-              value: '个人报备可当餐前两个小时修改,默认就餐'
-            },
-          }
-          await wx.cloud.callFunction({
-            name: 'message',
-            data: {
-              action: 'sendInsideOrderSuccess',
-              sendValue: sendValue
-            }
-          }).then(res_after => {
-            console.log(res_after);
-          })
-            .catch(err => {
-              console.log(err)
-            })
-        } else {
-          Toast('记录未变')
-        }
-        wx.reLaunch({
-          url: '../index/index',
-        })
-      } else {
-        Toast('提交失败')
-      }
-    })
-      .catch(err => {
-        console.log(err)
-        Toast('系统错误')
-      })
+    // await wx.cloud.callFunction({
+    //     name: 'recording',
+    //     data: {
+    //       action: 'updateRecordingById',
+    //       now: new Date(),
+    //       formatList: formatList
+    //     }
+    //   }).then(async (res) => {
+    //     console.log(res);
+    //     if (res.result >= 0) {
+    //       if (res.result > 0) {
+    //         Toast.success('提交成功');
+    //         let sendValue = {
+    //           //预约产品，20字以内字符
+    //           thing1: {
+    //             value: '个人就餐报备'
+    //           },
+    //           //使用日期，年月日格式（支持+24小时制时间），支持填时间段，两个时间点之间用“~”符号连接
+    //           date2: {
+    //             value: that.formatDateStr(that.data.date)
+    //           },
+    //           //温馨提示，20个以内字符
+    //           thing3: {
+    //             value: '个人报备可当餐前两个小时修改,默认就餐'
+    //           },
+    //         }
+    //         await wx.cloud.callFunction({
+    //             name: 'message',
+    //             data: {
+    //               action: 'sendInsideOrderSuccess',
+    //               sendValue: sendValue
+    //             }
+    //           }).then(res_after => {
+    //             console.log(res_after);
+    //           })
+    //           .catch(err => {
+    //             console.log(err)
+    //           })
+    //       } else {
+    //         Toast('记录未变')
+    //       }
+    //       wx.reLaunch({
+    //         url: '../index/index',
+    //       })
+    //     } else {
+    //       Toast('提交失败')
+    //     }
+    //   })
+    //   .catch(err => {
+    //     console.log(err)
+    //     Toast('系统错误')
+    //   })
   },
   isAutoRecording: async function () {
     let that = this;
@@ -217,28 +238,28 @@ Page({
     // let list = that.data.menuList;
     let now = new Date();
     let weekDay = now.getDay();
-    let today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);//当天0点
-    let today9PM = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 21, 0, 0);//当晚9点
+    let today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0); //当天0点
+    let today9PM = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 21, 0, 0); //当晚9点
     let start;
     let end;
-    if (now.getTime() > today9PM.getTime()) {//当前时间在当天的9点以后
+    if (now.getTime() > today9PM.getTime()) { //当前时间在当天的9点以后
       let tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000);
       start = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 0, 0, 0);
       end = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 21, 0, 0);
-    } else {//当前时间在当晚的9点以前
+    } else { //当前时间在当晚的9点以前
       start = today;
       end = today9PM;
     }
     await wx.cloud.callFunction({
-      name: "recording",
-      data: {
-        // action: "isAutoRecording",
-        action: "getRecording",
-        userId: userInfo.userId,
-        start: start,
-        end: end
-      }
-    })
+        name: "recording",
+        data: {
+          // action: "isAutoRecording",
+          action: "getRecording",
+          userId: userInfo.userId,
+          start: start,
+          end: end
+        }
+      })
       .then(res => {
         console.log(res);
         let list = res.result;
