@@ -30,6 +30,7 @@
 		<view class="title">就餐类型</view>
 		<picker name="state" bindchange="eatPickerChange" value="{{eatIndex}}" range="{{eatList}}" range-key="value">
 			<view class="picker">
+				<!-- {{eatIndex!=3?eatList[eatIndex].value:'如需报备多餐需分开提交'}} -->
 				{{eatIndex!=3?eatList[eatIndex].value:'如需报备多餐需分开提交'}}
 			</view>
 		</picker>

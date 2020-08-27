@@ -98,25 +98,39 @@ Page({
     console.log('toOtherInsideOrder');
     let now = new Date();
     let deadline = new Date(now.getFullYear(),now.getMonth(),now.getDate(),10,0,0);
-    //当前时间大于当天10点
-    if(now.getTime()>deadline.getTime()){
-      Toast("抱歉，当前时间已超过10:00，您无法提交报备。")
-    }else{
-      wx.requestSubscribeMessage({
-        //[每日食谱提醒，下单成功]
-        tmplIds: ['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI'],
-        success: async function (res_mes) {
-          console.log(res_mes);
-        },
-        fail(err) {
-          console.log(err)
-        }
-      })
-      //当前时间小于当天10点
-      wx.navigateTo({
-        url: '../otherInsideOrder/otherInsideOrder',
-      })
-    }
+    // //当前时间大于当天10点
+    // if(now.getTime()>deadline.getTime()){
+    //   Toast("抱歉，当前时间已超过10:00，您无法提交报备。")
+    // }else{
+    //   wx.requestSubscribeMessage({
+    //     //[每日食谱提醒，下单成功]
+    //     tmplIds: ['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI'],
+    //     success: async function (res_mes) {
+    //       console.log(res_mes);
+    //     },
+    //     fail(err) {
+    //       console.log(err)
+    //     }
+    //   })
+    //   //当前时间小于当天10点
+    //   wx.navigateTo({
+    //     url: '../otherInsideOrder/otherInsideOrder',
+    //   })
+    // }
+    wx.requestSubscribeMessage({
+      //[每日食谱提醒，下单成功]
+      tmplIds: ['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI'],
+      success: async function (res_mes) {
+        console.log(res_mes);
+      },
+      fail(err) {
+        console.log(err)
+      }
+    })
+    //当前时间小于当天10点
+    wx.navigateTo({
+      url: '../otherInsideOrder/otherInsideOrder',
+    })
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

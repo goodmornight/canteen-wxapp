@@ -2,6 +2,7 @@
 import Toast from '@vant/weapp/toast/toast';
 import Dialog from '@vant/weapp/dialog/dialog';
 const eatPicker = ['早餐', '午餐', '晚餐'];
+const menuTime = [8, 12, 18];
 const app = getApp()
 Page({
 
@@ -12,12 +13,18 @@ Page({
     userInfo: {},
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
-    eatList: [],//查询数据库里的当天已存菜谱
-    // eatList: ['早餐', '午餐', '晚餐'],
+    // eatList: [],//查询数据库里的当天已存菜谱
+    eatList: [{
+      value: '早餐'
+    }, {
+      value: '午餐'
+    }, {
+      value: '晚餐'
+    }],
     eatIndex: 3,
     now: "",
-    num: 0,//用餐人数
-    userId: '',//输入的userId
+    num: 0, //用餐人数
+    userId: '', //输入的userId
     clickItem: '',
   },
 
@@ -65,60 +72,60 @@ Page({
         userInfo: userInfo
       });
       let clickItem = wx.getStorageSync('otherInsideOrder');
-      //因为只有当天0-10点可以进入报备
-      await wx.cloud.callFunction({
-        name: "menu",
-        data: {
-          action: "getTodayMenu",
-          // today:"Fri Apr 17 2020 10:52:05 GMT+0800 (中国标准时间)"
-          today: new Date()
-        }
-      }).then(res => {
-        console.log(res)
-        let result = res.result;
-        let eatList = [];
-        if (result.length != 0) {
-          result.forEach(item => {
-            let temp = {};
-            let time = new Date(item.time).getHours();
-            temp._id = item._id;
-            if (time == 8) {
-              temp.value = '早餐'
-            } else if (time == 12) {
-              temp.value = '午餐'
-            } else {
-              temp.value = '晚餐'
-            }
-            eatList.push(temp);
-          })
+      // //因为只有当天0-10点可以进入报备
+      // await wx.cloud.callFunction({
+      //   name: "menu",
+      //   data: {
+      //     action: "getTodayMenu",
+      //     // today:"Fri Apr 17 2020 10:52:05 GMT+0800 (中国标准时间)"
+      //     today: new Date()
+      //   }
+      // }).then(res => {
+      //   console.log(res)
+      //   let result = res.result;
+      //   let eatList = [];
+      //   if (result.length != 0) {
+      //     result.forEach(item => {
+      //       let temp = {};
+      //       let time = new Date(item.time).getHours();
+      //       temp._id = item._id;
+      //       if (time == 8) {
+      //         temp.value = '早餐'
+      //       } else if (time == 12) {
+      //         temp.value = '午餐'
+      //       } else {
+      //         temp.value = '晚餐'
+      //       }
+      //       eatList.push(temp);
+      //     })
 
-        }
-        that.setData({
-          eatList: eatList
-        });
-        // that.setData({
-        //   eatList: [{
-        //     _id:'',
-        //     value:'早餐'
-        //   },{
-        //     _id:'',
-        //     value:'午餐'
-        //   },{
-        //     _id:'',
-        //     value:'晚餐'
-        //   }]
-        // });
-        if (clickItem != {} && clickItem != '') {
-          that.setData({
-            clickItem: clickItem,
-            num: clickItem.number,
-            eatIndex: clickItem.state - 1
-          })
-        }
-      })
-        .catch(err => {
-          console.log(err)
-        })
+      //   }
+      //   that.setData({
+      //     eatList: eatList
+      //   });
+      //   // that.setData({
+      //   //   eatList: [{
+      //   //     _id:'',
+      //   //     value:'早餐'
+      //   //   },{
+      //   //     _id:'',
+      //   //     value:'午餐'
+      //   //   },{
+      //   //     _id:'',
+      //   //     value:'晚餐'
+      //   //   }]
+      //   // });
+      //   if (clickItem != {} && clickItem != '') {
+      //     that.setData({
+      //       clickItem: clickItem,
+      //       num: clickItem.number,
+      //       eatIndex: clickItem.state - 1
+      //     })
+      //   }
+      // })
+      //   .catch(err => {
+      //     console.log(err)
+      //   })
 
     }
   },
@@ -141,30 +148,36 @@ Page({
     let state = detail.state;
     let userId = detail.userId;
     let number = (detail.number.length == 0 ? 0 : parseInt(detail.number));
-    
+
     if (userId == userInfo.userId && number != 0 && state != 3) {
+
       let menu = eatPicker.indexOf(eatList[state].value);
-      console.log(menu)
+      let createdTime = new Date();
+      let time = new Date(createdTime.getFullYear(), createdTime.getMonth(), createdTime.getDate(), menuTime[menu], 0, 0)
       that.setData({
         userId: userId,
         num: number
       });
       if (clickItem == {} || clickItem == '') {
-        await wx.cloud.callFunction({
-          name: "recording",
+        wx.request({
+          url: app.globalData.requestURL + '/Recording/insert',
+          method: 'POST',
           data: {
-            action: "addOutsideRecording",
-            createdTime: new Date(),
+            createdTime: that.formatDateforSQL(createdTime),
+            time: that.formatDateforSQL(time),
             userId: userId,
             number: number,
-            menuId: eatList[state]._id,
-            state: menu + 1,
-            others: true
-          }
-        })
-          .then(res => {
+            menuId: "wxTest",
+            state: state,
+            other: true,
+            auto: false
+          },
+          header: {
+            'content-type': 'application/json' // 默认值
+          },
+          success(res) {
             console.log(res)
-            if (res.result.state == 1) {
+            if (res.statusCode == 200) {
               Toast({
                 type: 'success',
                 message: '报备成功',
@@ -174,28 +187,63 @@ Page({
                   })
                 }
               });
-            } else {
+            }else{
               Toast.fail('系统错误');
             }
-          })
-          .catch(err => {
-            console.log(err);
+          },
+          fail(err){
+            console.log(err)
             Toast.fail('系统错误');
-          })
-      }else{
-        await wx.cloud.callFunction({
-          name: "recording",
-          data: {
-            action: "updateOutsideRecordingById",
-            createdTime: new Date(),
-            _id: clickItem._id,
-            userId:userId,
-            number: number,
-            menuId: eatList[state]._id,
-            state: menu + 1,
-            others: true
           }
         })
+
+        // await wx.cloud.callFunction({
+        //   name: "recording",
+        //   data: {
+        //     action: "addOutsideRecording",
+        //     createdTime: new Date(),
+        //     userId: userId,
+        //     number: number,
+        //     menuId: eatList[state]._id,
+        //     state: menu + 1,
+        //     others: true
+        //   }
+        // })
+        //   .then(res => {
+        //     console.log(res)
+        //     if (res.result.state == 1) {
+        //       Toast({
+        //         type: 'success',
+        //         message: '报备成功',
+        //         onClose: () => {
+        //           wx.reLaunch({
+        //             url: '../index/index',
+        //           })
+        //         }
+        //       });
+        //     } else {
+        //       Toast.fail('系统错误');
+        //     }
+        //   })
+        //   .catch(err => {
+        //     console.log(err);
+        //     Toast.fail('系统错误');
+        //   })
+      } else {
+        // 更新报备信息，未修改api
+        await wx.cloud.callFunction({
+            name: "recording",
+            data: {
+              action: "updateOutsideRecordingById",
+              createdTime: new Date(),
+              _id: clickItem._id,
+              userId: userId,
+              number: number,
+              menuId: eatList[state]._id,
+              state: menu + 1,
+              others: true
+            }
+          })
           .then(res => {
             console.log(res)
             if (res.result.stats.updated == 1) {
@@ -253,12 +301,12 @@ Page({
         },
       }
       await wx.cloud.callFunction({
-        name: 'message',
-        data: {
-          action: 'sendInsideOrderSuccess',
-          sendValue: sendValue
-        }
-      })
+          name: 'message',
+          data: {
+            action: 'sendInsideOrderSuccess',
+            sendValue: sendValue
+          }
+        })
         .then(res_after => {
           console.log(res_after);
         })
@@ -298,6 +346,11 @@ Page({
   formatDateStr(date) {
     date = new Date(date);
     return `${date.getFullYear()}年${this.overTen(date.getMonth() + 1)}月${this.overTen(date.getDate())}日`;
+  },
+  // 2020-04-04 00:00:00
+  formatDateforSQL(date) {
+    date = new Date(date);
+    return `${date.getFullYear()}-${this.overTen(date.getMonth() + 1)}-${this.overTen(date.getDate())} ${this.overTen(date.getHours())}:${this.overTen(date.getMinutes())}:${this.overTen(date.getSeconds())}`;
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

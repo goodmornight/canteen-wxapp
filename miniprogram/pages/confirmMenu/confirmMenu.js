@@ -1,6 +1,7 @@
 // miniprogram/pages/confirmMenu/confirmMenu.js
 import Toast from '@vant/weapp/toast/toast';
 const app = getApp();
+const menuTime = [8, 12, 18];
 Page({
 
   /**
@@ -25,33 +26,12 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: async function (options) {
-    console.log(app.globalData.requestURL)
-    // wx.request({
-    //   url: app.globalData.requestURL + '/Recording/insert',
-    //   method: 'POST',
-    //   data: {
-    //     createdTime: "2020-08-23 02:52:05",
-    //     time: "2020-08-23 02:52:05",
-    //     userId: "002",
-    //     number: 0,
-    //     menuId: "string",
-    //     state: 0,
-    //     other: true,
-    //     auto: true
-    //   },
-    //   header: {
-    //     'content-type': 'application/json' // 默认值
-    //   },
-    //   success(res) {
-    //     console.log(res)
-    //   }
-    // })
     //加载动画
-    Toast.loading({
-      duration: 0,
-      mask: true,
-      message: '加载中...'
-    });
+    // Toast.loading({
+    //   duration: 0,
+    //   mask: true,
+    //   message: '加载中...'
+    // });
     let that = this;
     let userInfo = wx.getStorageSync('userInfo');
     if (userInfo == {} || userInfo == '') {
@@ -178,7 +158,81 @@ Page({
       temp.isTrue = value[state];
       formatList.push(temp);
     }
-    console.log(formatList);
+
+    let createdTime = new Date();
+    let createdTimeStr = that.formatDateforSQL(createdTime);
+    let isToday = (createdTime.getHours() < 21)
+    let sendData = []
+    that.data.checkBox.forEach(item => {
+      let time = isToday ? that.formatDateforSQL(new Date(createdTime.getFullYear(), createdTime.getMonth(), createdTime.getDate(), menuTime[item - 1], 0, 0)) : that.formatDateforSQL(new Date(createdTime.getFullYear(), createdTime.getMonth(), createdTime.getDate() + 1, menuTime[item - 1], 0, 0))
+      let temp = {
+        createdTime: createdTimeStr,
+        time: time,
+        userId: that.data.userInfo.userId,
+        number: 1,
+        menuId: "wxTest",
+        state: item,
+        other: false,
+        auto: false
+      }
+      sendData.push(temp)
+    })
+    let times = 0;
+    sendData.forEach(async (item) => {
+      wx.request({
+        url: app.globalData.requestURL + '/Recording/insert',
+        method: 'POST',
+        data: item,
+        header: {
+          'content-type': 'application/json' // 默认值
+        },
+        success(res) {
+          console.log(res)
+          if (res.statusCode == 200) {
+            times++;
+            if (times == sendData.length) {
+              Toast.success('提交成功');
+              let sendValue = {
+                //预约产品，20字以内字符
+                thing1: {
+                  value: '个人就餐报备'
+                },
+                //使用日期，年月日格式（支持+24小时制时间），支持填时间段，两个时间点之间用“~”符号连接
+                date2: {
+                  value: that.formatDateStr(item.time)
+                },
+                //温馨提示，20个以内字符
+                thing3: {
+                  value: '个人报备可当餐前两个小时修改,默认就餐'
+                },
+              }
+              wx.cloud.callFunction({
+                  name: 'message',
+                  data: {
+                    action: 'sendInsideOrderSuccess',
+                    sendValue: sendValue
+                  }
+                }).then(res_after => {
+                  console.log(res_after);
+                  wx.reLaunch({
+                    url: '../index/index',
+                  })
+                })
+                .catch(err => {
+                  console.log(err)
+                })
+            }
+          }else{
+            Toast.fail('系统错误');
+          }
+        },
+        fail(err){
+          console.log(err)
+          Toast.fail('系统错误');
+        }
+      })
+    })
+
     // await wx.cloud.callFunction({
     //     name: 'recording',
     //     data: {
@@ -315,7 +369,11 @@ Page({
     date = new Date(date);
     return `${date.getFullYear()}年${this.overTen(date.getMonth() + 1)}月${this.overTen(date.getDate())}日`;
   },
-
+  // 2020-04-04 00:00:00
+  formatDateforSQL(date) {
+    date = new Date(date);
+    return `${date.getFullYear()}-${this.overTen(date.getMonth() + 1)}-${this.overTen(date.getDate())} ${this.overTen(date.getHours())}:${this.overTen(date.getMinutes())}:${this.overTen(date.getSeconds())}`;
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
