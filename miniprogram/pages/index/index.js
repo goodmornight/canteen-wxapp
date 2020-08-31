@@ -57,6 +57,7 @@ Page({
   data: {
     isNewDay: false,
     userInfo: {},
+    _openid:'',
     recordingList: [0, 0, 0],
     eatNum: eatNum_btn,//用餐人数
     orderList: orderList_btn,//外卖订单
@@ -82,37 +83,74 @@ Page({
       isNewDay: isNewDay
     })
     that.getRecordingNum();
+    // 暂时用于获取用户的openid
+    await wx.cloud.callFunction({
+      name: 'test',
+      data: {
+      }
+    }).then(res => {
+      console.log(res.result);
+      wx.setStorageSync('_openid', res.result.openid)
+      that.setData({
+        _openid: res.result.openid
+      })
+    }).catch(err => {
+      console.log(err)
+    })
 
     wx.request({
-      url: app.globalData.requestURL, //仅为示例，并非真实的接口地址
+      url: app.globalData.requestURL + '/Users/getby_openid',  // 通过openid查询用户数据
+      method: 'GET',
       data: {
-        x: '',
-        y: ''
+        _openid: that.data._openid,
       },
       header: {
         'content-type': 'application/json' // 默认值
       },
       success (res) {
         console.log(res.data)
+        if(res.data.length!=0){
+          that.setData({
+            userInfo: res.data[0]
+          })
+          wx.setStorageSync('userInfo', res.data[0])
+        }
+      }
+    })
+    // 请求code
+    wx.login({
+      success (res) {
+        if (res.code) {
+          console.log(res)
+          //发起网络请求
+          // wx.request({
+          //   url: 'https://test.com/onLogin',
+          //   data: {
+          //     code: res.code
+          //   }
+          // })
+        } else {
+          console.log('登录失败！' + res.errMsg)
+        }
       }
     })
 
-    await wx.cloud.callFunction({
-      name: 'users',
-      data: {
-        action: 'getUserInfo'
-      }
-    }).then(res => {
-      console.log(res);
-      let userInfo = res.result;
-      that.setData({
-        userInfo: userInfo
-      })
-      wx.setStorageSync('userInfo', userInfo)
-    }).catch(err => {
-      console.log(err)
-      wx.setStorageSync('userInfo', {})
-    })
+    // await wx.cloud.callFunction({
+    //   name: 'users',
+    //   data: {
+    //     action: 'getUserInfo'
+    //   }
+    // }).then(res => {
+    //   console.log(res);
+    //   let userInfo = res.result;
+    //   that.setData({
+    //     userInfo: userInfo
+    //   })
+    //   wx.setStorageSync('userInfo', userInfo)
+    // }).catch(err => {
+    //   console.log(err)
+    //   wx.setStorageSync('userInfo', {})
+    // })
   },
   //跳转用餐人数
   toEatNum() {

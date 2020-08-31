@@ -16,12 +16,12 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad:async function (options) {
-    //加载动画
-    Toast.loading({
-      duration:0,
-      mask: true,
-      message: '加载中...'
-    });
+    // //加载动画
+    // Toast.loading({
+    //   duration:0,
+    //   mask: true,
+    //   message: '加载中...'
+    // });
     let that = this;
     let userInfo = wx.getStorageSync('userInfo');
     if (userInfo == {} || userInfo == ''||userInfo_cloud == undefined) {

@@ -33,6 +33,19 @@ Page({
     //   message: '加载中...'
     // });
     let that = this;
+
+    // wx.request({
+    //   url: app.globalData.requestURL + '/Recording/insert',
+    //   method: 'POST',
+    //   data: item,
+    //   header: {
+    //     'content-type': 'application/json' // 默认值
+    //   },
+    //   success(res) {
+    //     console.log(res)
+    //   }
+    // })
+
     let userInfo = wx.getStorageSync('userInfo');
     if (userInfo == {} || userInfo == '') {
       let userInfo_cloud = await wx.cloud.callFunction({
