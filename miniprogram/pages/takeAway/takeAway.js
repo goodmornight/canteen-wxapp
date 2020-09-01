@@ -11,32 +11,33 @@ Page({
     MainCur: 0,
     VerticalNavTop: 0,
     userInfo: {},
+    dishes: [],
     list: [],
     load: true,
     imgUrl: '../../../../images/test.jpg',
-    classes: [],//选择菜的种类
-    orderList: [],//选择的菜
-    totalPrice: 0,//购物车总价
-    popup_show: false,//下弹框显示
+    classes: [], //选择菜的种类
+    orderList: [], //选择的菜
+    totalPrice: 0, //购物车总价
+    popup_show: false, //下弹框显示
 
   },
   onLoad: async function () {
     let that = this;
     Toast.loading({
-      duration:0,
+      duration: 0,
       mask: true,
       message: '加载中...'
     });
     let userInfo = wx.getStorageSync('userInfo');
     console.log(userInfo)
-    if (userInfo == {}||userInfo=='') {
+    if (userInfo == {} || userInfo == '') {
       Dialog.confirm({
         title: '身份验证',
         message: '为了更好的使用该小程序的其他功能，请您先进行身份验证',
         confirmButtonText: "身份验证",
-        zIndex:102,
-        overlayStyle:{
-          zIndex:101
+        zIndex: 102,
+        overlayStyle: {
+          zIndex: 101
         }
       }).then(() => {
         // on confirm
@@ -54,77 +55,143 @@ Page({
       });
     } else {
       that.setData({
-        userInfo:userInfo
+        userInfo: userInfo
       });
-      
-      let dishes = await wx.cloud.callFunction({
-        name: "dishes",
-        data: {
-          action: "getOutsideDishes"
-        }
-      }).then(res => {
-        console.log(res)
-        let data = res.result.data;
-        // let final = data.filter((item) => {
-        //   return (item.isStorage == true);
-        // });
-        // return final;
-        return data;
-      }).catch(err => {
-        console.log(err);
-        return {};
-      });
-      let classes = [];
-      for (let i = 0; i < dishes.length; i++) {
-        let className = dishes[i].className;
-        if (classes.indexOf(className) == -1) {
-          classes.push(className);
-        }
-      }
-      //list初始化
-      let list = [{}];
-      for (let i = 0; i < classes.length; i++) {
-        let className = classes[i];
-        list[i] = {};
-        list[i].className = className;
-        list[i].items = [];
-        list[i].id = i;
-      }
-      //将数据库里的数据整理进list
-      for (let i = 0; i < dishes.length; i++) {
-        let className = dishes[i].className;
-        list.forEach(item => {
-          if (item.className == className) {
-            let temp = {
-              className: '',
-              _id: '',
-              name: '',
-              num: 0,
-              imgSrc: '',
-              price: 0,
-              rate: 0,
-              isStorage: true,
-              isSpecial: true,
-              isInside: false,
-            };
-            temp.className = dishes[i].className;
-            temp._id = dishes[i]._id;
-            temp.name = dishes[i].name;
-            temp.imgSrc = dishes[i].imgSrc;
-            temp.price = dishes[i].price;
-            temp.rate = dishes[i].rate;
-            temp.isSpecial = dishes[i].isSpecial;
-            temp.isStorage = dishes[i].isStorage;
-            temp.isInside = dishes[i].isInside;
-            item.items.push(temp)
+
+      wx.request({
+        url: app.globalData.requestURL + '/Dishes/getall', // 通过openid查询用户数据
+        method: 'GET',
+        data: {},
+        header: {
+          'content-type': 'application/json' // 默认值
+        },
+        success(res) {
+          console.log(res.data)
+          if (res.data.length != 0) {
+            let dishes = res.data.filter(item => item.isInside == false)
+            console.log(dishes)
+
+            let classes = [];
+            for (let i = 0; i < dishes.length; i++) {
+              let className = dishes[i].className;
+              if (classes.indexOf(className) == -1) {
+                classes.push(className);
+              }
+            }
+
+            let list = [{}];
+            for (let i = 0; i < classes.length; i++) {
+              let className = classes[i];
+              list[i] = {};
+              list[i].className = className;
+              list[i].items = [];
+              list[i].id = i;
+            }
+            for (let i = 0; i < dishes.length; i++) {
+              let className = dishes[i].className;
+              console.log(className)
+              list.forEach(item => {
+                console.log(list)
+                if (item.className == className) {
+                  let temp = {
+                    className: '',
+                    _id: '',
+                    name: '',
+                    num: 0,
+                    imgSrc: '',
+                    price: 0,
+                    rate: 0,
+                    isStorage: true,
+                    isSpecial: true,
+                    isInside: false,
+                  };
+                  temp.className = dishes[i].className;
+                  temp._id = dishes[i]._id;
+                  temp.name = dishes[i].name;
+                  temp.imgSrc = dishes[i].imgSrc;
+                  temp.price = dishes[i].price;
+                  temp.rate = dishes[i].rate;
+                  temp.isSpecial = dishes[i].isSpecial;
+                  temp.isStorage = dishes[i].isStorage;
+                  temp.isInside = dishes[i].isInside;
+                  console.log(temp)
+                  item.items.push(temp)
+                }
+              })
+            }
+            that.setData({
+              classes: classes,
+              list: list,
+              listCur: list[0]
+            });
           }
-        })
-      }
-      that.setData({
-        classes: classes,
-        list: list,
-        listCur: list[0]
-      });
+        }
+      })
+
+      // let dishes = await wx.cloud.callFunction({
+      //   name: "dishes",
+      //   data: {
+      //     action: "getOutsideDishes"
+      //   }
+      // }).then(res => {
+      //   console.log(res)
+      //   let data = res.result.data;
+      //   return data;
+      // }).catch(err => {
+      //   console.log(err);
+      //   return {};
+      // });
+      // let classes = [];
+      // for (let i = 0; i < dishes.length; i++) {
+      //   let className = dishes[i].className;
+      //   if (classes.indexOf(className) == -1) {
+      //     classes.push(className);
+      //   }
+      // }
+      // //list初始化
+      // let list = [{}];
+      // for (let i = 0; i < classes.length; i++) {
+      //   let className = classes[i];
+      //   list[i] = {};
+      //   list[i].className = className;
+      //   list[i].items = [];
+      //   list[i].id = i;
+      // }
+      // //将数据库里的数据整理进list
+      // for (let i = 0; i < dishes.length; i++) {
+      //   let className = dishes[i].className;
+      //   list.forEach(item => {
+      //     if (item.className == className) {
+      //       let temp = {
+      //         className: '',
+      //         _id: '',
+      //         name: '',
+      //         num: 0,
+      //         imgSrc: '',
+      //         price: 0,
+      //         rate: 0,
+      //         isStorage: true,
+      //         isSpecial: true,
+      //         isInside: false,
+      //       };
+      //       temp.className = dishes[i].className;
+      //       temp._id = dishes[i]._id;
+      //       temp.name = dishes[i].name;
+      //       temp.imgSrc = dishes[i].imgSrc;
+      //       temp.price = dishes[i].price;
+      //       temp.rate = dishes[i].rate;
+      //       temp.isSpecial = dishes[i].isSpecial;
+      //       temp.isStorage = dishes[i].isStorage;
+      //       temp.isInside = dishes[i].isInside;
+      //       item.items.push(temp)
+      //     }
+      //   })
+      // }
+      // that.setData({
+      //   classes: classes,
+      //   list: list,
+      //   listCur: list[0]
+      // });
     }
   },
   onReady() {
@@ -173,14 +240,14 @@ Page({
   //步进器变化
   onStepChange(e) {
     let that = this;
-    let num = e.detail;//当前菜的数量
-    let idx1 = e.currentTarget.dataset.idx1;//种类index
-    let idx2 = e.currentTarget.dataset.idx2;//菜index
-    let item = e.currentTarget.dataset.item;//当前菜的细节
-    let orderList = [];//订单内容
-    let totalNum = 0;//总数
-    let totalPrice = 0;//总价钱
-    let list = that.data.list;//所有菜品
+    let num = e.detail; //当前菜的数量
+    let idx1 = e.currentTarget.dataset.idx1; //种类index
+    let idx2 = e.currentTarget.dataset.idx2; //菜index
+    let item = e.currentTarget.dataset.item; //当前菜的细节
+    let orderList = []; //订单内容
+    let totalNum = 0; //总数
+    let totalPrice = 0; //总价钱
+    let list = that.data.list; //所有菜品
     list[idx1].items[idx2].num = num;
     that.setData({
       list: list

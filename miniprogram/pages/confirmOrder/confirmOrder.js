@@ -7,16 +7,16 @@ Page({
    * 页面的初始数据
    */
   data: {
-    detail: '',//页面传过来的时间
-    isShowHistory: false,//是否在查看历史订单
+    detail: '', //页面传过来的时间
+    isShowHistory: false, //是否在查看历史订单
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
     imgUrl: '../../../../images/test.jpg',
     userInfo: {},
-    list: [],//列表
-    totalNum: 0,//总数
-    totalPrice: 0,//总价
-    number: '',//输入的编号
+    list: [], //列表
+    totalNum: 0, //总数
+    totalPrice: 0, //总价
+    number: '', //输入的编号
     // phone: '',//输入的手机号
   },
 
@@ -40,9 +40,9 @@ Page({
     }
 
     let userInfo = wx.getStorageSync('userInfo');
-    let list = wx.getStorageSync('list');//提交的订单
-    let totalPrice = wx.getStorageSync('totalPrice');//总价
-    let totalNum = wx.getStorageSync('totalNum');//总数
+    let list = wx.getStorageSync('list'); //提交的订单
+    let totalPrice = wx.getStorageSync('totalPrice'); //总价
+    let totalNum = wx.getStorageSync('totalNum'); //总数
     that.setData({
       list: list,
       totalPrice: totalPrice,
@@ -69,14 +69,14 @@ Page({
   //提交
   onSubmit: async function () {
     let that = this;
-    let userInfo = that.data.userInfo;//用户个人信息
-    let userId = userInfo.userId;//用户缓存中的编号
-    let number = that.data.number;//用户编号
+    let userInfo = that.data.userInfo; //用户个人信息
+    let userId = userInfo.userId; //用户缓存中的编号
+    let number = that.data.number; //用户编号
     // let phone = that.data.phone;//用户手机号
-    let list = that.data.list;//全部列表内容
-    let totalNum = that.data.totalNum;//数量
-    let totalPrice = that.data.totalPrice / 100;//总价
-    let orderList = [];//订单内容
+    let list = that.data.list; //全部列表内容
+    let totalNum = that.data.totalNum; //数量
+    let totalPrice = that.data.totalPrice / 100; //总价
+    let orderList = []; //订单内容
     if (userInfo.userId == number) {
       //过滤num=0的菜品
       list.forEach(item_class => {
@@ -84,40 +84,90 @@ Page({
         let temp = item_class.items.filter(function (item) {
           return item.num != 0;
         });
+        console.log(temp)
         if (temp.length != 0) {
-          orderList = orderList.concat(temp)
+          temp.forEach(item => {
+            orderList = orderList.concat([item._id, item.num])
+          })
         }
       });
-
-      await wx.cloud.callFunction({
-        name: 'order',
+      console.log(orderList)
+      wx.request({
+        url: app.globalData.requestURL + '/Order/insert', // 通过openid查询用户数据
+        method: 'POST',
         data: {
-          action: 'addOrder',
-          createdTime: new Date(),
-          userId: userId,
-          orderList: orderList,
-          totalNum: totalNum,
-          totalPrice: totalPrice
-        }
-      }).then(async (res) => {
-        console.log(res)
-        if (res.result.state) {
-          Toast({
-            type: 'success',
-            message: '下单成功',
-            onClose: () => {
-              wx.reLaunch({
-                url: '../index/index',
-              })
-            }
-          });
-        } else {
+          "createdTime": that.formatDateforSQL(new Date()),
+          "completedTime": '',
+          "userId": userInfo.userId,
+          "phone": 0,
+          "orderList": orderList.toString(),
+          "totalNum": totalNum,
+          "totalPrice": totalPrice
+        },
+        header: {
+          'content-type': 'application/json' // 默认值
+        },
+        success(res) {
+          console.log(res)
+          if (res.statusCode == 200) {
+            Toast({
+              type: 'success',
+              message: '下单成功',
+              onClose: () => {
+                wx.reLaunch({
+                  url: '../index/index',
+                })
+              }
+            });
+          } else {
+            Toast.fail('系统错误');
+          }
+        },
+        fail(err) {
+          console.log(err)
           Toast.fail('系统错误');
         }
       })
-        .catch(res => {
-          Toast.fail('系统错误');
-        })
+
+      // list.forEach(item_class => {
+
+      //   let temp = item_class.items.filter(function (item) {
+      //     return item.num != 0;
+      //   });
+      //   if (temp.length != 0) {
+      //     orderList = orderList.concat(temp)
+      //   }
+      // });
+
+      // await wx.cloud.callFunction({
+      //     name: 'order',
+      //     data: {
+      //       action: 'addOrder',
+      //       createdTime: new Date(),
+      //       userId: userId,
+      //       orderList: orderList,
+      //       totalNum: totalNum,
+      //       totalPrice: totalPrice
+      //     }
+      //   }).then(async (res) => {
+      //     console.log(res)
+      //     if (res.result.state) {
+      //       Toast({
+      //         type: 'success',
+      //         message: '下单成功',
+      //         onClose: () => {
+      //           wx.reLaunch({
+      //             url: '../index/index',
+      //           })
+      //         }
+      //       });
+      //     } else {
+      //       Toast.fail('系统错误');
+      //     }
+      //   })
+      //   .catch(res => {
+      //     Toast.fail('系统错误');
+      //   })
     } else {
       Toast.fail('信息填写有误');
     }
@@ -177,14 +227,14 @@ Page({
         if (res_mes.q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI == 'accept') {
 
           await wx.cloud.callFunction({
-            name: 'message',
-            data: {
-              action: 'sendOrderSuccess',
-              sendValue: sendValue
-            }
-          }).then(res_after => {
-            console.log(res_after);
-          })
+              name: 'message',
+              data: {
+                action: 'sendOrderSuccess',
+                sendValue: sendValue
+              }
+            }).then(res_after => {
+              console.log(res_after);
+            })
             .catch(err => {
               console.log(err)
             })
@@ -211,6 +261,11 @@ Page({
     } else {
       return '' + num;
     }
+  },
+  // 2020-04-04 00:00:00
+  formatDateforSQL(date) {
+    date = new Date(date);
+    return `${date.getFullYear()}-${this.overTen(date.getMonth() + 1)}-${this.overTen(date.getDate())} ${this.overTen(date.getHours())}:${this.overTen(date.getMinutes())}:${this.overTen(date.getSeconds())}`;
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

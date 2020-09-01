@@ -11,13 +11,13 @@
 <view style="height:{{CustomBar}}px;width:100%;">
 </view>
 <van-cell-group wx:if="{{!isShowHistory}}">
-	<van-field value="{{ value }}" label="编号" placeholder="请输入编号" type="number" border="{{ true }}" required="{{true}}" bind:change="onNumberChange" />
+	<van-field value="{{ value }}" label="编号" placeholder="请输入编号" border="{{ true }}" required="{{true}}" bind:change="onNumberChange" />
 	<!-- <van-field value="{{ value }}" label="联系方式" placeholder="请输入手机号" type="number" border="{{ true }}" required="{{true}}" bind:change="onPhoneChange" /> -->
 </van-cell-group>
 <scroll-view class="VerticalMain" scroll-y scroll-with-animation style="height:calc(100vh - 334rpx)">
 	<view wx:for="{{list}}" wx:for-item="item_list" wx:for-index="index_list">
 		<view wx:for="{{item_list.items}}" wx:for-index="index_items" wx:if="{{item.num!=0}}">
-			<van-card title-class="card-title-class" price-class="card-price-class" num-class="card-num-class" price="{{item.price}}" title="{{item.name}}" num="{{item.num}}" thumb="{{item.imgSrc!=''?item.imgSrc:imgUrl}}">
+			<van-card title-class="card-title-class" price-class="card-price-class" num-class="card-num-class" price="{{item.price}}" title="{{item.name}}" num="{{item.num}}" thumb="{{item.imgSrc?item.imgSrc:imgUrl}}">
 				<view slot="desc">
 					<van-rate readonly value="{{item.rate}}" size="12px" />
 				</view>

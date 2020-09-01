@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/takeAway/takeAway",
     "pages/index/index",
     "pages/otherInsideOrder/otherInsideOrder",
     "pages/confirmMenu/confirmMenu",
@@ -13,7 +14,7 @@
     
     "pages/myOrder/myOrder",
     "pages/rate/rate",
-    "pages/takeAway/takeAway",
+    
     "pages/check/check",
     "pages/confirmOrder/confirmOrder",
     "pages/privacy/privacy",

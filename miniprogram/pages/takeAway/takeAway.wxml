@@ -28,7 +28,7 @@
 					<text class='cuIcon-title text-green'></text> {{item.className}} </view>
 			</view>
 			<view class="cu-list menu-avatar">
-				<van-card wx:for="{{item.items}}" wx:for-index="index_items" title-class="card-title-class" price-class="card-price-class" price="{{item.price}}" title="{{item.name}}" thumb="{{item.imgSrc!=''?item.imgSrc:imgUrl}}">
+				<van-card wx:for="{{item.items}}" wx:for-index="index_items" title-class="card-title-class" price-class="card-price-class" price="{{item.price}}" title="{{item.name}}" thumb="{{item.imgSrc?item.imgSrc:imgUrl}}">
 					<view slot="desc">
 						<van-rate readonly value="{{item.rate}}" size="12px" />
 					</view>
