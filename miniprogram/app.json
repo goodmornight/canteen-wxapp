@@ -1,14 +1,14 @@
 {
   "pages": [
-    "pages/takeAway/takeAway",
+    "pages/menu/menu",
     "pages/index/index",
     "pages/otherInsideOrder/otherInsideOrder",
     "pages/confirmMenu/confirmMenu",
     "pages/otherInsideOrderList/otherInsideOrderList",
-    
+    "pages/takeAway/takeAway",
     "pages/updateOrder/updateOrder",
     
-    "pages/menu/menu",
+    
     "pages/orderList/orderList",
     "pages/eatNum/eatNum",
     

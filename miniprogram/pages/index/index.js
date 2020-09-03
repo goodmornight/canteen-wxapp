@@ -57,16 +57,16 @@ Page({
   data: {
     isNewDay: false,
     userInfo: {},
-    _openid:'',
+    _openid: '',
     recordingList: [0, 0, 0],
-    eatNum: eatNum_btn,//用餐人数
-    orderList: orderList_btn,//外卖订单
-    menu: menu_btn,//今日食谱
-    otherInsideOrder: otherInsideOrder_btn,//就餐报备
-    takeAway: takeAway_btn,//特色外卖
-    myOrder: myOrder_btn,//我的订单
-    rate: rate_btn,//评价意见
-    mySetting: mySetting_btn,//我的设置
+    eatNum: eatNum_btn, //用餐人数
+    orderList: orderList_btn, //外卖订单
+    menu: menu_btn, //今日食谱
+    otherInsideOrder: otherInsideOrder_btn, //就餐报备
+    takeAway: takeAway_btn, //特色外卖
+    myOrder: myOrder_btn, //我的订单
+    rate: rate_btn, //评价意见
+    mySetting: mySetting_btn, //我的设置
   },
 
   onLoad: async function () {
@@ -86,8 +86,7 @@ Page({
     // 暂时用于获取用户的openid
     await wx.cloud.callFunction({
       name: 'test',
-      data: {
-      }
+      data: {}
     }).then(res => {
       console.log(res.result);
       wx.setStorageSync('_openid', res.result.openid)
@@ -99,7 +98,7 @@ Page({
     })
 
     wx.request({
-      url: app.globalData.requestURL + '/Users/getby_openid',  // 通过openid查询用户数据
+      url: app.globalData.requestURL + '/Users/getby_openid', // 通过openid查询用户数据
       method: 'GET',
       data: {
         _openid: that.data._openid,
@@ -107,19 +106,23 @@ Page({
       header: {
         'content-type': 'application/json' // 默认值
       },
-      success (res) {
+      success(res) {
         console.log(res.data)
-        if(res.data.length!=0){
+        if (res.data.length != 0) {
           that.setData({
             userInfo: res.data[0]
           })
           wx.setStorageSync('userInfo', res.data[0])
         }
+      },
+      fail(err) {
+        console.log(err)
+        Toast.fail('系统错误');
       }
     })
     // 请求code
     wx.login({
-      success (res) {
+      success(res) {
         if (res.code) {
           console.log(res)
           //发起网络请求
@@ -216,14 +219,14 @@ Page({
         }
       })
       let list = await wx.cloud.callFunction({
-        name: 'recording',
-        data: {
-          action: 'getRecordingByCreatedTime',
-          start: start,
-          end: end,
-          userId: userInfo.userId
-        }
-      })
+          name: 'recording',
+          data: {
+            action: 'getRecordingByCreatedTime',
+            start: start,
+            end: end,
+            userId: userInfo.userId
+          }
+        })
         .then(res => {
           console.log(res)
           return res.result
@@ -334,13 +337,13 @@ Page({
       end = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 21, 0, 0);
     }
     let totalNum = await wx.cloud.callFunction({
-      name: 'recording',
-      data: {
-        action: 'getRecordingNum',
-        start: start,
-        end: end
-      }
-    })
+        name: 'recording',
+        data: {
+          action: 'getRecordingNum',
+          start: start,
+          end: end
+        }
+      })
       .then(res => {
         console.log(res);
         return res.result;
@@ -351,11 +354,11 @@ Page({
       });
     if (totalNum.length != 0) {
       for (let i = 0; i < totalNum.length; i++) {
-        if(totalNum[i]._id==1){
+        if (totalNum[i]._id == 1) {
           recordingList[0] = totalNum[i].count;
-        }else if(totalNum[i]._id==2){
+        } else if (totalNum[i]._id == 2) {
           recordingList[1] = totalNum[i].count;
-        }else if(totalNum[i]._id==3){
+        } else if (totalNum[i]._id == 3) {
           recordingList[2] = totalNum[i].count;
         }
         // recordingList[i] = totalNum[i].count;

@@ -87,7 +87,7 @@ Page({
         console.log(temp)
         if (temp.length != 0) {
           temp.forEach(item => {
-            orderList = orderList.concat([item._id, item.num])
+            orderList = orderList.concat(item._id + ',' + item.num)
           })
         }
       });
@@ -100,7 +100,7 @@ Page({
           "completedTime": '',
           "userId": userInfo.userId,
           "phone": 0,
-          "orderList": orderList.toString(),
+          "orderList": orderList.join(';'),
           "totalNum": totalNum,
           "totalPrice": totalPrice
         },

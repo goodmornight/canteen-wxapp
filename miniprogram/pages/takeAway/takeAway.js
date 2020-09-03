@@ -59,7 +59,7 @@ Page({
       });
 
       wx.request({
-        url: app.globalData.requestURL + '/Dishes/getall', // 通过openid查询用户数据
+        url: app.globalData.requestURL + '/Dishes/getall',
         method: 'GET',
         data: {},
         header: {
