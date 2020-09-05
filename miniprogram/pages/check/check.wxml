@@ -24,8 +24,8 @@
 				身份绑定
 			</view>
 			<form bindsubmit="checkIdSubmit">
-				<input bindinput="onNumInput" class="input-style" name="num" placeholder="请输入编号" type="number" maxlength="{{6}}"></input>
-				<input bindinput="onPwdInput" class="input-style" name="pwd" placeholder="请输入密码" type="text" password="{{true}}" maxlength="{{12}}">
+				<input bindinput="onNumInput" class="input-style" name="num" placeholder="请输入编号" type="text" maxlength="{{6}}" value="z0008"></input>
+				<input bindinput="onPwdInput" class="input-style" name="pwd" placeholder="请输入密码" type="text" password="{{true}}" maxlength="{{12}}" value="123123">
 				<!-- <image class="pwd-inside-style" src="../../images/icons/{{isSee?'see':'nosee'}}.svg" bindtap="toSee"></image> -->
 				</input>
 

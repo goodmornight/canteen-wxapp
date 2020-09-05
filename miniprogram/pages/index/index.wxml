@@ -34,7 +34,6 @@
 
 	</view>
 	<view class="flex flex-sub flex-direction">
-
 		<view class="text-green-dark">
 			晚餐</view>
 		<view class="text-xxl margin-top-sm">{{recordingList[2]}}</view>

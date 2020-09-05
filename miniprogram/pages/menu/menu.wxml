@@ -20,24 +20,24 @@
 	<van-tab wx:for="{{menuList}}" wx:for-index="index_w" wx:for-item="item_w" title="{{item_w.title_w}}">
 		<van-collapse value="{{ activeClassColNames }}" border="{{false}}" bind:change="onClassColChange">
 			<van-collapse-item wx:for="{{item_w.list_w}}" wx:for-index="index_c" wx:for-item="item_c" content-class="collapse-no-padding" title="{{item_c.title_c}}" name="{{index_c}}">
-				<van-cell-group wx:for="{{item_c.list_c}}" wx:for-index="index_d" wx:for-item="item_d" title="{{item_d.className}}">
-					<view class="cu-list menu-avatar">
+				<!-- <van-cell-group wx:for="{{item_c.list_c}}" wx:for-index="index_d" wx:for-item="item_d" title="{{item_d.className}}"> -->
+					<view class="cu-list menu-avatar" wx:for="{{item_c.list_c}}" wx:for-index="index_d" wx:for-item="item_d">
 						
-						<view wx:for="{{item_d.list_d}}" class="cu-item">
-							<image class="cu-avatar radius lg" mode="aspectFill" src="{{item.imgSrc==''?'../../images/test.jpg':item.imgSrc}}"></image>
+						<!-- <view wx:for="{{item_d.list_d}}" class="cu-item"> -->
+						<view class="cu-item">
+							<image class="cu-avatar radius lg" mode="aspectFill" src="{{item_d.imgSrc==''?'../../images/test.jpg':item.imgSrc}}"></image>
 							<view class="content">
 								<view class="text-theme-color">
-									<text class="text-cut">{{item.name}}</text>
+									<text class="text-cut">{{item_d.name}}</text>
 								</view>
-								<van-rate readonly value="{{ item.rate }}"/>
-
+								<van-rate readonly value="{{ item_d.rate }}"/>
 							</view>
-							<view wx:if="{{item.isSpecial}}" class="action">
+							<view wx:if="{{item_d.isSpecial}}" class="action">
 								<view class="cu-tag round bg-red"></view>
 							</view>
 						</view>
 					</view>
-				</van-cell-group>
+				<!-- </van-cell-group> -->
 			</van-collapse-item>
 		</van-collapse>
 	</van-tab>

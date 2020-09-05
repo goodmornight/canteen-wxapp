@@ -175,6 +175,29 @@ Page({
         },
         success(res) {
           console.log(res.data)
+          let requestList = res.data;
+          requestList.forEach(item => {
+            let time = new Date(item.time).getDay()
+            let menuNumArr = item.menuList.split(',')
+            // 代码需要优化，还没想好
+            let reqDishes = [];
+            that.data.dishes.forEach(dish => {
+              menuNumArr.forEach(menuNum => {
+                if (dish._id == parseInt(menuNum)) {
+                  reqDishes.push(dish)
+                }
+              })
+            })
+            // let reqDishes = that.data.dishes.filter(dish=>{
+              
+            // })
+            console.log(reqDishes)
+            menuList[time].list_w[item.state - 1].list_c = reqDishes
+          })
+          console.log(menuList)
+          that.setData({
+            menuList: menuList
+          })
           // if (res.data.length != 0) {
           //   let dishes = res.data.filter(item => item.isInside == true)
           //   console.log(dishes)
@@ -190,39 +213,39 @@ Page({
           Toast.fail('系统错误');
         }
       })
-      let list = await wx.cloud.callFunction({
-          name: "menu",
-          data: {
-            action: "getWeekMenu",
-            now: new Date()
-          }
-        })
-        .then(res => {
-          console.log(res);
-          return res.result;
-        })
-        .catch(err => {
-          console.log(err);
-          return [];
-        })
-      console.log(list);
-      console.log(menuList);
-      list.forEach(item => {
-        let time = new Date(item.time);
-        let id = item._id;
-        let state = item.state - 1;
-        let itemList = item.menuList;
-        let weekDays = time.getDay();
-        // let classList = that.getClassList(itemList);//餐类下的类名列表
-        // if (classList.length != 0) {
-        menuList[weekDays].list_w[state]._id = id;
-        menuList[weekDays].list_w[state].list_c = that.getClassList(itemList);
-        // }
+      // let list = await wx.cloud.callFunction({
+      //     name: "menu",
+      //     data: {
+      //       action: "getWeekMenu",
+      //       now: new Date()
+      //     }
+      //   })
+      //   .then(res => {
+      //     console.log(res);
+      //     return res.result;
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //     return [];
+      //   })
+      // console.log(list);
+      // console.log(menuList);
+      // list.forEach(item => {
+      //   let time = new Date(item.time);
+      //   let id = item._id;
+      //   let state = item.state - 1;
+      //   let itemList = item.menuList;
+      //   let weekDays = time.getDay();
+      //   // let classList = that.getClassList(itemList);//餐类下的类名列表
+      //   // if (classList.length != 0) {
+      //   menuList[weekDays].list_w[state]._id = id;
+      //   menuList[weekDays].list_w[state].list_c = that.getClassList(itemList);
+      //   // }
 
-      });
-      that.setData({
-        menuList: menuList
-      })
+      // });
+      // that.setData({
+      //   menuList: menuList
+      // })
 
     }
 

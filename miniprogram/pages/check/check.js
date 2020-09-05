@@ -268,6 +268,11 @@ Page({
         message: '加载中...'
       });
       let _openid = wx.getStorageSync('_openid');
+      console.log({
+        "_openid": _openid,
+          "userId": num,
+          "ppp": pwd
+      })
       // 还没写完，api在改
       wx.request({
         url: app.globalData.requestURL + '/Users/update_openid',
@@ -275,15 +280,16 @@ Page({
         data: {
           "_openid": _openid,
           "userId": num,
-          "ppp": pwd,
+          "ppp": pwd
         },
         header: {
           'content-type': 'application/json' // 默认值
         },
         success(res) {
           console.log(res)
-          if (res.statusCode == 200) {
-            Toast.clear();
+          Toast.clear()
+          if (res.data.code == 2) {
+            console.log(res.data.code)
             Toast({
               type: 'success',
               message: '身份绑定成功',
@@ -293,10 +299,20 @@ Page({
                 })
               }
             });
-          } else {
-            Toast.clear();
+          } else if (res.data.code == 1) {
+            console.log(res.data.code)
+            Toast.fail('账号密码错误')
+          } else if (res.data.code == 0) {
+            console.log(res.data.code)
             Dialog.confirm({
-              title: '身份绑定失败',
+              title: '该账号已被绑定',
+              message: '如有问题，请点击下方【联系管理员】进行反馈。',
+              confirmButtonText: "联系管理员",
+              confirmButtonOpenType: "contact"
+            })
+          } else {
+            Dialog.confirm({
+              title: '系统错误',
               message: '如有问题，请点击下方【联系管理员】进行反馈。',
               confirmButtonText: "联系管理员",
               confirmButtonOpenType: "contact"

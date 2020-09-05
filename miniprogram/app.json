@@ -8,14 +8,14 @@
     "pages/takeAway/takeAway",
     "pages/updateOrder/updateOrder",
     
-    
+    "pages/check/check",
     "pages/orderList/orderList",
     "pages/eatNum/eatNum",
     
     "pages/myOrder/myOrder",
     "pages/rate/rate",
     
-    "pages/check/check",
+    
     "pages/confirmOrder/confirmOrder",
     "pages/privacy/privacy",
     "pages/protocol/protocol"

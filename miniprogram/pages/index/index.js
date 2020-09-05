@@ -336,40 +336,73 @@ Page({
       start = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 0, 0, 0);
       end = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 21, 0, 0);
     }
-    let totalNum = await wx.cloud.callFunction({
-        name: 'recording',
-        data: {
-          action: 'getRecordingNum',
-          start: start,
-          end: end
-        }
-      })
-      .then(res => {
-        console.log(res);
-        return res.result;
-      })
-      .catch(err => {
-        console.log(err);
-        return [];
-      });
-    if (totalNum.length != 0) {
-      for (let i = 0; i < totalNum.length; i++) {
-        if (totalNum[i]._id == 1) {
-          recordingList[0] = totalNum[i].count;
-        } else if (totalNum[i]._id == 2) {
-          recordingList[1] = totalNum[i].count;
-        } else if (totalNum[i]._id == 3) {
-          recordingList[2] = totalNum[i].count;
-        }
-        // recordingList[i] = totalNum[i].count;
+    wx.request({
+      url: app.globalData.requestURL + '/Recording/getnumberlist', // 获取用餐人数
+      method: 'GET',
+      data: {
+        time: that.formatDateforSQL(start),
+        timeend: that.formatDateforSQL(end)
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log(res.data)
+        recordingList = res.data;
+        that.setData({
+          recordingList: recordingList
+        })
+      },
+      fail(err) {
+        console.log(err)
+        Toast.fail('系统错误');
       }
-      that.setData({
-        recordingList: recordingList
-      })
-    }
+    })
+    // let totalNum = await wx.cloud.callFunction({
+    //     name: 'recording',
+    //     data: {
+    //       action: 'getRecordingNum',
+    //       start: start,
+    //       end: end
+    //     }
+    //   })
+    //   .then(res => {
+    //     console.log(res);
+    //     return res.result;
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //     return [];
+    //   });
+    // if (totalNum.length != 0) {
+    //   for (let i = 0; i < totalNum.length; i++) {
+    //     if (totalNum[i]._id == 1) {
+    //       recordingList[0] = totalNum[i].count;
+    //     } else if (totalNum[i]._id == 2) {
+    //       recordingList[1] = totalNum[i].count;
+    //     } else if (totalNum[i]._id == 3) {
+    //       recordingList[2] = totalNum[i].count;
+    //     }
+    //     // recordingList[i] = totalNum[i].count;
+    //   }
+    //   that.setData({
+    //     recordingList: recordingList
+    //   })
+    // }
   },
   onReady() {
     Toast.clear();
   },
-
+  // 2020-04-04 00:00:00
+  formatDateforSQL(date) {
+    date = new Date(date);
+    return `${date.getFullYear()}-${this.overTen(date.getMonth() + 1)}-${this.overTen(date.getDate())} ${this.overTen(date.getHours())}:${this.overTen(date.getMinutes())}:${this.overTen(date.getSeconds())}`;
+  },
+  overTen(num) {
+    if (num < 10) {
+      return '0' + num;
+    } else {
+      return '' + num;
+    }
+  },
 })

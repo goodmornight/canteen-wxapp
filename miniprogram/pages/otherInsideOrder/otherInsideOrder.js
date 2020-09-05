@@ -168,7 +168,7 @@ Page({
             userId: userId,
             number: number,
             menuId: "wxTest",
-            state: state,
+            state: state+1,
             other: true,
             auto: false
           },
