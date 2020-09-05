@@ -191,7 +191,6 @@ Page({
             // let reqDishes = that.data.dishes.filter(dish=>{
               
             // })
-            console.log(reqDishes)
             menuList[time].list_w[item.state - 1].list_c = reqDishes
           })
           console.log(menuList)

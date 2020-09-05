@@ -282,6 +282,7 @@ Page({
           "userId": num,
           "ppp": pwd
         },
+        dataType:'',
         header: {
           'content-type': 'application/json' // 默认值
         },
