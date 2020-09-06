@@ -293,18 +293,19 @@ Page({
   //评价意见
   toRate() {
     console.log('toRate');
-    wx.requestSubscribeMessage({
-      tmplIds: ['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI'],
-      success(res) {
-        console.log(res)
-      },
-      fail(err) {
-        console.log(err)
-      }
-    })
-    wx.navigateTo({
-      url: '../rate/rate',
-    })
+    Toast('程序员正在加速开发中')
+    // wx.requestSubscribeMessage({
+    //   tmplIds: ['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI'],
+    //   success(res) {
+    //     console.log(res)
+    //   },
+    //   fail(err) {
+    //     console.log(err)
+    //   }
+    // })
+    // wx.navigateTo({
+    //   url: '../rate/rate',
+    // })
   },
   //跳转我的设置
   toMySetting() {

@@ -1,13 +1,13 @@
 {
   "pages": [
-    "pages/check/check",
+    
     "pages/index/index",
     "pages/otherInsideOrder/otherInsideOrder",
     "pages/confirmMenu/confirmMenu",
     "pages/otherInsideOrderList/otherInsideOrderList",
     "pages/takeAway/takeAway",
     "pages/updateOrder/updateOrder",
-    
+    "pages/check/check",
     
     "pages/orderList/orderList",
     "pages/eatNum/eatNum",

@@ -273,7 +273,7 @@ Page({
           "userId": num,
           "ppp": pwd
       })
-      // 还没写完，api在改
+      // 绑定账号，如果返回2表示绑定成功，返回1表示账号密码有误，返回0表示账号已被绑定
       wx.request({
         url: app.globalData.requestURL + '/Users/update_openid',
         method: 'PUT',
