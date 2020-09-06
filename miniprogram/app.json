@@ -1,6 +1,6 @@
 {
   "pages": [
-    
+    "pages/orderList/orderList",
     "pages/index/index",
     "pages/otherInsideOrder/otherInsideOrder",
     "pages/confirmMenu/confirmMenu",
@@ -9,7 +9,7 @@
     "pages/updateOrder/updateOrder",
     "pages/check/check",
     
-    "pages/orderList/orderList",
+    
     "pages/eatNum/eatNum",
     "pages/menu/menu",
     "pages/myOrder/myOrder",
