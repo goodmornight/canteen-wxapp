@@ -249,51 +249,58 @@ Page({
 
   },
   //特色外卖
-  toTakeAway() {
-    console.log('toTakeAway');
-    let now = new Date();
-    let deadline = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 16, 0, 0);
-    //当前时间大于当天16点
-    if (now.getTime() > deadline.getTime()) {
-      Toast("抱歉，当前时间已超过16:00，您无法购买特色外卖。")
-    } else {
-      wx.requestSubscribeMessage({
-        tmplIds: ['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI'],
-        success(res) {
-          console.log(res)
-        },
-        fail(err) {
-          console.log(err)
-        }
-      })
-      //当前时间小于当天16点
-      wx.navigateTo({
-        url: '../takeAway/takeAway',
-      })
-    }
+  // toTakeAway() {
+  //   console.log('toTakeAway');
+  //   let now = new Date();
+  //   let deadline = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 16, 0, 0);
+  //   //当前时间大于当天16点
+  //   if (now.getTime() > deadline.getTime()) {
+  //     Toast("抱歉，当前时间已超过16:00，您无法购买特色外卖。")
+  //   } else {
+  //     wx.requestSubscribeMessage({
+  //       tmplIds: ['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI'],
+  //       success(res) {
+  //         console.log(res)
+  //       },
+  //       fail(err) {
+  //         console.log(err)
+  //       }
+  //     })
+  //     //当前时间小于当天16点
+  //     wx.navigateTo({
+  //       url: '../takeAway/takeAway',
+  //     })
+  //   }
 
+  // },
+  // 用于演示特色外卖
+  toTakeAway() {
+    //当前时间小于当天16点
+    wx.navigateTo({
+      url: '../takeAway/takeAway',
+    })
   },
   //我的订单
   toMyOrder() {
     console.log('toMyOrder');
-
-    wx.requestSubscribeMessage({
-      tmplIds: ['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI'],
-      success(res) {
-        console.log(res)
-      },
-      fail(err) {
-        console.log(err)
-      }
-    })
-    wx.navigateTo({
-      url: '../myOrder/myOrder',
-    })
+    Toast('正在加速开发中');
+    // wx.requestSubscribeMessage({
+    //   tmplIds: ['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI'],
+    //   success(res) {
+    //     console.log(res)
+    //   },
+    //   fail(err) {
+    //     console.log(err)
+    //   }
+    // })
+    // wx.navigateTo({
+    //   url: '../myOrder/myOrder',
+    // })
   },
   //评价意见
   toRate() {
     console.log('toRate');
-    Toast('程序员正在加速开发中')
+    Toast('正在加速开发中')
     // wx.requestSubscribeMessage({
     //   tmplIds: ['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI'],
     //   success(res) {

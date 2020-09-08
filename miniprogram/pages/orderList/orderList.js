@@ -10,7 +10,7 @@ Page({
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
     dishes: [],
-    totalList: [],
+    totalList: {},
     date: '', //这个订单的时间
   },
 
@@ -20,41 +20,14 @@ Page({
   onLoad: function (options) {
     let that = this;
     //加载动画
-    // Toast.loading({
-    //   duration:0,
-    //   mask: true,
-    //   message: '加载中...'
-    // });
-    that.getTotalDishes();
+    Toast.loading({
+      duration:0,
+      mask: true,
+      message: '加载中...'
+    });
     that.getTotalList();
   },
-  getTotalDishes: function () {
-    let that = this;
-    // 获得所有的菜品列表
-    wx.request({
-      url: app.globalData.requestURL + '/Dishes/getall',
-      method: 'GET',
-      data: {},
-      header: {
-        'content-type': 'application/json'
-      },
-      success(res) {
-        if (res.data.length != 0) {
-          let dishes = res.data.filter(item => item.isInside == false)
-          console.log(dishes)
-          that.setData({
-            dishes: dishes
-          })
-        } else {
-          Toast.fail('系统错误');
-        }
-      },
-      fail(err) {
-        console.log('请求不到dishes');
-        Toast.fail('系统错误');
-      }
-    })
-  },
+
   getTotalList: function () {
     let that = this;
     let totalList = [];
@@ -84,35 +57,20 @@ Page({
       })
     }
     wx.request({
-      url: app.globalData.requestURL + '/Order/get', // 获取用餐人数
+      url: app.globalData.requestURL + '/Order/getNum', // 获取用餐人数
       method: 'GET',
       data: {
-        // createdTime: that.formatDateforSQL(start),
-        // createdTimeend: that.formatDateforSQL(end)
-        createdTime: '2020-09-02 02:35:26',
-        createdTimeend: '2020-09-04 02:35:26'
+        createdTime: that.formatDateforSQL(start),
+        createdTimeend: that.formatDateforSQL(end)
       },
       header: {
         'content-type': 'application/json' // 默认值
       },
       success(res) {
         console.log(res.data)
-        list = res.data;
-        if (list.length != 0) {
-          list.forEach(item => {
-            let orderList = item.orderList.split(';')
-            orderList.forEach(order_item => {
-              let order = order_item.split(',');
-              let dishDetail = that.data.dishes.filter(detail => order[0] == detail._id)
-              console.log(dishDetail)
-              final.push({
-                ...dishDetail[0],
-                num: parseInt(order[1])
-              })
-            })
-          })
-        }
-        console.log(final)
+        that.setData({
+          totalList: res.data
+        })
       },
       fail(err) {
         console.log(err)
