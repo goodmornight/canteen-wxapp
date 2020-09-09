@@ -178,12 +178,12 @@ Page({
           let requestList = res.data;
           requestList.forEach(item => {
             let time = new Date(item.time).getDay()
-            let menuNumArr = item.menuList.split(',')
+            let menuArr = item.menuList.split(',')
             // 代码需要优化，还没想好
             let reqDishes = [];
             that.data.dishes.forEach(dish => {
-              menuNumArr.forEach(menuNum => {
-                if (dish._id == parseInt(menuNum)) {
+              menuArr.forEach(menuName => {
+                if (dish.name == menuName) {
                   reqDishes.push(dish)
                 }
               })
