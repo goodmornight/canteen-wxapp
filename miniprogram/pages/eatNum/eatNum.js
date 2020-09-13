@@ -10,24 +10,39 @@ Page({
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
     activeNames: [],
-    totalList:[{title:"早餐",num:0,others:0,list:[]},{title:"午餐",num:0,others:0,list:[]},{title:"晚餐",num:0,others:0,list:[]}],
-    deadline:''
+    totalList: [{
+      title: "早餐",
+      num: 0,
+      others: 0,
+      list: []
+    }, {
+      title: "午餐",
+      num: 0,
+      others: 0,
+      list: []
+    }, {
+      title: "晚餐",
+      num: 0,
+      others: 0,
+      list: []
+    }],
+    deadline: ''
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad:async function (options) {
+  onLoad: async function (options) {
     let that = this;
     //加载动画
     Toast.loading({
-      duration:0,
+      duration: 0,
       mask: true,
       message: '加载中...'
     });
     let now = new Date();
     that.setData({
-      deadline:that.fullFormatDate(now)
+      deadline: that.fullFormatDate(now)
     })
     that.getTotalList();
   },
@@ -36,12 +51,27 @@ Page({
       activeNames: event.detail
     });
   },
-  getTotalList:async function(){
+  getTotalList: async function () {
     let that = this;
-    let totalList = [{title:"早餐",num:0,others:0,list:[]},{title:"午餐",num:0,others:0,list:[]},{title:"晚餐",num:0,others:0,list:[]}];
+    let totalList = [{
+      title: "早餐",
+      num: 0,
+      others: 0,
+      list: []
+    }, {
+      title: "午餐",
+      num: 0,
+      others: 0,
+      list: []
+    }, {
+      title: "晚餐",
+      num: 0,
+      others: 0,
+      list: []
+    }];
     let now = new Date();
-    let yesterday = new Date(now.getTime()-24*60*60*1000);
-    let tomorrow = new Date(now.getTime()+24*60*60*1000);
+    let yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    let tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
 
     let start;
     let end;
@@ -57,61 +87,123 @@ Page({
       start = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 0, 0, 0);
       end = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate(), 21, 0, 0);
     }
-    let totalNum = await wx.cloud.callFunction({
-      name:'recording',
-      data:{
-        action:'getRecordingNum',
-        start:start,
-        end:end
-      }
-    })
-    .then(res=>{
-      console.log(res);
-      return res.result;
-    })
-    .catch(err=>{
-      console.log(err);
-      return [];
-    });
-
-    let othersList;
-    if(totalNum.length!=0){
-      othersList = await wx.cloud.callFunction({
-        name:'recording',
-        data:{
-          action:'getOutsideRecording',
-          start:start,
-          end:now
-        }
-      })
-      .then(res=>{
-        console.log(res);
-        return res.result;
-      })
-      .catch(err=>{
-        console.log(err);
-        return [];
-      });
-      for(let i=0;i<totalNum.length;i++){
-        if(totalNum[i]._id==1){
-          totalList[0].num = totalNum[i].count;
-        }else if(totalNum[i]._id==2){
-          totalList[1].num = totalNum[i].count;
-        }else if(totalNum[i]._id==3){
-          totalList[2].num = totalNum[i].count;
-        }
-      }
-      if(othersList.length!=0){
-        othersList.forEach(item=>{
-          let index = item.state-1;
-          totalList[index].others+=item.number;
-          totalList[index].list.push(item)
+    console.log(that.formatDateforSQL(start))
+    wx.request({
+      url: app.globalData.requestURL + '/Recording/getnumberlist', // 获取用餐人数
+      method: 'GET',
+      data: {
+        // time: '2020-09-01 00:00:00',
+        // timeend: '2020-09-13 00:00:00'
+        time: that.formatDateforSQL(start),
+        timeend: that.formatDateforSQL(end)
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log(res.data)
+        totalList[0].num = res.data[0]
+        totalList[1].num = res.data[1]
+        totalList[2].num = res.data[2]
+        that.setData({
+          totalList: totalList
         })
+
+        wx.request({
+          url: app.globalData.requestURL + '/Recording/getother', // 获取外部用餐列表
+          method: 'GET',
+          data: {
+            // time: '2020-09-01 00:00:00', 测试数据
+            // timeend: '2020-09-13 00:00:00'
+            time: that.formatDateforSQL(start),
+            timeend: that.formatDateforSQL(end)
+          },
+          header: {
+            'content-type': 'application/json' // 默认值
+          },
+          success(res) {
+            console.log(res.data)
+            let otherRecordingList = res.data;
+            otherRecordingList.forEach(other=>{
+              let idx = other.state-1;
+              totalList[idx].others += other.number;
+              totalList[idx].list.push(other)
+            })
+            that.setData({
+              totalList:totalList
+            })
+            Toast.clear()
+          },
+          fail(err) {
+            Toast.clear()
+            console.log(err)
+            Toast.fail('系统错误');
+          }
+        })
+
+      },
+      fail(err) {
+        Toast.clear()
+        console.log(err)
+        Toast.fail('系统错误');
       }
-      that.setData({
-        totalList:totalList
-      })
-    }
+    })
+
+    // let totalNum = await wx.cloud.callFunction({
+    //   name:'recording',
+    //   data:{
+    //     action:'getRecordingNum',
+    //     start:start,
+    //     end:end
+    //   }
+    // })
+    // .then(res=>{
+    //   console.log(res);
+    //   return res.result;
+    // })
+    // .catch(err=>{
+    //   console.log(err);
+    //   return [];
+    // });
+
+    // let othersList;
+    // if(totalNum.length!=0){
+    //   othersList = await wx.cloud.callFunction({
+    //     name:'recording',
+    //     data:{
+    //       action:'getOutsideRecording',
+    //       start:start,
+    //       end:now
+    //     }
+    //   })
+    //   .then(res=>{
+    //     console.log(res);
+    //     return res.result;
+    //   })
+    //   .catch(err=>{
+    //     console.log(err);
+    //     return [];
+    //   });
+    //   for(let i=0;i<totalNum.length;i++){
+    //     if(totalNum[i]._id==1){
+    //       totalList[0].num = totalNum[i].count;
+    //     }else if(totalNum[i]._id==2){
+    //       totalList[1].num = totalNum[i].count;
+    //     }else if(totalNum[i]._id==3){
+    //       totalList[2].num = totalNum[i].count;
+    //     }
+    //   }
+    //   if(othersList.length!=0){
+    //     othersList.forEach(item=>{
+    //       let index = item.state-1;
+    //       totalList[index].others+=item.number;
+    //       totalList[index].list.push(item)
+    //     })
+    //   }
+    //   that.setData({
+    //     totalList:totalList
+    //   })
+    // }
   },
   overTen(num) {
     if (num < 10) {
@@ -129,6 +221,11 @@ Page({
   fullFormatDate(date) {
     date = new Date(date);
     return `${date.getFullYear()}/${this.overTen(date.getMonth() + 1)}/${this.overTen(date.getDate())} ${this.overTen(date.getHours())}:${this.overTen(date.getMinutes())}`
+  },
+  // 2020-04-04 00:00:00
+  formatDateforSQL(date) {
+    date = new Date(date);
+    return `${date.getFullYear()}-${this.overTen(date.getMonth() + 1)}-${this.overTen(date.getDate())} ${this.overTen(date.getHours())}:${this.overTen(date.getMinutes())}:${this.overTen(date.getSeconds())}`;
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

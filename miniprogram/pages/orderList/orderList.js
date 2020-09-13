@@ -9,8 +9,7 @@ Page({
   data: {
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
-    dishes: [],
-    totalList: {},
+    totalList: [],
     date: '', //这个订单的时间
   },
 
@@ -21,13 +20,12 @@ Page({
     let that = this;
     //加载动画
     Toast.loading({
-      duration:0,
+      duration: 0,
       mask: true,
       message: '加载中...'
     });
     that.getTotalList();
   },
-
   getTotalList: function () {
     let that = this;
     let totalList = [];
@@ -56,12 +54,16 @@ Page({
         date: that.formatDate(yesterday)
       })
     }
+    console.log(that.formatDateforSQL(start))
+    console.log(that.formatDateforSQL(end))
     wx.request({
-      url: app.globalData.requestURL + '/Order/getNum', // 获取用餐人数
+      url: app.globalData.requestURL + '/Order/getNum', // 获取订单汇总列表
       method: 'GET',
       data: {
-        createdTime: that.formatDateforSQL(start),
-        createdTimeend: that.formatDateforSQL(end)
+        // time: '2020-09-01 00:00:00', // 测试数据
+        // timeend: '2020-09-13 00:00:00'
+        time: that.formatDateforSQL(start),
+        timeend: that.formatDateforSQL(end)
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -71,8 +73,10 @@ Page({
         that.setData({
           totalList: res.data
         })
+        Toast.clear()
       },
       fail(err) {
+        Toast.clear()
         console.log(err)
         Toast.fail('系统错误');
       }
@@ -157,7 +161,6 @@ Page({
     date = new Date(date);
     return `${date.getFullYear()}-${this.overTen(date.getMonth() + 1)}-${this.overTen(date.getDate())} ${this.overTen(date.getHours())}:${this.overTen(date.getMinutes())}:${this.overTen(date.getSeconds())}`;
   },
-
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

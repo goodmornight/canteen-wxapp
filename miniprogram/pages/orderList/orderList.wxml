@@ -14,9 +14,9 @@
 <van-toast id="van-toast" />
 <van-cell title="时间" value="{{date}}" />
 
-<!-- <van-cell-group wx:for="{{totalList}}" wx:for-index="index_total" wx:for-item="item_total" title="{{item_total.className}}"> -->
-	<van-cell wx:for="{{totalList}}" title="{{index}}" value="{{item}}份" />
-<!-- </van-cell-group> -->
 <!-- <van-cell-group wx:for="{{totalList}}" wx:for-index="index_total" wx:for-item="item_total" title="{{item_total.className}}">
 	<van-cell wx:for="{{item_total.list}}" title="{{item.name}}" value="{{item.num}}份" />
 </van-cell-group> -->
+<!-- <van-cell-group wx:for="{{totalList}}" wx:for-index="index" wx:for-item="item" title="{{item_total.className}}"> -->
+	<van-cell wx:for="{{totalList}}" title="{{index}}" value="{{item}}份" />
+<!-- </van-cell-group> -->

@@ -17,7 +17,7 @@ Page({
     userInfo: {},
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
-    activeTab: 0,//标签页
+    activeTab: 0, //标签页
     date: '',
     calendarShow: false,
     defaultDate: newDay.getTime(),
@@ -33,7 +33,7 @@ Page({
   onLoad: function (options) {
     //加载动画
     Toast.loading({
-      duration:0,
+      duration: 0,
       mask: true,
       message: '加载中...'
     });
@@ -41,14 +41,14 @@ Page({
     let start = new Date(newDay.getFullYear(), newDay.getMonth(), newDay.getDate());
     let end = new Date(newDay.getTime() + 1 * 24 * 60 * 60 * 1000);
     let userInfo = wx.getStorageSync('userInfo');
-    if (userInfo == {}||userInfo==''||userInfo==[]){
+    if (userInfo == {} || userInfo == '' || userInfo == []) {
       Dialog.confirm({
         title: '身份验证',
         message: '为了更好的使用该小程序的其他功能，请您先进行身份验证',
         confirmButtonText: "身份验证",
-        zIndex:102,
-        overlayStyle:{
-          zIndex:101
+        zIndex: 102,
+        overlayStyle: {
+          zIndex: 101
         }
       }).then(() => {
         // on confirm
@@ -64,18 +64,18 @@ Page({
           url: '../index/index',
         })
       });
-    }else{
+    } else {
       that.setData({
         userInfo: userInfo
       });
       that.onList(userInfo, start, end);
     }
-    
+
     // let date = new Date();
     that.setData({
       date: `${this.formatDate(start)} - ${this.formatDate(end)}`
     });
-    
+
   },
   //标签页
   // onTabsChange(event) {
@@ -87,10 +87,14 @@ Page({
   // },
   onCalendarShow() {
     console.log('onshow')
-    this.setData({ calendarShow: true });
+    this.setData({
+      calendarShow: true
+    });
   },
   onCalendarClose() {
-    this.setData({ calendarShow: false });
+    this.setData({
+      calendarShow: false
+    });
   },
   overTen(num) {
     if (num < 10) {
@@ -124,41 +128,28 @@ Page({
   onList: async function (userInfo, start, end) {
     //加载动画
     Toast.loading({
-      duration:0,
+      duration: 0,
       mask: true,
       message: '加载中...'
     });
     let that = this;
-    // let recordingList = await wx.cloud.callFunction({
-    //   name:'recording',
-    //   data:{
-    //     action:'getRecording',
-    //     userId: userInfo.userId,
-    //     start: start,
-    //     end: end
-    //   }
-    // })
-    // .then(res=>{
-    //   console.log(res);
-    //   return res.result;
-    // })
-    // .catch(err=>{
-    //   console.log(err);
-    //   return [];
-    // });
-    // console.log(recordingList);
-    await wx.cloud.callFunction({
-      name: "order",
+
+    wx.request({
+      url: app.globalData.requestURL + '/Order/get', // 获取用户订单列表
+      method: 'GET',
       data: {
-        action: "getOrder",
+        time: '2020-09-01 00:00:00', // 测试数据
+        timeend: '2020-09-13 00:00:00',
         userId: userInfo.userId,
-        start: start.getTime(),
-        end: end.getTime()
-      }
-    })
-      .then(res => {
-        console.log(res)
-        let result = res.result;
+        // time: that.formatDateforSQL(start),
+        // timeend: that.formatDateforSQL(end)
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log(res.data)
+        let result = res.data;
         let totalPrice = 0;
         let list = [{}];//整理好的内容列表
         let tempDateList = [];//日期列表
@@ -166,21 +157,20 @@ Page({
           let today = new Date().getTime();
           let tempDate = new Date(item.createdTime).getTime();
           let tempDate_format = that.formatDate(tempDate);
+
           if (tempDate >= firstTime && today < finalTime) {
             item.completed = 0;//已下单，可修改
           } else {
             item.completed = 1;//正在处理，不可修改
           }
-          if (item.completedTime != undefined) {
+          if (item.completedTime) {
             console.log(totalPrice)
             let completedDate = new Date(item.completedTime).getTime();
             totalPrice += item.totalPrice;
             item.completedTime_format = that.fullFormatDate(completedDate);
             item.completed = 2;//已完成，可评价，需要在后台系统控制
           }
-          // item.createdTime = new Date(new Date(item.createdTime).getTime()+8*60*60*1000);//格林威治时间与北京时间的转换
-
-
+          
           item.createdTime_format = that.fullFormatDate(tempDate);
           if (tempDateList.indexOf(tempDate_format) == -1) {
             tempDateList.push(tempDate_format)
@@ -205,11 +195,77 @@ Page({
           totalPrice: totalPrice
         });
         Toast.clear();
-      })
-      .catch(err => {
-        console.log(err);
-        Toast.clear();
-      })
+      },
+      fail(err) {
+        Toast.clear()
+        console.log(err)
+        Toast.fail('系统错误');
+      }
+    })
+
+    // await wx.cloud.callFunction({
+    //   name: "order",
+    //   data: {
+    //     action: "getOrder",
+    //     userId: userInfo.userId,
+    //     start: start.getTime(),
+    //     end: end.getTime()
+    //   }
+    // })
+    //   .then(res => {
+    //     console.log(res)
+    //     let result = res.result;
+    //     let totalPrice = 0;
+    //     let list = [{}];//整理好的内容列表
+    //     let tempDateList = [];//日期列表
+    //     result.forEach(item => {
+    //       let today = new Date().getTime();
+    //       let tempDate = new Date(item.createdTime).getTime();
+    //       let tempDate_format = that.formatDate(tempDate);
+    //       if (tempDate >= firstTime && today < finalTime) {
+    //         item.completed = 0;//已下单，可修改
+    //       } else {
+    //         item.completed = 1;//正在处理，不可修改
+    //       }
+    //       if (item.completedTime != undefined) {
+    //         console.log(totalPrice)
+    //         let completedDate = new Date(item.completedTime).getTime();
+    //         totalPrice += item.totalPrice;
+    //         item.completedTime_format = that.fullFormatDate(completedDate);
+    //         item.completed = 2;//已完成，可评价，需要在后台系统控制
+    //       }
+    //       // item.createdTime = new Date(new Date(item.createdTime).getTime()+8*60*60*1000);//格林威治时间与北京时间的转换
+
+
+    //       item.createdTime_format = that.fullFormatDate(tempDate);
+    //       if (tempDateList.indexOf(tempDate_format) == -1) {
+    //         tempDateList.push(tempDate_format)
+    //       }
+    //     });
+
+    //     for (let i = 0; i < tempDateList.length; i++) {
+    //       list[i] = {};
+    //       list[i].formatDate = tempDateList[i];
+    //       list[i].items = [];
+    //       result.forEach(item => {
+    //         let tempDate = new Date(item.createdTime).getTime();
+    //         let tempDate_format = that.formatDate(tempDate);
+    //         if (tempDate_format == tempDateList[i]) {
+    //           list[i].items.push(item)
+    //         }
+    //       })
+    //     }
+
+    //     that.setData({
+    //       list: list,
+    //       totalPrice: totalPrice
+    //     });
+    //     Toast.clear();
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //     Toast.clear();
+    //   })
   },
 
   //跳转评价页面
@@ -229,6 +285,8 @@ Page({
     let orderList = detail.orderList;
     let formatDate = that.data.list[idx1].formatDate;
     let classes = [];
+    console.log(orderList)
+    // 整理class列表
     for (let i = 0; i < orderList.length; i++) {
       let className = orderList[i].className;
       if (classes.indexOf(className) == -1) {
@@ -282,6 +340,11 @@ Page({
     wx.navigateTo({
       url: '../confirmOrder/confirmOrder?detail=' + formatDate,
     })
+  },
+  // 2020-04-04 00:00:00
+  formatDateforSQL(date) {
+    date = new Date(date);
+    return `${date.getFullYear()}-${this.overTen(date.getMonth() + 1)}-${this.overTen(date.getDate())} ${this.overTen(date.getHours())}:${this.overTen(date.getMinutes())}:${this.overTen(date.getSeconds())}`;
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
