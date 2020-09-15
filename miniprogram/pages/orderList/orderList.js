@@ -19,11 +19,11 @@ Page({
   onLoad: function (options) {
     let that = this;
     //加载动画
-    Toast.loading({
-      duration: 0,
-      mask: true,
-      message: '加载中...'
-    });
+    // Toast.loading({
+    //   duration: 0,
+    //   mask: true,
+    //   message: '加载中...'
+    // });
     that.getTotalList();
   },
   getTotalList: function () {
@@ -62,8 +62,8 @@ Page({
       data: {
         // time: '2020-09-01 00:00:00', // 测试数据
         // timeend: '2020-09-13 00:00:00'
-        time: that.formatDateforSQL(start),
-        timeend: that.formatDateforSQL(end)
+        createdTime: that.formatDateforSQL(start),
+        createdTimeend: that.formatDateforSQL(end)
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -73,10 +73,10 @@ Page({
         that.setData({
           totalList: res.data
         })
-        Toast.clear()
+        // Toast.clear()
       },
       fail(err) {
-        Toast.clear()
+        // Toast.clear()
         console.log(err)
         Toast.fail('系统错误');
       }
@@ -165,7 +165,7 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    Toast.clear();
+    // Toast.clear();
   },
 
   /**
