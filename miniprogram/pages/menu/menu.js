@@ -179,6 +179,7 @@ Page({
           requestList.forEach(item => {
             let time = new Date(item.time).getDay();
             let state = item.state - 1;
+            menuList[time].list_w[state].list_c.push(item)
             // let menuArr = item.menuList.split(',')
             // // 代码需要优化，还没想好
             // let reqDishes = [];
@@ -191,6 +192,11 @@ Page({
             // })
 
             // menuList[time].list_w[item.state - 1].list_c = reqDishes
+          })
+          menuList.forEach(w=>{
+            w.list_w.forEach(c=>{
+              c.list_c = that.getClassList(c.list_c)
+            })
           })
           console.log(menuList)
           that.setData({
