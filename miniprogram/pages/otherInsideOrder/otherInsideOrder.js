@@ -280,6 +280,7 @@ Page({
   //发送报备通知
   toSend: async function () {
     let that = this;
+    let userInfo = that.data.userInfo;
     let userId = that.data.userId;
     let num = that.data.num;
     let state = that.data.eatIndex;

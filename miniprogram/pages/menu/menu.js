@@ -179,22 +179,11 @@ Page({
           requestList.forEach(item => {
             let time = new Date(item.time).getDay();
             let state = item.state - 1;
-            menuList[time].list_w[state].list_c.push(item)
-            // let menuArr = item.menuList.split(',')
-            // // 代码需要优化，还没想好
-            // let reqDishes = [];
-            // that.data.dishes.forEach(dish => {
-            //   menuArr.forEach(menuName => {
-            //     if (dish.name == menuName) {
-            //       reqDishes.push(dish)
-            //     }
-            //   })
-            // })
-
-            // menuList[time].list_w[item.state - 1].list_c = reqDishes
+            let temp = that.data.dishes.filter(dish => dish.name == item.menuList)
+            if (temp.length) menuList[time].list_w[state].list_c.push(...temp)
           })
-          menuList.forEach(w=>{
-            w.list_w.forEach(c=>{
+          menuList.forEach(w => {
+            w.list_w.forEach(c => {
               c.list_c = that.getClassList(c.list_c)
             })
           })

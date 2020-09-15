@@ -24,7 +24,7 @@ Page({
     // });
     let that = this;
     let userInfo = wx.getStorageSync('userInfo');
-    if (userInfo == {} || userInfo == ''||userInfo_cloud == undefined) {
+    if (userInfo == {} || userInfo == '') {
       let userInfo_cloud = await wx.cloud.callFunction({
         name: 'users',
         data: {
