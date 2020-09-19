@@ -26,12 +26,12 @@ Page({
   onLoad: function (options) {
     let that = this;
     console.log(options)
-    //加载动画
-    Toast.loading({
-      duration: 0,
-      mask: true,
-      message: '加载中...'
-    });
+    // //加载动画
+    // Toast.loading({
+    //   duration: 0,
+    //   mask: true,
+    //   message: '加载中...'
+    // });
     if (options.detail != undefined) {
       that.setData({
         isShowHistory: true,
@@ -271,7 +271,7 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    Toast.clear();
+    // Toast.clear();
   },
 
   /**

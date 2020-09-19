@@ -14,15 +14,17 @@ Page({
    * 页面的初始数据
    */
   data: {
+    userInfo: wx.getStorageSync('userInfo'),
+    allDishes: wx.getStorageSync('allDishes'),
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
     activeTab: 0,
-    calendarShow: false,//显示日历
+    calendarShow: false, //显示日历
     date: '',
     defaultDate: new Date().getTime(),
     minDate: new Date(minDay.getFullYear(), minDay.getMonth(), minDay.getDate()).getTime(),
     maxDate: new Date(maxDay.getFullYear(), maxDay.getMonth(), maxDay.getDate()).getTime(),
-    bottomShow: false,//测试，用于显示输入框
+    bottomShow: false, //测试，用于显示输入框
     rateList: []
   },
 
@@ -31,132 +33,143 @@ Page({
    */
   onLoad: async function (options) {
     //加载动画
-    Toast.loading({
-      duration: 0,
-      mask: true,
-      message: '加载中...'
-    });
+    // Toast.loading({
+    //   duration: 0,
+    //   mask: true,
+    //   message: '加载中...'
+    // });
+
     let that = this;
     let rateList = that.data.rateList;
     let date = that.formatDate(newDay);
     that.setData({
       date: date
     });
-    let userInfo = wx.getStorageSync('userInfo');
+    let userInfo = that.data.userInfo;
     if (userInfo == {} || userInfo == '') {
-      let userInfo_cloud = await wx.cloud.callFunction({
-        name: 'users',
-        data: {
-          action: 'getUserInfo'
+      Dialog.confirm({
+        title: '身份验证',
+        message: '为了更好的使用该小程序的其他功能，请您先进行身份验证',
+        confirmButtonText: "身份验证",
+        zIndex: 102,
+        overlayStyle: {
+          zIndex: 101
         }
-      }).then(res => {
-        console.log(res);
-        return res.result;
-
-      }).catch(err => {
-        console.log(err)
-        return {};
-      });
-      if (userInfo_cloud == {} || userInfo_cloud == '') {
-        Dialog.confirm({
-          title: '身份验证',
-          message: '为了更好的使用该小程序的其他功能，请您先进行身份验证',
-          confirmButtonText: "身份验证",
-          zIndex: 102,
-          overlayStyle: {
-            zIndex: 101
-          }
-        }).then(() => {
-          // on confirm
-          wx.reLaunch({
-            url: '../check/check',
-          })
-        }).catch(() => {
-          // on cancel
-          wx.reLaunch({
-            url: '../index/index',
-          })
-        });
-      } else {
-        that.setData({
-          userInfo: userInfo_cloud
+      }).then(() => {
+        // on confirm
+        wx.reLaunch({
+          url: '../check/check',
         })
-        wx.setStorageSync('userInfo', userInfo_cloud)
-      }
-    } else {
-      that.setData({
-        userInfo: userInfo
-      })
-    }
-    let userInfo_final = that.data.userInfo;
-    if (userInfo_final != {} || userInfo_final != '') {
-      Toast.loading({
-        duration: 0,
-        mask: true,
-        message: '加载中...'
+      }).catch(() => {
+        // on cancel
+        wx.reLaunch({
+          url: '../index/index',
+        })
       });
+    } else {
       let date = new Date();
-      that.getRateList(date, userInfo_final);
-      // //身份信息已绑定，并且有缓存
-      // let list = await wx.cloud.callFunction({
-      //   name: "rate",
-      //   data: {
-      //     action: "getRecordingAndOrder",
-      //     now: new Date(),
-      //     userId: userInfo_final.userId
-      //   }
-      // })
-      //   .then(res => {
-      //     console.log(res);
-      //     return res.result;
-      //   })
-      //   .catch(err => {
-      //     console.log(err);
-      //     return [];
-      //   })
-      // let orderList = list.orderList;
-      // let recordList = list.recordList;
-      // if (orderList != null || orderList.length != 0) {
-      //   orderList.forEach(item => {
-      //     let orderDetail = item.orderList;
-      //     orderDetail.forEach(item_detail => {
-
-      //       if (item_detail.isAssessed == undefined || item_detail.isAssessed == '') {
-      //         item_detail.isAssessed = false;
-      //       }
-
-      //       if (!item_detail.isAssessed) {
-      //         rateList[3].list.push(item_detail)
-      //       }
-
-      //     })
-      //   })
-      // }
-      // if (recordList != null || recordList.length != 0) {
-      //   recordList.forEach(item => {
-      //     let recordListDetail = item.menu[0].menuList;
-      //     recordListDetail.forEach(item_detail => {
-      //       if (item_detail.isAssessed == undefined) {
-      //         item_detail.isAssessed = false;
-      //       }
-      //       if (!item_detail.isAssessed) {
-      //         rateList[item.state - 1].list.push(item_detail)
-      //       }
-      //     })
-
-      //   })
-      // }
-      // that.setData({
-      //   rateList: rateList
-      // })
+      that.getRateList(date, userInfo);
     }
+    //   if (userInfo) {
+    //     Dialog.confirm({
+    //       title: '身份验证',
+    //       message: '为了更好的使用该小程序的其他功能，请您先进行身份验证',
+    //       confirmButtonText: "身份验证",
+    //       zIndex: 102,
+    //       overlayStyle: {
+    //         zIndex: 101
+    //       }
+    //     }).then(() => {
+    //       // on confirm
+    //       wx.reLaunch({
+    //         url: '../check/check',
+    //       })
+    //     }).catch(() => {
+    //       // on cancel
+    //       wx.reLaunch({
+    //         url: '../index/index',
+    //       })
+    //     });
+    //   } else {
+    //     that.setData({
+    //       userInfo: userInfo_cloud
+    //     })
+    //     wx.setStorageSync('userInfo', userInfo_cloud)
+    //   }
+    // } else {
+    //   that.setData({
+    //     userInfo: userInfo
+    //   })
+    // }
+    // let userInfo_final = that.data.userInfo;
+    // if (userInfo_final != {} || userInfo_final != '') {
+    //   Toast.loading({
+    //     duration: 0,
+    //     mask: true,
+    //     message: '加载中...'
+    //   });
+    // let date = new Date();
+    // that.getRateList(date, userInfo_final);
+    // //身份信息已绑定，并且有缓存
+    // let list = await wx.cloud.callFunction({
+    //   name: "rate",
+    //   data: {
+    //     action: "getRecordingAndOrder",
+    //     now: new Date(),
+    //     userId: userInfo_final.userId
+    //   }
+    // })
+    //   .then(res => {
+    //     console.log(res);
+    //     return res.result;
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //     return [];
+    //   })
+    // let orderList = list.orderList;
+    // let recordList = list.recordList;
+    // if (orderList != null || orderList.length != 0) {
+    //   orderList.forEach(item => {
+    //     let orderDetail = item.orderList;
+    //     orderDetail.forEach(item_detail => {
+
+    //       if (item_detail.isAssessed == undefined || item_detail.isAssessed == '') {
+    //         item_detail.isAssessed = false;
+    //       }
+
+    //       if (!item_detail.isAssessed) {
+    //         rateList[3].list.push(item_detail)
+    //       }
+
+    //     })
+    //   })
+    // }
+    // if (recordList != null || recordList.length != 0) {
+    //   recordList.forEach(item => {
+    //     let recordListDetail = item.menu[0].menuList;
+    //     recordListDetail.forEach(item_detail => {
+    //       if (item_detail.isAssessed == undefined) {
+    //         item_detail.isAssessed = false;
+    //       }
+    //       if (!item_detail.isAssessed) {
+    //         rateList[item.state - 1].list.push(item_detail)
+    //       }
+    //     })
+
+    //   })
+    // }
+    // that.setData({
+    //   rateList: rateList
+    // })
+    // }
   },
   onStarChange(e) {
     console.log(e)
     let that = this;
     let rateList = that.data.rateList;
-    let idx1 = e.currentTarget.dataset.idx1;//大的列表的定位
-    let idx2 = e.currentTarget.dataset.idx2;//小的列表的定位
+    let idx1 = e.currentTarget.dataset.idx1; //大的列表的定位
+    let idx2 = e.currentTarget.dataset.idx2; //小的列表的定位
     let star = e.detail;
     rateList[idx1].list[idx2].rate = star;
     rateList[idx1].list[idx2].isAssessed = true;
@@ -174,36 +187,68 @@ Page({
     let listItem = rateList[idx1].list[idx2];
     let rate = e.detail.value.rate;
     let textRate = e.detail.value.textRate;
-    let usedTime = rateList[idx1].usedTime;
-    await wx.cloud.callFunction({
-      name: 'comment',
+    let usedTime = rateList[idx1].list[idx2].usedTime;
+    console.log({
+      createdTime: new Date(), //创建时间
+      userId: userInfo.userId, //用户编号
+      dishId: listItem._id, //菜品ID
+      dishName: listItem.name, //菜名
+      rate: rate, //打星
+      otherComment: textRate, //其他评价
+      usedTime: usedTime //用餐时间
+    })
+    wx.request({
+      url: app.globalData.requestURL + '/Comment/insert',
+      method: 'POST',
       data: {
-        action: 'addComment',
-        createdTime: new Date(),//创建时间
-        userId: userInfo.userId,//用户编号
-        dishId: listItem._id,//菜品ID
-        dishName: listItem.name,//菜名
-        rate: rate,//打星
-        otherComment: textRate,//其他评价
-        usedTime: usedTime//用餐时间
+        createdTime: that.formatDateforSQL(new Date()), //创建时间
+        userId: userInfo.userId, //用户编号
+        dishId: listItem._id, //菜品ID
+        dishName: listItem.name, //菜名
+        rate: rate, //打星
+        otherComment: textRate, //其他评价
+        usedTime: that.formatDateforSQL(usedTime) //用餐时间
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      success(res) {
+        console.log(res)
+      },
+      fail(err){
+        console.log(err)
       }
     })
-      .then(res => {
-        console.log(res);
-        if (res.result.state == 1) {
-          Toast('提交成功');
-          rateList[idx1].list.splice(idx2, 1);
-          that.setData({
-            rateList: rateList
-          })
-        } else {
-          Toast.fail('提交失败')
-        }
-      })
-      .catch(err => {
-        console.log(err);
-        Toast.fail('系统错误')
-      })
+
+    // await wx.cloud.callFunction({
+    //     name: 'comment',
+    //     data: {
+    //       action: 'addComment',
+    //       createdTime: new Date(), //创建时间
+    //       userId: userInfo.userId, //用户编号
+    //       dishId: listItem._id, //菜品ID
+    //       dishName: listItem.name, //菜名
+    //       rate: rate, //打星
+    //       otherComment: textRate, //其他评价
+    //       usedTime: usedTime //用餐时间
+    //     }
+    //   })
+    //   .then(res => {
+    //     console.log(res);
+    //     if (res.result.state == 1) {
+    //       Toast('提交成功');
+    //       rateList[idx1].list.splice(idx2, 1);
+    //       that.setData({
+    //         rateList: rateList
+    //       })
+    //     } else {
+    //       Toast.fail('提交失败')
+    //     }
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //     Toast.fail('系统错误')
+    //   })
   },
   //显示评论框
   toTextShow(e) {
@@ -237,10 +282,14 @@ Page({
   },
   onCalendarShow() {
     console.log('onshow')
-    this.setData({ calendarShow: true });
+    this.setData({
+      calendarShow: true
+    });
   },
   onCalendarClose() {
-    this.setData({ calendarShow: false });
+    this.setData({
+      calendarShow: false
+    });
   },
   formatDate(date) {
     date = new Date(date);
@@ -257,98 +306,279 @@ Page({
   // 从服务器获取要评价的列表
   getRateList: async function (date, userInfo) {
     let that = this;
-    let rateList = [{ tab: '早餐', list: [] }, { tab: '午餐', list: [] }, { tab: '晚餐', list: [] }, { tab: '订单', list: [] }];
-    let orderIdList = [];//用于避免菜品重复
-    let recordIdList = [];//用于避免重复
-    let list = await wx.cloud.callFunction({
-      name: "rate",
+    let allDishes = that.data.allDishes;
+    let rateList = [{
+      tab: '早餐',
+      list: []
+    }, {
+      tab: '午餐',
+      list: []
+    }, {
+      tab: '晚餐',
+      list: []
+    }, {
+      tab: '订单',
+      list: []
+    }];
+
+    let orderIdList = []; //用于避免菜品重复
+    let recordIdList = []; //用于避免重复
+
+    let idCommentList = []; //已评价过的dishId
+
+    let start = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+    let end = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
+    let orderList = [];
+
+    wx.request({
+      url: app.globalData.requestURL + '/Comment/get', // 获取用户订单列表
+      method: 'GET',
       data: {
-        action: "getRecordingAndOrder",
-        now: date,
-        userId: userInfo.userId
+        createdTime: '2020-08-25 21:59:06', // 测试数据
+        createdTimeend: '2020-08-26 21:59:06',
+        // createdTime: that.formatDateforSQL(start),
+        // createdTimeend: that.formatDateforSQL(end)
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res_comGET) {
+        console.log(res_comGET.data)
+        if (res_comGET.data) {
+          res_comGET.data.forEach(item => {
+            idCommentList.push(parseInt(item.dishId))
+          })
+          console.log(idCommentList)
+
+          // 获取用户订单列表
+          wx.request({
+            url: app.globalData.requestURL + '/Order/get',
+            method: 'GET',
+            data: {
+              // createdTime: '2020-09-17 00:00:00', // 测试数据
+              // createdTimeend: '2020-09-20 00:00:00',
+              userId: userInfo.userId,
+              createdTime: that.formatDateforSQL(start),
+              createdTimeend: that.formatDateforSQL(end)
+            },
+            header: {
+              'content-type': 'application/json' // 默认值
+            },
+            success(res_orderGET) {
+              console.log(res_orderGET.data)
+              if (res_orderGET.data) {
+                res_orderGET.data.forEach(item => {
+                  let orderArr = item.orderList.split(';')
+                  orderList.push(...orderArr + ',' + item.createdTime)
+                })
+                console.log(orderList)
+                orderList.forEach(item => {
+                  let id = parseInt(/^\d+/.exec(item)[0]);
+                  let time = /(\d+-\d+-\d+ [01][0-9]|[2][0-3]):[0-5][0-9]$/.exec(item)[0]
+                  let isExit = orderIdList.find(dish => dish._id == id) || idCommentList.find(dish => dish == id)
+                  if (!isExit) {
+                    orderIdList.push(id)
+                    rateList[3].list.push({
+                      ...allDishes.filter(item => item._id == id)[0],
+                      rate: 0,
+                      usedTime: new Date(time)
+                    })
+                  }
+                })
+                console.log(rateList)
+                // 获取recording列表
+                wx.request({
+                  url: app.globalData.requestURL + '/Menu/getbytime',
+                  method: 'GET',
+                  data: {
+                    time: '2020-09-17 00:00:00', // 测试数据
+                    timeend: '2020-09-20 00:00:00',
+                    // time: that.formatDateforSQL(start),
+                    // timeend: that.formatDateforSQL(end),
+                  },
+                  header: {
+                    'content-type': 'application/json'
+                  },
+                  success(res_menuGET) {
+                    console.log(res_menuGET.data)
+                    if (res_menuGET.data) {
+                      let breakfast = new Set();
+                      let lunch = new Set();
+                      let dinner = new Set();
+                      res_menuGET.data.forEach(item => {
+                        if (item.state == 1) {
+                          breakfast.add(item.menuList + ',' + item.time)
+                        } else if (item.state == 2) {
+                          lunch.add(item.menuList + ',' + item.time)
+                        } else {
+                          dinner.add(item.menuList + ',' + item.time)
+                        }
+                      })
+                      for (let b of breakfast) {
+                        let dish = b.split(',')[0];
+                        let time = b.split(',')[1];
+                        rateList[0].list.push({
+                          ...allDishes.filter(item => item.name == dish)[0],
+                          rate: 0,
+                          usedTime: new Date(time)
+                        })
+                      }
+                      for (let l of lunch) {
+                        let dish = l.split(',')[0];
+                        let time = l.split(',')[1];
+                        rateList[0].list.push({
+                          ...allDishes.filter(item => item.name == dish)[0],
+                          rate: 0,
+                          usedTime: new Date(time)
+                        })
+                      }
+                      for (let d of dinner) {
+                        let dish = d.split(',')[0];
+                        let time = d.split(',')[1];
+                        rateList[0].list.push({
+                          ...allDishes.filter(item => item.name == dish)[0],
+                          rate: 0,
+                          usedTime: new Date(time)
+                        })
+                      }
+                      console.log(rateList)
+                      that.setData({
+                        rateList: rateList
+                      })
+                    }
+                  },
+                  fail(err) {
+                    console.log(err)
+                  }
+                })
+              }
+            },
+            fail(err) {
+              console.log(err)
+              Toast.fail('系统错误')
+            }
+          })
+
+        }
+      },
+      fail(err) {
+        console.log(err)
       }
     })
-      .then(res => {
-        console.log(res);
-        return res.result;
-      })
-      .catch(err => {
-        console.log(err);
-        return [];
-      })
-    if (list.length != 0) {
-      let rateIdDetail = await wx.cloud.callFunction({
-        name: "comment",
-        data: {
-          action: "getDayComment",
-          start: new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0),
-          end: new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59),
-          userId: userInfo.userId
-        }
-      })
-        .then(res => {
-          console.log(res);
-          return res.result;
-        })
-        .catch(err => {
-          console.log(err);
-          return [];
-        });
-      rateIdDetail.forEach(item => {
-        if (orderIdList.indexOf(item) == -1) {
-          orderIdList.push(item.dishId)
-          recordIdList.push(item.dishId)
-        }
-      })
+
+
+    // let list = await wx.cloud.callFunction({
+    //   name: "rate",
+    //   data: {
+    //     action: "getRecordingAndOrder",
+    //     now: date,
+    //     userId: userInfo.userId
+    //   }
+    // })
+    //   .then(res => {
+    //     console.log(res);
+    //     return res.result;
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //     return [];
+    //   })
+    // if (list.length != 0) {
+    //   let rateIdDetail = await wx.cloud.callFunction({
+    //     name: "comment",
+    //     data: {
+    //       action: "getDayComment",
+    //       start: new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0),
+    //       end: new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59),
+    //       userId: userInfo.userId
+    //     }
+    //   })
+    //     .then(res => {
+    //       console.log(res);
+    //       return res.result;
+    //     })
+    //     .catch(err => {
+    //       console.log(err);
+    //       return [];
+    //     });
+    //   rateIdDetail.forEach(item => {
+    //     if (orderIdList.indexOf(item) == -1) {
+    //       orderIdList.push(item.dishId)
+    //       recordIdList.push(item.dishId)
+    //     }
+    //   })
+    // }
+    // let orderList = list.orderList;
+    // let recordList = list.recordList;
+
+    // if (orderList != null || orderList.length != 0) {
+    //   orderList.forEach(item => {
+    //     rateList[3].usedTime = new Date(item.createdTime);
+    //     let orderDetail = item.orderList;
+    //     orderDetail.forEach(item_detail => {
+    //       if (orderIdList.indexOf(item_detail._id) == -1) {
+    //         orderIdList.push(item_detail._id);
+    //         if (item_detail.isAssessed == undefined || item_detail.isAssessed == '') {
+    //           item_detail.isAssessed = false;
+    //           item_detail.rate = 0;
+    //         }
+    //         if (!item_detail.isAssessed) {
+    //           rateList[3].list.push(item_detail)
+    //         }
+    //       }
+
+    //     })
+    //   })
+    // }
+    // if (recordList != null || recordList.length != 0) {
+
+    //   recordList.forEach(item => {
+    //     rateList[item.state - 1].usedTime = new Date(item.time);
+    //     let recordListDetail = item.menu[0].menuList;
+    //     recordListDetail.forEach(item_detail => {
+
+    //       if (recordIdList.indexOf(item_detail._id) == -1) {
+    //         recordIdList.push(item_detail._id);
+    //         if (item_detail.isAssessed == undefined || item_detail.isAssessed == '') {
+    //           item_detail.isAssessed = false;
+    //           item_detail.rate = 0;
+    //         }
+    //         if (!item_detail.isAssessed) {
+    //           rateList[item.state - 1].list.push(item_detail)
+    //         }
+    //       }
+
+    //     })
+
+    //   })
+    // }
+    // that.setData({
+    //   rateList: rateList
+    // })
+    // Toast.clear();
+  },
+  // 正则表达式解析菜品和数量
+  getDishDetail(string) {
+    let that = this;
+    let id = parseInt(/^\d+/.exec(string)[0]);
+    // let num = parseInt(/\d+$/.exec(string)[0]);
+    let allDish = that.data.allDishes;
+    return {
+      ...allDish.filter(item => item._id == id)[0],
+      // num: num
+    } || null
+  },
+  // 2020-04-04 00:00:00
+  formatDateforSQL(date) {
+    date = new Date(date);
+    return `${date.getFullYear()}-${this.overTen(date.getMonth() + 1)}-${this.overTen(date.getDate())} ${this.overTen(date.getHours())}:${this.overTen(date.getMinutes())}:${this.overTen(date.getSeconds())}`;
+  },
+  overTen(num) {
+    if (num < 10) {
+      return '0' + num;
+    } else {
+      return '' + num;
     }
-    let orderList = list.orderList;
-    let recordList = list.recordList;
-
-    if (orderList != null || orderList.length != 0) {
-      orderList.forEach(item => {
-        rateList[3].usedTime = new Date(item.createdTime);
-        let orderDetail = item.orderList;
-        orderDetail.forEach(item_detail => {
-          if (orderIdList.indexOf(item_detail._id) == -1) {
-            orderIdList.push(item_detail._id);
-            if (item_detail.isAssessed == undefined || item_detail.isAssessed == '') {
-              item_detail.isAssessed = false;
-              item_detail.rate = 0;
-            }
-            if (!item_detail.isAssessed) {
-              rateList[3].list.push(item_detail)
-            }
-          }
-
-        })
-      })
-    }
-    if (recordList != null || recordList.length != 0) {
-
-      recordList.forEach(item => {
-        rateList[item.state - 1].usedTime = new Date(item.time);
-        let recordListDetail = item.menu[0].menuList;
-        recordListDetail.forEach(item_detail => {
-
-          if (recordIdList.indexOf(item_detail._id) == -1) {
-            recordIdList.push(item_detail._id);
-            if (item_detail.isAssessed == undefined || item_detail.isAssessed == '') {
-              item_detail.isAssessed = false;
-              item_detail.rate = 0;
-            }
-            if (!item_detail.isAssessed) {
-              rateList[item.state - 1].list.push(item_detail)
-            }
-          }
-
-        })
-
-      })
-    }
-    that.setData({
-      rateList: rateList
-    })
-    Toast.clear();
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

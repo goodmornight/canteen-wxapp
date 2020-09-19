@@ -162,7 +162,7 @@ Page({
         start,
         end
       } = that.getWeek(new Date());
-      // 获得所有的菜品列表
+      // 获得基于时间获取菜单列表
       wx.request({
         url: app.globalData.requestURL + '/Menu/getbytime',
         method: 'GET',

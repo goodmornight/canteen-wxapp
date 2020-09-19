@@ -282,8 +282,8 @@ Page({
   },
   //我的订单
   toMyOrder() {
-    console.log('toMyOrder');
-    Toast('正在加速开发中');
+    // console.log('toMyOrder');
+    // Toast('正在加速开发中');
     // wx.requestSubscribeMessage({
     //   tmplIds: ['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI'],
     //   success(res) {
@@ -293,9 +293,9 @@ Page({
     //     console.log(err)
     //   }
     // })
-    // wx.navigateTo({
-    //   url: '../myOrder/myOrder',
-    // })
+    wx.navigateTo({
+      url: '../myOrder/myOrder',
+    })
   },
   //评价意见
   toRate() {

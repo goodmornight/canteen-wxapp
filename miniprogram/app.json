@@ -1,6 +1,6 @@
 {
   "pages": [
-    
+    "pages/rate/rate",
     "pages/index/index",
     "pages/otherInsideOrder/otherInsideOrder",
     "pages/confirmMenu/confirmMenu",
@@ -13,7 +13,7 @@
     "pages/eatNum/eatNum",
     "pages/menu/menu",
     
-    "pages/rate/rate",
+    
     
     
     "pages/confirmOrder/confirmOrder",

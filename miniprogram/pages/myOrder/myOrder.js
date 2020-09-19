@@ -17,6 +17,7 @@ Page({
     userInfo: {},
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
+    allDishes: wx.getStorageSync('allDishes'),
     activeTab: 0, //标签页
     date: '',
     calendarShow: false,
@@ -32,15 +33,16 @@ Page({
    */
   onLoad: function (options) {
     //加载动画
-    Toast.loading({
-      duration: 0,
-      mask: true,
-      message: '加载中...'
-    });
+    // Toast.loading({
+    //   duration: 0,
+    //   mask: true,
+    //   message: '加载中...'
+    // });
     let that = this;
     let start = new Date(newDay.getFullYear(), newDay.getMonth(), newDay.getDate());
     let end = new Date(newDay.getTime() + 1 * 24 * 60 * 60 * 1000);
     let userInfo = wx.getStorageSync('userInfo');
+    // let allDishes = wx.getStorageSync('allDishes');
     if (userInfo == {} || userInfo == '' || userInfo == []) {
       Dialog.confirm({
         title: '身份验证',
@@ -127,22 +129,22 @@ Page({
   },
   onList: async function (userInfo, start, end) {
     //加载动画
-    Toast.loading({
-      duration: 0,
-      mask: true,
-      message: '加载中...'
-    });
+    // Toast.loading({
+    //   duration: 0,
+    //   mask: true,
+    //   message: '加载中...'
+    // });
     let that = this;
 
     wx.request({
       url: app.globalData.requestURL + '/Order/get', // 获取用户订单列表
       method: 'GET',
       data: {
-        time: '2020-09-01 00:00:00', // 测试数据
-        timeend: '2020-09-13 00:00:00',
+        // createdTime: '2020-09-17 00:00:00', // 测试数据
+        // createdTimeend: '2020-09-20 00:00:00',
         userId: userInfo.userId,
-        // time: that.formatDateforSQL(start),
-        // timeend: that.formatDateforSQL(end)
+        createdTime: that.formatDateforSQL(start),
+        createdTimeend: that.formatDateforSQL(end)
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -151,26 +153,26 @@ Page({
         console.log(res.data)
         let result = res.data;
         let totalPrice = 0;
-        let list = [{}];//整理好的内容列表
-        let tempDateList = [];//日期列表
+        let list = [{}]; //整理好的内容列表
+        let tempDateList = []; //日期列表
         result.forEach(item => {
           let today = new Date().getTime();
           let tempDate = new Date(item.createdTime).getTime();
           let tempDate_format = that.formatDate(tempDate);
 
           if (tempDate >= firstTime && today < finalTime) {
-            item.completed = 0;//已下单，可修改
+            item.completed = 0; //已下单，可修改
           } else {
-            item.completed = 1;//正在处理，不可修改
+            item.completed = 1; //正在处理，不可修改
           }
           if (item.completedTime) {
             console.log(totalPrice)
             let completedDate = new Date(item.completedTime).getTime();
             totalPrice += item.totalPrice;
             item.completedTime_format = that.fullFormatDate(completedDate);
-            item.completed = 2;//已完成，可评价，需要在后台系统控制
+            item.completed = 2; //已完成，可评价，需要在后台系统控制
           }
-          
+
           item.createdTime_format = that.fullFormatDate(tempDate);
           if (tempDateList.indexOf(tempDate_format) == -1) {
             tempDateList.push(tempDate_format)
@@ -285,10 +287,32 @@ Page({
     let orderList = detail.orderList;
     let formatDate = that.data.list[idx1].formatDate;
     let classes = [];
+    let dishDetailList = [];
     console.log(orderList)
+    let orderListArr = orderList.split(';')
+    console.log(orderListArr)
+    orderListArr.forEach(item => {
+      let dish = that.getDishDetail(item)
+      if (dish) {
+        dishDetailList.push(dish)
+      }
+    })
+    // let list = [{}];
+    // dishDetailList.forEach(item => {
+    //   let className = item.className;
+    //   if (classes.indexOf(className) == -1) {
+    //     classes.push(className);
+    //     list.push({
+    //       className: className,
+    //       items:[item]
+    //     })
+    //   }else{
+
+    //   }
+    // })
     // 整理class列表
-    for (let i = 0; i < orderList.length; i++) {
-      let className = orderList[i].className;
+    for (let i = 0; i < dishDetailList.length; i++) {
+      let className = dishDetailList[i].className;
       if (classes.indexOf(className) == -1) {
         classes.push(className);
       }
@@ -299,47 +323,28 @@ Page({
       let className = classes[i];
       list[i] = {};
       list[i].className = className;
-      list[i].items = [];
+      list[i].items = dishDetailList.filter(item => item.className == className);
       list[i].id = i;
     }
-    //将数据库里的数据整理进list
-    for (let i = 0; i < orderList.length; i++) {
-      let className = orderList[i].className;
-      list.forEach(item => {
-        if (item.className == className) {
-          let temp = {
-            className: '',
-            _id: '',
-            name: '',
-            num: 0,
-            imgSrc: '',
-            price: 0,
-            rate: 0,
-            isStorage: true,
-            isSpecial: true,
-            isInside: false,
-          };
-          temp.className = orderList[i].className;
-          temp._id = orderList[i]._id;
-          temp.num = orderList[i].num;
-          temp.name = orderList[i].name;
-          temp.imgSrc = orderList[i].imgSrc;
-          temp.price = orderList[i].price;
-          temp.rate = orderList[i].rate;
-          temp.isSpecial = orderList[i].isSpecial;
-          temp.isStorage = orderList[i].isStorage;
-          temp.isInside = orderList[i].isInside;
-          item.items.push(temp)
-        }
-      })
-    }
+
     wx.setStorageSync('list', list);
     wx.setStorageSync('totalNum', detail.totalNum);
     wx.setStorageSync('totalPrice', detail.totalPrice * 100);
-    // console.log(list)
+    console.log(list)
     wx.navigateTo({
       url: '../confirmOrder/confirmOrder?detail=' + formatDate,
     })
+  },
+  // 正则表达式解析菜品和数量
+  getDishDetail(string) {
+    let that = this;
+    let id = parseInt(/^\d+/.exec(string)[0]);
+    let num = parseInt(/\d+$/.exec(string)[0]);
+    let allDishes = that.data.allDishes;
+    return {
+      ...allDishes.filter(item => item._id == id)[0],
+      num: num
+    } || null
   },
   // 2020-04-04 00:00:00
   formatDateforSQL(date) {

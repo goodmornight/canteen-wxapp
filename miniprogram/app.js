@@ -47,5 +47,26 @@ App({
       }
     })
 
+    wx.request({
+      url: this.globalData.requestURL + '/Dishes/getall',
+      method: 'GET',
+      data: {},
+      header: {
+        'content-type': 'application/json'
+      },
+      success(res) {
+        console.log(res.data)
+        if (res.data.length != 0) {
+          wx.setStorageSync('allDishes', res.data);
+        } else {
+          wx.setStorageSync('allDishes', []);
+        }
+      },
+      fail(err) {
+        console.log('请求不到dishes');
+        wx.setStorageSync('allDishes', []);
+      }
+    })
+
   }
 })
