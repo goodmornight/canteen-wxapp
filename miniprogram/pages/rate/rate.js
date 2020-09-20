@@ -38,7 +38,9 @@ Page({
     //   mask: true,
     //   message: '加载中...'
     // });
-
+    // let time = /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|[2][0-3]):[0-5][0-9]$/.exec('15,3,2020-09-19 10:22:22')[0]
+    let time = /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])\s([01][0-9]|[2][0-3]):[0-5][0-9]/.exec('15,3,2020-09-19 10:22:22')[0]
+    console.log(time)
     let that = this;
     let rateList = that.data.rateList;
     let date = that.formatDate(newDay);
@@ -214,8 +216,17 @@ Page({
       },
       success(res) {
         console.log(res)
+        if (res.errMsg == 'request:ok') {
+          Toast('提交成功');
+          rateList[idx1].list.splice(idx2, 1);
+          that.setData({
+            rateList: rateList
+          })
+        } else {
+          Toast.fail('提交失败')
+        }
       },
-      fail(err){
+      fail(err) {
         console.log(err)
       }
     })
@@ -322,22 +333,26 @@ Page({
     }];
 
     let orderIdList = []; //用于避免菜品重复
-    let recordIdList = []; //用于避免重复
+    // let recordIdList = []; //用于避免重复
 
     let idCommentList = []; //已评价过的dishId
 
     let start = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
     let end = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
+    let orderDate = new Date(date.getTime() - 24 * 60 * 60 * 1000);
+    let start_order = new Date(orderDate.getFullYear(), orderDate.getMonth(), orderDate.getDate(), 0, 0, 0)
+    let end_order = new Date(orderDate.getFullYear(), orderDate.getMonth(), orderDate.getDate(), 16, 0, 0)
+
     let orderList = [];
 
     wx.request({
       url: app.globalData.requestURL + '/Comment/get', // 获取用户订单列表
       method: 'GET',
       data: {
-        createdTime: '2020-08-25 21:59:06', // 测试数据
-        createdTimeend: '2020-08-26 21:59:06',
-        // createdTime: that.formatDateforSQL(start),
-        // createdTimeend: that.formatDateforSQL(end)
+        // createdTime: '2020-08-25 21:59:06', // 测试数据
+        // createdTimeend: '2020-08-26 21:59:06',
+        createdTime: that.formatDateforSQL(start),
+        createdTimeend: that.formatDateforSQL(end)
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -348,7 +363,6 @@ Page({
           res_comGET.data.forEach(item => {
             idCommentList.push(parseInt(item.dishId))
           })
-          console.log(idCommentList)
 
           // 获取用户订单列表
           wx.request({
@@ -358,8 +372,8 @@ Page({
               // createdTime: '2020-09-17 00:00:00', // 测试数据
               // createdTimeend: '2020-09-20 00:00:00',
               userId: userInfo.userId,
-              createdTime: that.formatDateforSQL(start),
-              createdTimeend: that.formatDateforSQL(end)
+              createdTime: that.formatDateforSQL(start_order),
+              createdTimeend: that.formatDateforSQL(end_order)
             },
             header: {
               'content-type': 'application/json' // 默认值
@@ -369,12 +383,13 @@ Page({
               if (res_orderGET.data) {
                 res_orderGET.data.forEach(item => {
                   let orderArr = item.orderList.split(';')
-                  orderList.push(...orderArr + ',' + item.createdTime)
+                  let tempArr = orderArr.map(arr => arr + ',' + item.createdTime)
+                  orderList.push(...tempArr)
                 })
                 console.log(orderList)
                 orderList.forEach(item => {
                   let id = parseInt(/^\d+/.exec(item)[0]);
-                  let time = /(\d+-\d+-\d+ [01][0-9]|[2][0-3]):[0-5][0-9]$/.exec(item)[0]
+                  let time = /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])\s([01][0-9]|[2][0-3]):[0-5][0-9]/.exec(item)[0]
                   let isExit = orderIdList.find(dish => dish._id == id) || idCommentList.find(dish => dish == id)
                   if (!isExit) {
                     orderIdList.push(id)
@@ -391,10 +406,10 @@ Page({
                   url: app.globalData.requestURL + '/Menu/getbytime',
                   method: 'GET',
                   data: {
-                    time: '2020-09-17 00:00:00', // 测试数据
-                    timeend: '2020-09-20 00:00:00',
-                    // time: that.formatDateforSQL(start),
-                    // timeend: that.formatDateforSQL(end),
+                    // time: '2020-09-17 00:00:00', // 测试数据
+                    // timeend: '2020-09-20 00:00:00',
+                    time: that.formatDateforSQL(start),
+                    timeend: that.formatDateforSQL(end),
                   },
                   header: {
                     'content-type': 'application/json'
