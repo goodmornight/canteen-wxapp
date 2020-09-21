@@ -1,6 +1,6 @@
 <!--miniprogram/pages/takeAway/takeAway.wxml-->
 <van-toast id="van-toast" />
-<van-dialog id="van-dialog" confirm-button-color="#5A9367"/>
+<van-dialog id="van-dialog" confirm-button-color="#5A9367" />
 <view class='cu-custom'>
 	<view class="cu-bar fixed bg-shadeTop" style="height:{{CustomBar}}px;padding-top:{{StatusBar}}px;">
 		<navigator class='action' open-type="navigateBack" delta="1" hover-class="none">
@@ -11,7 +11,6 @@
 </view>
 <swiper class="screen-swiper" indicator-dots="true" circular="true" autoplay="true" interval="5000" duration="500">
 	<swiper-item wx:for="{{2}}" wx:key>
-		<!-- <image src="https://image.weilanwl.com/img/4x3-{{index+1}}.jpg" mode='aspectFill'></image> -->
 		<image src="../../images/canteen-{{index+1}}.jpg" mode='aspectFill'></image>
 	</swiper-item>
 </swiper>
@@ -28,7 +27,7 @@
 					<text class='cuIcon-title text-green'></text> {{item.className}} </view>
 			</view>
 			<view class="cu-list menu-avatar">
-				<van-card wx:for="{{item.items}}" wx:for-index="index_items" title-class="card-title-class" price-class="card-price-class" price="{{item.price}}" title="{{item.name}}" thumb="{{item.imgSrc?item.imgSrc:imgUrl}}">
+				<van-card wx:for="{{item.items}}" wx:for-index="index_items" title-class="card-title-class" price-class="card-price-class" price="{{item.price}}" title="{{item.name}}" thumb="{{item.imgSrc?fileURL+item.imgSrc:imgUrl}}">
 					<view slot="desc">
 						<van-rate readonly value="{{item.rate}}" size="12px" />
 					</view>

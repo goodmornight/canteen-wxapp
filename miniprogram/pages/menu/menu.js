@@ -15,6 +15,7 @@ Page({
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
     Custom: app.globalData.Custom,
+    fileURL:app.globalData.fileURL,
     // starValue: 3,//评价分数
     activeTab: new Date().getDay(), //标签页
     // activeColNames: ['1', '2', '3'],//‘全部’标签页内伸缩栏

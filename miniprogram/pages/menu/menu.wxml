@@ -23,22 +23,22 @@
 				<van-cell-group wx:for="{{item_c.list_c}}" wx:for-index="index_d" wx:for-item="item_d" title="{{item_d.className}}">
 					<view class="cu-list menu-avatar" wx:for="{{item_d.list_d}}">
 
-					<!-- <view wx:for="{{item_d.list_d}}" class="cu-item"> -->
+						<!-- <view wx:for="{{item_d.list_d}}" class="cu-item"> -->
 						<view class="cu-item">
-						<!-- <image class="cu-avatar radius lg" mode="aspectFill"
+							<!-- <image class="cu-avatar radius lg" mode="aspectFill"
 							src="{{item_d.imgSrc==''?'../../images/test.jpg':item.imgSrc}}"></image> -->
-						<!-- <image class="cu-avatar radius lg" mode="aspectFill"
+							<!-- <image class="cu-avatar radius lg" mode="aspectFill"
 							src="{{item.imgSrc==''?'../../images/test.jpg':item.imgSrc}}"></image> -->
-						<image class="cu-avatar radius lg" mode="aspectFill" src="../../images/test.jpg"></image>
-						<view class="content">
-							<view class="text-theme-color">
-								<text class="text-cut">{{item.name}}</text>
+							<image class="cu-avatar radius lg" mode="aspectFill" src="item.imgSrc?fileURL+item.imgSrc:'../../images/test.jpg'"></image>
+							<view class="content">
+								<view class="text-theme-color">
+									<text class="text-cut">{{item.name}}</text>
+								</view>
+								<van-rate readonly value="{{ item.rate }}" />
 							</view>
-							<van-rate readonly value="{{ item.rate }}" />
-						</view>
-						<view wx:if="{{item_d.isSpecial}}" class="action">
-							<view class="cu-tag round bg-red"></view>
-						</view>
+							<view wx:if="{{item_d.isSpecial}}" class="action">
+								<view class="cu-tag round bg-red"></view>
+							</view>
 						</view>
 					</view>
 				</van-cell-group>

@@ -18,6 +18,7 @@ Page({
     allDishes: wx.getStorageSync('allDishes'),
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
+    fileURL:app.globalData.fileURL,
     activeTab: 0,
     calendarShow: false, //显示日历
     date: '',
@@ -390,7 +391,7 @@ Page({
                 orderList.forEach(item => {
                   let id = parseInt(/^\d+/.exec(item)[0]);
                   let time = /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])\s([01][0-9]|[2][0-3]):[0-5][0-9]/.exec(item)[0]
-                  let isExit = orderIdList.find(dish => dish._id == id) || idCommentList.find(dish => dish == id)
+                  let isExit = orderIdList.find(dish => dish == id) || idCommentList.find(dish => dish == id)
                   if (!isExit) {
                     orderIdList.push(id)
                     rateList[3].list.push({

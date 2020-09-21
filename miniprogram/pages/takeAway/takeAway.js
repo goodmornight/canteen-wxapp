@@ -7,6 +7,7 @@ Page({
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
     Custom: app.globalData.Custom,
+    fileURL:app.globalData.fileURL,
     TabCur: 0,
     MainCur: 0,
     VerticalNavTop: 0,

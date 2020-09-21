@@ -11,6 +11,7 @@ Page({
     isShowHistory: false, //是否在查看历史订单
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
+    fileURL:app.globalData.fileURL,
     imgUrl: '../../../../images/test.jpg',
     userInfo: {},
     list: [], //列表

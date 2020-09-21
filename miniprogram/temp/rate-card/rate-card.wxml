@@ -3,7 +3,7 @@
 		<form bindsubmit="toRateSubmit">
 			<view class="top">
 				<view class="top-left">
-					<image class="cu-avatar radius lg" mode="aspectFill" src="../../images/test.jpg"></image>
+					<image class="cu-avatar radius lg" mode="aspectFill" src="{{item.imgSrc?fileURL+item.imgSrc:'../../images/test.jpg'}}"></image>
 				</view>
 				<view class="top-right">
 					<text>{{item.name}}</text>
@@ -17,7 +17,7 @@
 			<view wx:if="{{item.isAssessed}}" class="bottom">
 				<textarea name="textRate" placeholder="请输入评价，默认为空">
     </textarea>
-		<button  data-idx1="{{idx1}}" data-idx2="{{idx2}}" class="btn-style" hover-class="hover-btn-style" formType="submit">提交</button>
+				<button data-idx1="{{idx1}}" data-idx2="{{idx2}}" class="btn-style" hover-class="hover-btn-style" formType="submit">提交</button>
 				<!-- <van-button custom-style="z-index:2;" color="#39b54a" custom-class="van-btn-sm" round size="small">提交</van-button> -->
 			</view>
 		</form>

@@ -17,7 +17,7 @@
 <scroll-view class="VerticalMain" scroll-y scroll-with-animation style="height:calc(100vh - 334rpx)">
 	<view wx:for="{{list}}" wx:for-item="item_list" wx:for-index="index_list">
 		<view wx:for="{{item_list.items}}" wx:for-index="index_items" wx:if="{{item.num!=0}}">
-			<van-card title-class="card-title-class" price-class="card-price-class" num-class="card-num-class" price="{{item.price}}" title="{{item.name}}" num="{{item.num}}" thumb="{{item.imgSrc?item.imgSrc:imgUrl}}">
+			<van-card title-class="card-title-class" price-class="card-price-class" num-class="card-num-class" price="{{item.price}}" title="{{item.name}}" num="{{item.num}}" thumb="{{item.imgSrc?fileURL+item.imgSrc:imgUrl}}">
 				<view slot="desc">
 					<van-rate readonly value="{{item.rate}}" size="12px" />
 				</view>
