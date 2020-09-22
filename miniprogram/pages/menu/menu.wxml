@@ -29,7 +29,7 @@
 							src="{{item_d.imgSrc==''?'../../images/test.jpg':item.imgSrc}}"></image> -->
 							<!-- <image class="cu-avatar radius lg" mode="aspectFill"
 							src="{{item.imgSrc==''?'../../images/test.jpg':item.imgSrc}}"></image> -->
-							<image class="cu-avatar radius lg" mode="aspectFill" src="item.imgSrc?fileURL+item.imgSrc:'../../images/test.jpg'"></image>
+							<image class="cu-avatar radius lg" mode="aspectFill" src="{{item.imgSrc?fileURL+item.imgSrc:imgUrl}}"></image>
 							<view class="content">
 								<view class="text-theme-color">
 									<text class="text-cut">{{item.name}}</text>
