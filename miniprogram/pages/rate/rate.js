@@ -39,9 +39,7 @@ Page({
     //   mask: true,
     //   message: '加载中...'
     // });
-    // let time = /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|[2][0-3]):[0-5][0-9]$/.exec('15,3,2020-09-19 10:22:22')[0]
-    let time = /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])\s([01][0-9]|[2][0-3]):[0-5][0-9]/.exec('15,3,2020-09-19 10:22:22')[0]
-    console.log(time)
+
     let that = this;
     let rateList = that.data.rateList;
     let date = that.formatDate(newDay);
@@ -347,13 +345,13 @@ Page({
     let orderList = [];
 
     wx.request({
-      url: app.globalData.requestURL + '/Comment/get', // 获取用户订单列表
+      url: app.globalData.requestURL + '/Comment/getbyusedTime', // 获取用户订单列表
       method: 'GET',
       data: {
         // createdTime: '2020-08-25 21:59:06', // 测试数据
         // createdTimeend: '2020-08-26 21:59:06',
-        createdTime: that.formatDateforSQL(start),
-        createdTimeend: that.formatDateforSQL(end)
+        usedTime: that.formatDateforSQL(start),
+        usedTimeend: that.formatDateforSQL(end)
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -461,10 +459,13 @@ Page({
                       that.setData({
                         rateList: rateList
                       })
+                      Toast.clear();
                     }
                   },
                   fail(err) {
                     console.log(err)
+                    Toast.fail('系统错误')
+                    Toast.clear();
                   }
                 })
               }
@@ -472,6 +473,7 @@ Page({
             fail(err) {
               console.log(err)
               Toast.fail('系统错误')
+              Toast.clear();
             }
           })
 
@@ -479,6 +481,8 @@ Page({
       },
       fail(err) {
         console.log(err)
+        Toast.fail('系统错误')
+        Toast.clear();
       }
     })
 
