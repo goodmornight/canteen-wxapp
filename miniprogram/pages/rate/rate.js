@@ -18,7 +18,7 @@ Page({
     allDishes: wx.getStorageSync('allDishes'),
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
-    fileURL:app.globalData.fileURL,
+    fileURL: app.globalData.fileURL,
     activeTab: 0,
     calendarShow: false, //显示日历
     date: '',
@@ -332,9 +332,6 @@ Page({
     }];
 
     let orderIdList = []; //用于避免菜品重复
-    // let recordIdList = []; //用于避免重复
-
-    let idCommentList = []; //已评价过的dishId
 
     let start = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
     let end = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
@@ -343,7 +340,8 @@ Page({
     let end_order = new Date(orderDate.getFullYear(), orderDate.getMonth(), orderDate.getDate(), 16, 0, 0)
 
     let orderList = [];
-
+    console.log(start)
+    console.log(end)
     wx.request({
       url: app.globalData.requestURL + '/Comment/getbyusedTime', // 获取用户订单列表
       method: 'GET',
@@ -359,9 +357,6 @@ Page({
       success(res_comGET) {
         console.log(res_comGET.data)
         if (res_comGET.data) {
-          res_comGET.data.forEach(item => {
-            idCommentList.push(parseInt(item.dishId))
-          })
 
           // 获取用户订单列表
           wx.request({
@@ -371,8 +366,10 @@ Page({
               // createdTime: '2020-09-17 00:00:00', // 测试数据
               // createdTimeend: '2020-09-20 00:00:00',
               userId: userInfo.userId,
-              createdTime: that.formatDateforSQL(start_order),
-              createdTimeend: that.formatDateforSQL(end_order)
+              createdTime: that.formatDateforSQL(start),
+              createdTimeend: that.formatDateforSQL(end)
+              // createdTime: that.formatDateforSQL(start_order),
+              // createdTimeend: that.formatDateforSQL(end_order)
             },
             header: {
               'content-type': 'application/json' // 默认值
@@ -389,7 +386,7 @@ Page({
                 orderList.forEach(item => {
                   let id = parseInt(/^\d+/.exec(item)[0]);
                   let time = /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])\s([01][0-9]|[2][0-3]):[0-5][0-9]/.exec(item)[0]
-                  let isExit = orderIdList.find(dish => dish == id) || idCommentList.find(dish => dish == id)
+                  let isExit = orderIdList.find(dish => dish == id) || res_comGET.data.find(dish => dish.dishId == id)
                   if (!isExit) {
                     orderIdList.push(id)
                     rateList[3].list.push({
@@ -420,12 +417,14 @@ Page({
                       let lunch = new Set();
                       let dinner = new Set();
                       res_menuGET.data.forEach(item => {
-                        if (item.state == 1) {
-                          breakfast.add(item.menuList + ',' + item.time)
-                        } else if (item.state == 2) {
-                          lunch.add(item.menuList + ',' + item.time)
-                        } else {
-                          dinner.add(item.menuList + ',' + item.time)
+                        if (!res_comGET.data.find(dish => dish.dishName == item.menuList)) {
+                          if (item.state == 1) {
+                            breakfast.add(item.menuList + ',' + item.time)
+                          } else if (item.state == 2) {
+                            lunch.add(item.menuList + ',' + item.time)
+                          } else {
+                            dinner.add(item.menuList + ',' + item.time)
+                          }
                         }
                       })
                       for (let b of breakfast) {
