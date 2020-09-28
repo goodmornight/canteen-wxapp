@@ -57,3 +57,14 @@
 		<template is="indexBtn-temp" data="{{item:mySetting}}"></template>
 	</view>
 </view>
+<van-dialog
+  use-slot
+  title="标题"
+  show="{{ birthShow }}"
+  show-cancel-button
+  confirm-button-open-type="getUserInfo"
+  bind:close="onClose"
+  bind:getuserinfo="getUserInfo"
+>
+  <image src="../../images/cake.png" />
+</van-dialog>

@@ -109,9 +109,15 @@ Page({
       success(res) {
         console.log(res.data)
         if (res.data.length != 0) {
+          let userInfo = res.data[0]
+          let birth = userInfo.birthday;
+          
+          console.log(birth)
           that.setData({
-            userInfo: res.data[0]
+            userInfo: userInfo,
+            birthShow: that.isBirth(birth)
           })
+          
           wx.setStorageSync('userInfo', res.data[0])
         }
       },
@@ -154,6 +160,20 @@ Page({
     //   console.log(err)
     //   wx.setStorageSync('userInfo', {})
     // })
+  },
+  isBirth(birth) {
+    let type = /[A-Z]/.exec(birth)[0]
+    let day = /^\d+.\d+/.exec(birth)[0]
+    let dayArr = day.split('.')
+    let now = new Date();
+    let m = now.getMonth() + 1
+    let d = now.getDate()
+
+    if (type == 'Y' && m == dayArr[0] && d == dayArr[1]) {
+      return true
+    } else {
+      return false
+    }
   },
   //跳转用餐人数
   toEatNum() {
