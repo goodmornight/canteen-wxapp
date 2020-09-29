@@ -48,53 +48,29 @@ Page({
 
     let userInfo = wx.getStorageSync('userInfo');
     if (userInfo == {} || userInfo == '') {
-      let userInfo_cloud = await wx.cloud.callFunction({
-        name: 'users',
-        data: {
-          action: 'getUserInfo'
+      Dialog.confirm({
+        title: '身份验证',
+        message: '为了更好的使用该小程序的其他功能，请您先进行身份验证',
+        confirmButtonText: "身份验证",
+        zIndex: 102,
+        overlayStyle: {
+          zIndex: 101
         }
-      }).then(res => {
-        console.log(res);
-        return res.result;
-        // let userInfo_cloud = res.result;
-        // that.setData({
-        //   userInfo:userInfo_cloud
+      }).then(() => {
+        // on confirm
+        // wx.navigateTo({
+        //   url: '../check/check',
         // })
-        // wx.setStorageSync('userInfo', userInfo)
-      }).catch(err => {
-        console.log(err)
-        return {};
-        // wx.setStorageSync('userInfo', {})
-      });
-      if (userInfo_cloud == {} || userInfo_cloud == '') {
-        Dialog.confirm({
-          title: '身份验证',
-          message: '为了更好的使用该小程序的其他功能，请您先进行身份验证',
-          confirmButtonText: "身份验证",
-          zIndex: 102,
-          overlayStyle: {
-            zIndex: 101
-          }
-        }).then(() => {
-          // on confirm
-          // wx.navigateTo({
-          //   url: '../check/check',
-          // })
-          wx.reLaunch({
-            url: '../check/check',
-          })
-        }).catch(() => {
-          // on cancel
-          wx.reLaunch({
-            url: '../index/index',
-          })
-        });
-      } else {
-        that.setData({
-          userInfo: userInfo_cloud
+        wx.reLaunch({
+          url: '../check/check',
         })
-        wx.setStorageSync('userInfo', userInfo_cloud)
-      }
+      }).catch(() => {
+        // on cancel
+        wx.reLaunch({
+          url: '../index/index',
+        })
+      });
+
     } else {
       that.setData({
         userInfo: userInfo
@@ -171,7 +147,7 @@ Page({
       temp.isTrue = value[state];
       formatList.push(temp);
     }
-
+    console.log(formatList)
     let createdTime = new Date();
     let createdTimeStr = that.formatDateforSQL(createdTime);
     let isToday = (createdTime.getHours() < 21)
@@ -235,11 +211,11 @@ Page({
                   console.log(err)
                 })
             }
-          }else{
+          } else {
             Toast.fail('系统错误');
           }
         },
-        fail(err){
+        fail(err) {
           console.log(err)
           Toast.fail('系统错误');
         }
@@ -317,19 +293,20 @@ Page({
       start = today;
       end = today9PM;
     }
-    await wx.cloud.callFunction({
-        name: "recording",
-        data: {
-          // action: "isAutoRecording",
-          action: "getRecording",
-          userId: userInfo.userId,
-          start: start,
-          end: end
-        }
-      })
-      .then(res => {
-        console.log(res);
-        let list = res.result;
+    wx.request({
+      url: app.globalData.requestURL + '/Recording/getbytime',
+      method: 'GET',
+      data: {
+        time: that.formatDateforSQL(start),
+        timeend: that.formatDateforSQL(end),
+        userId: userInfo.userId
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log(res.data)
+        let list = res.data;
         that.setData({
           list: list
         })
@@ -355,14 +332,60 @@ Page({
             checkBox: checkBox
           })
         }
-      })
-      .catch(err => {
+      },
+      fail(err){
         console.log(err);
         that.setData({
           list: []
         })
-        // return [];
-      })
+      }
+    })
+    // await wx.cloud.callFunction({
+    //     name: "recording",
+    //     data: {
+    //       // action: "isAutoRecording",
+    //       action: "getRecording",
+    //       userId: userInfo.userId,
+    //       start: start,
+    //       end: end
+    //     }
+    //   })
+    //   .then(res => {
+    //     console.log(res);
+    //     let list = res.result;
+    //     that.setData({
+    //       list: list
+    //     })
+    //     if (list.length != 0) {
+    //       let checkBox = [];
+    //       list.forEach(item => {
+    //         if (item.state == 1) {
+    //           that.setData({
+    //             ifBreakfast: true
+    //           })
+    //         } else if (item.state == 2) {
+    //           that.setData({
+    //             ifLunch: true
+    //           })
+    //         } else if (item.state == 3) {
+    //           that.setData({
+    //             ifDinner: true
+    //           })
+    //         }
+    //         checkBox.push(item.state + '');
+    //       })
+    //       that.setData({
+    //         checkBox: checkBox
+    //       })
+    //     }
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //     that.setData({
+    //       list: []
+    //     })
+    //     // return [];
+    //   })
   },
 
   overTen(num) {

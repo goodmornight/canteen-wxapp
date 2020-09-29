@@ -5,22 +5,19 @@
 	<view slot="content">杜家坎人民公社食堂</view>
 </cu-custom>
 <van-toast id="van-toast" />
-<van-dialog id="van-dialog" confirm-button-color="#5A9367"/>
-<van-notice-bar
-  mode="closeable"
-	speed="{{30}}"
-	color="#5A9367"
-	backgroundColor="#fff"
-	custom-class="bar-border"
-  text="1.特色外卖需前一天的16:00前下单。2.外部人员于食堂就餐，需当天0:00-10:00内，提交就餐报备。">
-<text slot="left-icon"><text class="cuIcon-notificationfill lg" style="color:#5A9367;"></text></text>
+<van-dialog id="van-dialog" confirm-button-color="#5A9367" />
+<van-notice-bar mode="closeable" speed="{{30}}" color="#5A9367" backgroundColor="#fff" custom-class="bar-border"
+	text="1.特色外卖需前一天的16:00前下单。2.外部人员于食堂就餐，需当天0:00-10:00内，提交就餐报备。">
+	<text slot="left-icon"><text class="cuIcon-notificationfill lg" style="color:#5A9367;"></text></text>
 </van-notice-bar>
 <view class="userInfo-con {{(userInfo.rank>0||userInfo.rank!=undefined)?'':'margin-normal'}}">
-	<open-data class="avatar" default-avatar="../../images/icons/{{userInfo.gender==2?'girl':'boy'}}.png" type="userAvatarUrl"></open-data>
+	<open-data class="avatar" default-avatar="../../images/icons/{{userInfo.gender==2?'girl':'boy'}}.png"
+		type="userAvatarUrl"></open-data>
 	<open-data class="nickName" default-text="用户" type="userNickName"></open-data>
 	<view class="number">{{userInfo.userId!=undefined?userInfo.userId:'未绑定'}}</view>
 </view>
-<view wx:if="{{userInfo.rank>0&&userInfo.rank!=undefined}}" class="padding flex text-center bg-white shadow-warp state-con">
+<view wx:if="{{userInfo.rank>0&&userInfo.rank!=undefined}}"
+	class="padding flex text-center bg-white shadow-warp state-con">
 	<view class="flex flex-sub flex-direction solid-right">
 		<view class="text-green-dark">
 			早餐</view>
@@ -57,14 +54,11 @@
 		<template is="indexBtn-temp" data="{{item:mySetting}}"></template>
 	</view>
 </view>
-<van-dialog
-  use-slot
-  title="标题"
-  show="{{ birthShow }}"
-  show-cancel-button
-  confirm-button-open-type="getUserInfo"
-  bind:close="onClose"
-  bind:getuserinfo="getUserInfo"
->
-  <image src="../../images/cake.png" />
+<van-dialog use-slot title="" show="{{ birthShow }}" show-cancel-button  confirm-button-color="#5A9367" 
+	bind:close="onBirthClose" bind:confirm="onBirthConfirm">
+	<view style="margin-top:2em">今天是<span style="font-weight:bold">{{birthArr[0]}}月{{birthArr[1]}}日</span>,</view>
+	<view>杜家坎人民公社食堂，祝您生日快乐~</view>
+	<view>凭此可以领取一个小礼物~</view>
+	<view style="font-size:0.8em">(已领取可忽略该条信息)</view>
+	<image mode="aspectFit" src="../../images/cake.png" />
 </van-dialog>
