@@ -1,6 +1,7 @@
 //index.js
 import Toast from '@vant/weapp/toast/toast';
 import Dialog from '@vant/weapp/dialog/dialog';
+
 const app = getApp();
 const db = wx.cloud.database();
 const users = db.collection('users');
@@ -76,7 +77,6 @@ Page({
       mask: true,
       message: '加载中...'
     });
-
     let that = this;
     let isNewDay = wx.getStorageSync('isNewDay');
     that.setData({

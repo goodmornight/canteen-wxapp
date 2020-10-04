@@ -1,6 +1,7 @@
 // miniprogram/pages/check/check.js
 import Toast from '@vant/weapp/toast/toast';
 import Dialog from '@vant/weapp/dialog/dialog';
+const md5 = require('md5');
 const app = getApp();
 Page({
 
@@ -280,7 +281,7 @@ Page({
         data: {
           "_openid": _openid,
           "userId": num,
-          "ppp": pwd
+          "ppp": md5(pwd)
         },
         dataType:'',
         header: {
@@ -496,7 +497,7 @@ Page({
           data: {
             "_openid": userInfo._openid,
             "userId": userInfo.userId,
-            "ppp": againPwd,
+            "ppp": md5(againPwd),
             "avatar": userInfo.avatar,
             "rank": userInfo.rank,
             "classA": userInfo.classA,
