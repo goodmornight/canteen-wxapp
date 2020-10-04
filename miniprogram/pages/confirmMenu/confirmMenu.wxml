@@ -18,12 +18,12 @@
 	<van-collapse-item title="用餐类型" name="1">
 		<van-checkbox-group value="{{ checkBox }}" bind:change="onCheckBoxChange">
 			<!-- 原来代码 -->
-			<!-- <van-checkbox disabled="{{!isBreakfast||!ifBreakfast}}" label-class="checkbox-class" name="1" checked-color="#5A9367">早餐</van-checkbox>
+			<van-checkbox disabled="{{!isBreakfast||!ifBreakfast}}" label-class="checkbox-class" name="1" checked-color="#5A9367">早餐</van-checkbox>
 			<van-checkbox disabled="{{!isLunch||!ifLunch}}" label-class="checkbox-class" name="2" checked-color="#5A9367">午餐</van-checkbox>
-			<van-checkbox disabled="{{!isDinner||!ifDinner}}" label-class="checkbox-class" name="3" checked-color="#5A9367">晚餐</van-checkbox> -->
-			<van-checkbox label-class="checkbox-class" name="1" checked-color="#5A9367">早餐</van-checkbox>
+			<van-checkbox disabled="{{!isDinner||!ifDinner}}" label-class="checkbox-class" name="3" checked-color="#5A9367">晚餐</van-checkbox>
+			<!-- <van-checkbox label-class="checkbox-class" name="1" checked-color="#5A9367">早餐</van-checkbox>
 			<van-checkbox label-class="checkbox-class" name="2" checked-color="#5A9367">午餐</van-checkbox>
-			<van-checkbox label-class="checkbox-class" name="3" checked-color="#5A9367">晚餐</van-checkbox>
+			<van-checkbox label-class="checkbox-class" name="3" checked-color="#5A9367">晚餐</van-checkbox> -->
 		</van-checkbox-group>
 	</van-collapse-item>
 </van-collapse>

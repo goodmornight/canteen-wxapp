@@ -98,36 +98,45 @@ Page({
     }).catch(err => {
       console.log(err)
     })
+    let userInfo = wx.getStorageSync('userInfo')
+    if (!userInfo) {
+      wx.request({
+        url: app.globalData.requestURL + '/Users/getby_openid', // 通过openid查询用户数据
+        method: 'GET',
+        data: {
+          _openid: that.data._openid,
+        },
+        header: {
+          'content-type': 'application/json' // 默认值
+        },
+        success(res) {
+          console.log(res.data)
+          if (res.data.length != 0) {
+            let userInfo = res.data[0]
+            let birth = userInfo.birthday;
+            console.log(userInfo)
+            console.log(birth)
+            that.setData({
+              userInfo: userInfo,
+              // birthShow: that.isBirth(birth)
+            })
 
-    wx.request({
-      url: app.globalData.requestURL + '/Users/getby_openid', // 通过openid查询用户数据
-      method: 'GET',
-      data: {
-        _openid: that.data._openid,
-      },
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      success(res) {
-        console.log(res.data)
-        if (res.data.length != 0) {
-          let userInfo = res.data[0]
-          let birth = userInfo.birthday;
-
-          console.log(birth)
-          that.setData({
-            userInfo: userInfo,
-            birthShow: that.isBirth(birth)
-          })
-
-          wx.setStorageSync('userInfo', res.data[0])
+            wx.setStorageSync('userInfo', userInfo)
+          }
+        },
+        fail(err) {
+          console.log(err)
+          Toast.fail('系统错误');
         }
-      },
-      fail(err) {
-        console.log(err)
-        Toast.fail('系统错误');
-      }
-    })
+      })
+    } else {
+      let birth = userInfo.birthday;
+      that.setData({
+        userInfo: userInfo,
+        // birthShow: that.isBirth(birth)
+      })
+    }
+
     // 请求code
     wx.login({
       success(res) {

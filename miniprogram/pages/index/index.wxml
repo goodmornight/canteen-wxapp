@@ -14,7 +14,8 @@
 	<open-data class="avatar" default-avatar="../../images/icons/{{userInfo.gender==2?'girl':'boy'}}.png"
 		type="userAvatarUrl"></open-data>
 	<open-data class="nickName" default-text="用户" type="userNickName"></open-data>
-	<view class="number">{{userInfo.userId!=undefined?userInfo.userId:'未绑定'}}</view>
+	<!-- <view class="number">{{userInfo.userId?userInfo.userId:'未绑定'}}</view> -->
+	<view class="number">{{userInfo.userId}}</view>
 </view>
 <view wx:if="{{userInfo.rank>0&&userInfo.rank!=undefined}}"
 	class="padding flex text-center bg-white shadow-warp state-con">

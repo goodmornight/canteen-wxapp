@@ -167,6 +167,7 @@ Page({
       sendData.push(temp)
     })
     let times = 0;
+    console.log(sendData)
     sendData.forEach(async (item) => {
       wx.request({
         url: app.globalData.requestURL + '/Recording/insert',
