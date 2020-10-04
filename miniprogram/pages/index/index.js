@@ -68,6 +68,8 @@ Page({
     myOrder: myOrder_btn, //我的订单
     rate: rate_btn, //评价意见
     mySetting: mySetting_btn, //我的设置
+    birthShow: false,
+    birthArr: [],
   },
 
   onLoad: async function () {
@@ -109,9 +111,15 @@ Page({
       success(res) {
         console.log(res.data)
         if (res.data.length != 0) {
+          let userInfo = res.data[0]
+          let birth = userInfo.birthday;
+
+          console.log(birth)
           that.setData({
-            userInfo: res.data[0]
+            userInfo: userInfo,
+            birthShow: that.isBirth(birth)
           })
+
           wx.setStorageSync('userInfo', res.data[0])
         }
       },
@@ -154,6 +162,34 @@ Page({
     //   console.log(err)
     //   wx.setStorageSync('userInfo', {})
     // })
+  },
+  isBirth(birth) {
+    let that = this;
+    let type = /[A-Z]/.exec(birth)[0]
+    let day = /^\d+.\d+/.exec(birth)[0]
+    let dayArr = day.split('.')
+    let now = new Date();
+    let m = now.getMonth() + 1
+    let d = now.getDate()
+
+    if (type == 'Y' && m == dayArr[0] && d == dayArr[1]) {
+      that.setData({
+        birthArr: [m, d]
+      })
+      return true
+    } else {
+      return false
+    }
+  },
+  onBirthClose() {
+    this.setData({
+      birthShow: false
+    })
+  },
+  onBirthConfirm() {
+    this.setData({
+      birthShow: false
+    })
   },
   //跳转用餐人数
   toEatNum() {
@@ -218,68 +254,71 @@ Page({
           console.log(err)
         }
       })
-      let list = await wx.cloud.callFunction({
-          name: 'recording',
-          data: {
-            action: 'getRecordingByCreatedTime',
-            start: start,
-            end: end,
-            userId: userInfo.userId
-          }
-        })
-        .then(res => {
-          console.log(res)
-          return res.result
-        })
-        .catch(err => {
-          console.log(err);
-          return [];
-        });
-      console.log(list);
-      if (list.length == 0) {
-        wx.navigateTo({
-          url: '../updateOrder/updateOrder',
-        })
-      } else {
-        wx.navigateTo({
-          url: '../otherInsideOrderList/otherInsideOrderList',
-        })
-      }
+      wx.navigateTo({
+        url: '../updateOrder/updateOrder',
+      })
+      // let list = await wx.cloud.callFunction({
+      //     name: 'recording',
+      //     data: {
+      //       action: 'getRecordingByCreatedTime',
+      //       start: start,
+      //       end: end,
+      //       userId: userInfo.userId
+      //     }
+      //   })
+      //   .then(res => {
+      //     console.log(res)
+      //     return res.result
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //     return [];
+      //   });
+      // console.log(list);
+      // if (list.length == 0) {
+      //   wx.navigateTo({
+      //     url: '../updateOrder/updateOrder',
+      //   })
+      // } else {
+      //   wx.navigateTo({
+      //     url: '../otherInsideOrderList/otherInsideOrderList',
+      //   })
+      // }
     }
 
   },
   //特色外卖
-  // toTakeAway() {
-  //   console.log('toTakeAway');
-  //   let now = new Date();
-  //   let deadline = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 16, 0, 0);
-  //   //当前时间大于当天16点
-  //   if (now.getTime() > deadline.getTime()) {
-  //     Toast("抱歉，当前时间已超过16:00，您无法购买特色外卖。")
-  //   } else {
-  //     wx.requestSubscribeMessage({
-  //       tmplIds: ['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI'],
-  //       success(res) {
-  //         console.log(res)
-  //       },
-  //       fail(err) {
-  //         console.log(err)
-  //       }
-  //     })
-  //     //当前时间小于当天16点
-  //     wx.navigateTo({
-  //       url: '../takeAway/takeAway',
-  //     })
-  //   }
-
-  // },
-  // 用于演示特色外卖
   toTakeAway() {
-    //当前时间小于当天16点
-    wx.navigateTo({
-      url: '../takeAway/takeAway',
-    })
+    console.log('toTakeAway');
+    let now = new Date();
+    let deadline = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 16, 0, 0);
+    //当前时间大于当天16点
+    if (now.getTime() > deadline.getTime()) {
+      Toast("抱歉，当前时间已超过16:00，您无法购买特色外卖。")
+    } else {
+      wx.requestSubscribeMessage({
+        tmplIds: ['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI'],
+        success(res) {
+          console.log(res)
+        },
+        fail(err) {
+          console.log(err)
+        }
+      })
+      //当前时间小于当天16点
+      wx.navigateTo({
+        url: '../takeAway/takeAway',
+      })
+    }
+
   },
+  // 用于演示特色外卖
+  // toTakeAway() {
+  //   //当前时间小于当天16点
+  //   wx.navigateTo({
+  //     url: '../takeAway/takeAway',
+  //   })
+  // },
   //我的订单
   toMyOrder() {
     // console.log('toMyOrder');
