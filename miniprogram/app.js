@@ -22,7 +22,27 @@ App({
     wx.setStorageSync('otherInsideOrder', '');
     let newDay = new Date();
     this.globalData.newDay = newDay;
-    console.log(today);
+    wx.request({
+      url: this.globalData.requestURL + '/Users/birthday_userIdlist', // 通过日期查询用户生日
+      method: 'GET',
+      data: {
+        year: newDay.getFullYear(),
+        month:newDay.getMonth()+1,
+        date:newDay.getDate()
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log(res.data)
+        if (res.data.length != 0) {
+          wx.setStorageSync('todayBirthUserList', res.data);
+        }
+      },
+      fail(err) {
+        console.log(err)
+      }
+    })
     if (today == '') {
       wx.setStorageSync('today', newDay);//保存进入小程序时间
       wx.setStorageSync('isNewDay', true);//判断是否是新的一天

@@ -117,11 +117,10 @@ Page({
             console.log(userInfo)
             console.log(birth)
             that.setData({
-              userInfo: userInfo,
-              // birthShow: that.isBirth(birth)
+              userInfo: userInfo
             })
-
             wx.setStorageSync('userInfo', userInfo)
+            that.isBirth()
           }
         },
         fail(err) {
@@ -130,11 +129,10 @@ Page({
         }
       })
     } else {
-      let birth = userInfo.birthday;
       that.setData({
-        userInfo: userInfo,
-        // birthShow: that.isBirth(birth)
+        userInfo: userInfo
       })
+      that.isBirth()
     }
 
     // 请求code
@@ -172,23 +170,33 @@ Page({
     //   wx.setStorageSync('userInfo', {})
     // })
   },
-  isBirth(birth) {
-    let that = this;
-    let type = /[A-Z]/.exec(birth)[0]
-    let day = /^\d+.\d+/.exec(birth)[0]
-    let dayArr = day.split('.')
-    let now = new Date();
-    let m = now.getMonth() + 1
-    let d = now.getDate()
+  // isBirth(birth) {
+  //   let that = this;
+  //   let type = /[A-Z]/.exec(birth)[0]
+  //   let day = /^\d+.\d+/.exec(birth)[0]
+  //   let dayArr = day.split('.')
+  //   let now = new Date();
+  //   let m = now.getMonth() + 1
+  //   let d = now.getDate()
 
-    if (type == 'Y' && m == dayArr[0] && d == dayArr[1]) {
-      that.setData({
-        birthArr: [m, d]
-      })
-      return true
-    } else {
-      return false
-    }
+  //   if (type == 'Y' && m == dayArr[0] && d == dayArr[1]) {
+  //     that.setData({
+  //       birthArr: [m, d]
+  //     })
+  //     return true
+  //   } else {
+  //     return false
+  //   }
+  // },
+  isBirth() {
+    let that = this;
+    let birthUserList = wx.getStorageSync('todayBirthUserList');
+    let userInfo = that.data.userInfo;
+    let today = new Date();
+    that.setData({
+      birthArr: [today.getMonth() + 1, today.getDate()],
+      birthShow: birthUserList.find(item => item == userInfo.userId)
+    })
   },
   onBirthClose() {
     this.setData({
