@@ -190,7 +190,7 @@ Page({
   // },
   isBirth() {
     let that = this;
-    let birthUserList = wx.getStorageSync('todayBirthUserList');
+    let birthUserList = wx.getStorageSync('todayBirthUserList') || [];
     let userInfo = that.data.userInfo;
     let today = new Date();
     that.setData({

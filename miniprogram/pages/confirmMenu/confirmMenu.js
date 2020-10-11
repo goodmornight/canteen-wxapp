@@ -34,18 +34,6 @@ Page({
     // });
     let that = this;
 
-    // wx.request({
-    //   url: app.globalData.requestURL + '/Recording/insert',
-    //   method: 'POST',
-    //   data: item,
-    //   header: {
-    //     'content-type': 'application/json' // 默认值
-    //   },
-    //   success(res) {
-    //     console.log(res)
-    //   }
-    // })
-
     let userInfo = wx.getStorageSync('userInfo');
     if (userInfo == {} || userInfo == '') {
       Dialog.confirm({
@@ -137,7 +125,7 @@ Page({
     console.log(e)
     let that = this;
     let list = that.data.list;
-    let value = e.detail.value; //选中内容
+    let value = e.detail.value; //选中内容,{1: true, 2: true, 3: true}
     let formatList = [];
     for (let i = 0; i < list.length; i++) {
       let state = list[i].state;
@@ -152,27 +140,36 @@ Page({
     let createdTimeStr = that.formatDateforSQL(createdTime);
     let isToday = (createdTime.getHours() < 21)
     let sendData = []
-    that.data.checkBox.forEach(item => {
-      let time = isToday ? that.formatDateforSQL(new Date(createdTime.getFullYear(), createdTime.getMonth(), createdTime.getDate(), menuTime[item - 1], 0, 0)) : that.formatDateforSQL(new Date(createdTime.getFullYear(), createdTime.getMonth(), createdTime.getDate() + 1, menuTime[item - 1], 0, 0))
+    let apiData = []
+    // that.data.checkBox.forEach(item => {
+    list.forEach(item => {
+      let time = isToday ? that.formatDateforSQL(new Date(createdTime.getFullYear(), createdTime.getMonth(), createdTime.getDate(), menuTime[item - 1], 0, 0)) : that.formatDateforSQL(new Date(createdTime.getFullYear(), createdTime.getMonth(), createdTime.getDate() + 1, menuTime[item.state - 1], 0, 0))
       let temp = {
-        createdTime: createdTimeStr,
+        // createdTime: createdTimeStr,
         time: time,
+        _id: item._id,
         userId: that.data.userInfo.userId,
-        number: 1,
-        menuId: "wxTest",
-        state: item,
-        other: false,
-        auto: false
+        number: that.data.checkBox.find(ele => ele == item.state) ? 1 : 0,
+        // menuId: "wxTest",
+        // state: item,
+        // other: false,
+        // auto: false
       }
       sendData.push(temp)
     })
     let times = 0;
     console.log(sendData)
-    sendData.forEach(async (item) => {
+    for (let i = 0; i < sendData.length; i++) {
+      // sendData.forEach(async (item) => {
+      let temp = {
+        _id: sendData[i]._id,
+        userId: sendData[i].userId,
+        number: sendData[i].number
+      }
       wx.request({
-        url: app.globalData.requestURL + '/Recording/insert',
-        method: 'POST',
-        data: item,
+        url: app.globalData.requestURL + '/Recording/update/number',
+        method: 'PUT',
+        data: temp,
         header: {
           'content-type': 'application/json' // 默认值
         },
@@ -189,7 +186,7 @@ Page({
                 },
                 //使用日期，年月日格式（支持+24小时制时间），支持填时间段，两个时间点之间用“~”符号连接
                 date2: {
-                  value: that.formatDateStr(item.time)
+                  value: that.formatDateStr(sendData[i].time)
                 },
                 //温馨提示，20个以内字符
                 thing3: {
@@ -197,17 +194,17 @@ Page({
                 },
               }
               wx.cloud.callFunction({
-                  name: 'message',
-                  data: {
-                    action: 'sendInsideOrderSuccess',
-                    sendValue: sendValue
-                  }
-                }).then(res_after => {
-                  console.log(res_after);
-                  wx.reLaunch({
-                    url: '../index/index',
-                  })
+                name: 'message',
+                data: {
+                  action: 'sendInsideOrderSuccess',
+                  sendValue: sendValue
+                }
+              }).then(res_after => {
+                console.log(res_after);
+                wx.reLaunch({
+                  url: '../index/index',
                 })
+              })
                 .catch(err => {
                   console.log(err)
                 })
@@ -221,8 +218,60 @@ Page({
           Toast.fail('系统错误');
         }
       })
-    })
-
+      // wx.request({
+      //   url: app.globalData.requestURL + '/Recording/insert',
+      //   method: 'POST',
+      //   data: item,
+      //   header: {
+      //     'content-type': 'application/json' // 默认值
+      //   },
+      //   success(res) {
+      //     console.log(res)
+      //     if (res.statusCode == 200) {
+      //       times++;
+      //       if (times == sendData.length) {
+      //         Toast.success('提交成功');
+      //         let sendValue = {
+      //           //预约产品，20字以内字符
+      //           thing1: {
+      //             value: '个人就餐报备'
+      //           },
+      //           //使用日期，年月日格式（支持+24小时制时间），支持填时间段，两个时间点之间用“~”符号连接
+      //           date2: {
+      //             value: that.formatDateStr(item.time)
+      //           },
+      //           //温馨提示，20个以内字符
+      //           thing3: {
+      //             value: '个人报备可当餐前两个小时修改,默认就餐'
+      //           },
+      //         }
+      //         wx.cloud.callFunction({
+      //             name: 'message',
+      //             data: {
+      //               action: 'sendInsideOrderSuccess',
+      //               sendValue: sendValue
+      //             }
+      //           }).then(res_after => {
+      //             console.log(res_after);
+      //             wx.reLaunch({
+      //               url: '../index/index',
+      //             })
+      //           })
+      //           .catch(err => {
+      //             console.log(err)
+      //           })
+      //       }
+      //     } else {
+      //       Toast.fail('系统错误');
+      //     }
+      //   },
+      //   fail(err) {
+      //     console.log(err)
+      //     Toast.fail('系统错误');
+      //   }
+      // })
+      // })
+    }
     // await wx.cloud.callFunction({
     //     name: 'recording',
     //     data: {
@@ -308,6 +357,7 @@ Page({
       success(res) {
         console.log(res.data)
         let list = res.data;
+        list = list.filter(item => item.number > 0 && !item.other)
         that.setData({
           list: list
         })
@@ -334,7 +384,7 @@ Page({
           })
         }
       },
-      fail(err){
+      fail(err) {
         console.log(err);
         that.setData({
           list: []

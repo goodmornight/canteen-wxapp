@@ -28,6 +28,6 @@
 	</van-collapse-item>
 </van-collapse>
 <!-- 原来代码 -->
-<!-- <button formType="submit" disabled="{{(!isBreakfast&&!isLunch&&!isDinner)||(!ifBreakfast&&!ifLunch&&!ifDinner)}}" class="button-style" hover-class="hover-button-style">提交</button> -->
-<button formType="submit" class="button-style" hover-class="hover-button-style">提交</button>
+<button formType="submit" disabled="{{(!isBreakfast&&!isLunch&&!isDinner)||(!ifBreakfast&&!ifLunch&&!ifDinner)}}" class="button-style" hover-class="hover-button-style">提交</button>
+<!-- <button formType="submit" class="button-style" hover-class="hover-button-style">提交</button> -->
 </form>
