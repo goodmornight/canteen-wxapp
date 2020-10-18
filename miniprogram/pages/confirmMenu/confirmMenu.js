@@ -167,7 +167,7 @@ Page({
         number: sendData[i].number
       }
       wx.request({
-        url: app.globalData.requestURL + '/Recording/update/number',
+        url: app.globalData.requestURL + '/Recording/update/numberby_id',
         method: 'PUT',
         data: temp,
         header: {

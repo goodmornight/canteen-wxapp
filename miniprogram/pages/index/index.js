@@ -141,12 +141,16 @@ Page({
         if (res.code) {
           console.log(res)
           //发起网络请求
-          // wx.request({
-          //   url: 'https://test.com/onLogin',
-          //   data: {
-          //     code: res.code
-          //   }
-          // })
+          wx.request({
+            url: app.globalData.requestURL + '/Users/getwxlogin',
+            method: 'GET',
+            data: {
+              code: res.code
+            },
+            success(res) {
+              console.log(res)
+            }
+          })
         } else {
           console.log('登录失败！' + res.errMsg)
         }
