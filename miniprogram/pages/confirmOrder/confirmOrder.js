@@ -11,7 +11,7 @@ Page({
     isShowHistory: false, //是否在查看历史订单
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
-    fileURL:app.globalData.fileURL,
+    fileURL: app.globalData.fileURL,
     imgUrl: '../../../../images/test.jpg',
     userInfo: {},
     list: [], //列表
@@ -227,18 +227,64 @@ Page({
         console.log(res_mes);
         if (res_mes.q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI == 'accept') {
 
-          await wx.cloud.callFunction({
-              name: 'message',
-              data: {
-                action: 'sendOrderSuccess',
-                sendValue: sendValue
+          wx.request({
+            url: app.globalData.requestURL + '/Users/wxMessageSendOrder',
+            method: 'POST',
+            data: {
+              "touser": that.data.userInfo._openid,
+              "template_id": "q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI",
+              "data": sendValue
+            },
+            header: {
+              'content-type': 'application/json' // 默认值
+            },
+            success(res) {
+              console.log(res)
+              if (res.data.errcode == 0) {
+                Toast({
+                  type: 'success',
+                  message: '下单成功',
+                  onClose: () => {
+                    wx.reLaunch({
+                      url: '../index/index',
+                    })
+                  }
+                });
+              }else{
+                Toast.fail('系统错误');
               }
-            }).then(res_after => {
-              console.log(res_after);
-            })
-            .catch(err => {
+              // if (res.statusCode == 200) {
+              //   Toast({
+              //     type: 'success',
+              //     message: '下单成功',
+              //     onClose: () => {
+              //       wx.reLaunch({
+              //         url: '../index/index',
+              //       })
+              //     }
+              //   });
+              // } else {
+              //   Toast.fail('系统错误');
+              // }
+            },
+            fail(err) {
               console.log(err)
-            })
+              Toast.fail('系统错误');
+            }
+          })
+
+          // await wx.cloud.callFunction({
+          //     name: 'message',
+          //     data: {
+          //       action: 'sendOrderSuccess',
+          //       sendValue: sendValue
+          //     }
+          //   }).then(res_after => {
+          //     console.log(res_after);
+          //   })
+          //   .catch(err => {
+          //     console.log(err)
+          //   })
         }
       },
       fail(err) {

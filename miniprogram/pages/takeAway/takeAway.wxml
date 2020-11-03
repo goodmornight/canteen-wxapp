@@ -40,7 +40,7 @@
 		</view>
 	</scroll-view>
 </view>
-<van-submit-bar price="{{ totalPrice }}" button-text="挑选完成" bind:submit="onSubmit" custom-class="submit-bar-class">
+<van-submit-bar price="{{ totalPrice }}" button-text="挑选完成" bind:submit="onSubmit" custom-class="submit-bar-class" safe-area-inset-bottom="true">
 	<!-- <view class="cu-tag round bg-orange sm">6人</view> -->
 	<view class="cart-btn" bindtap="onCart">
 		<view class="cuIcon-cart{{popup_show?'fill':''}} text-red lg"></view>

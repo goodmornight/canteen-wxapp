@@ -139,7 +139,6 @@ Page({
     wx.login({
       success(res) {
         if (res.code) {
-          console.log(res)
           //发起网络请求
           wx.request({
             url: app.globalData.requestURL + '/Users/getwxlogin',
@@ -149,6 +148,9 @@ Page({
             },
             success(res) {
               console.log(res)
+              if(res.data.openid){
+                wx.setStorageSync('_openid', res.data.openid)
+              }
             }
           })
         } else {
@@ -331,6 +333,9 @@ Page({
         url: '../takeAway/takeAway',
       })
     }
+    // wx.navigateTo({
+    //   url: '../takeAway/takeAway',
+    // })
 
   },
   // 用于演示特色外卖
