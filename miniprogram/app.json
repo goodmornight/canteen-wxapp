@@ -1,8 +1,8 @@
 {
   "pages": [
-    "pages/otherInsideOrder/otherInsideOrder",
-    "pages/index/index",
     
+    "pages/index/index",
+    "pages/otherInsideOrder/otherInsideOrder",
     "pages/confirmMenu/confirmMenu",
     "pages/otherInsideOrderList/otherInsideOrderList",
     "pages/takeAway/takeAway",
