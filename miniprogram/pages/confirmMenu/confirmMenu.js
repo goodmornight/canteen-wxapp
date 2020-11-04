@@ -193,21 +193,53 @@ Page({
                   value: '个人报备可当餐前两个小时修改,默认就餐'
                 },
               }
-              wx.cloud.callFunction({
-                name: 'message',
+              wx.request({
+                url: app.globalData.requestURL + '/Users/wxMessageSendBook',
+                method: 'POST',
                 data: {
-                  action: 'sendInsideOrderSuccess',
-                  sendValue: sendValue
-                }
-              }).then(res_after => {
-                console.log(res_after);
-                wx.reLaunch({
-                  url: '../index/index',
-                })
-              })
-                .catch(err => {
+                  "touser": that.data.userInfo._openid,
+                  "template_id": "BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY",
+                  "data": sendValue
+                },
+                header: {
+                  'content-type': 'application/json' // 默认值
+                },
+                success(res) {
+                  console.log(res)
+                  if (res.data.errcode == 0) {
+                    Toast({
+                      type: 'success',
+                      message: '报备成功',
+                      onClose: () => {
+                        wx.reLaunch({
+                          url: '../index/index',
+                        })
+                      }
+                    });
+                  }else{
+                    Toast.fail('系统错误');
+                  }
+                },
+                fail(err) {
                   console.log(err)
-                })
+                  Toast.fail('系统错误');
+                }
+              })
+              // wx.cloud.callFunction({
+              //   name: 'message',
+              //   data: {
+              //     action: 'sendInsideOrderSuccess',
+              //     sendValue: sendValue
+              //   }
+              // }).then(res_after => {
+              //   console.log(res_after);
+              //   wx.reLaunch({
+              //     url: '../index/index',
+              //   })
+              // })
+              //   .catch(err => {
+              //     console.log(err)
+              //   })
             }
           } else {
             Toast.fail('系统错误');

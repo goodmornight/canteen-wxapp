@@ -178,15 +178,63 @@ Page({
           success(res) {
             console.log(res)
             if (res.statusCode == 200) {
-              Toast({
-                type: 'success',
-                message: '报备成功',
-                onClose: () => {
-                  wx.reLaunch({
-                    url: '../index/index',
-                  })
+
+              let sendValue = {
+                //预约产品，20字以内字符
+                thing1: {
+                  value: '外部人员就餐报备'
+                },
+                //使用日期，年月日格式（支持+24小时制时间），支持填时间段，两个时间点之间用“~”符号连接
+                date2: {
+                  value: that.formatDateStr(that.data.now)
+                },
+                //温馨提示，20个以内字符
+                thing3: {
+                  value: '在当天的0:00-10:00内可提交修改'
+                },
+              }
+              wx.request({
+                url: app.globalData.requestURL + '/Users/wxMessageSendBook',
+                method: 'POST',
+                data: {
+                  "touser": that.data.userInfo._openid,
+                  "template_id": "BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY",
+                  "data": sendValue
+                },
+                header: {
+                  'content-type': 'application/json' // 默认值
+                },
+                success(res) {
+                  console.log(res)
+                  if (res.data.errcode == 0) {
+                    Toast({
+                      type: 'success',
+                      message: '报备成功',
+                      onClose: () => {
+                        wx.reLaunch({
+                          url: '../index/index',
+                        })
+                      }
+                    });
+                  }else{
+                    Toast.fail('系统错误');
+                  }
+                },
+                fail(err) {
+                  console.log(err)
+                  Toast.fail('系统错误');
                 }
-              });
+              })
+
+              // Toast({
+              //   type: 'success',
+              //   message: '报备成功',
+              //   onClose: () => {
+              //     wx.reLaunch({
+              //       url: '../index/index',
+              //     })
+              //   }
+              // });
             }else{
               Toast.fail('系统错误');
             }
@@ -301,19 +349,51 @@ Page({
           value: '在当天的0:00-10:00内可提交修改'
         },
       }
-      await wx.cloud.callFunction({
-          name: 'message',
-          data: {
-            action: 'sendInsideOrderSuccess',
-            sendValue: sendValue
+      wx.request({
+        url: app.globalData.requestURL + '/Users/wxMessageSendBook',
+        method: 'POST',
+        data: {
+          "touser": that.data.userInfo._openid,
+          "template_id": "BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY",
+          "data": sendValue
+        },
+        header: {
+          'content-type': 'application/json' // 默认值
+        },
+        success(res) {
+          console.log(res)
+          if (res.data.errcode == 0) {
+            Toast({
+              type: 'success',
+              message: '报备成功',
+              onClose: () => {
+                wx.reLaunch({
+                  url: '../index/index',
+                })
+              }
+            });
+          }else{
+            Toast.fail('系统错误');
           }
-        })
-        .then(res_after => {
-          console.log(res_after);
-        })
-        .catch(err => {
+        },
+        fail(err) {
           console.log(err)
-        })
+          Toast.fail('系统错误');
+        }
+      })
+      // await wx.cloud.callFunction({
+      //     name: 'message',
+      //     data: {
+      //       action: 'sendInsideOrderSuccess',
+      //       sendValue: sendValue
+      //     }
+      //   })
+      //   .then(res_after => {
+      //     console.log(res_after);
+      //   })
+      //   .catch(err => {
+      //     console.log(err)
+      //   })
     }
   },
   // // 用户编号输入
