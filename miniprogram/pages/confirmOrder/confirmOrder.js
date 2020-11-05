@@ -296,7 +296,7 @@ Page({
     let that = this;
     date = new Date(date);
     let year = date.getFullYear();
-    let month = date.getMonth();
+    let month = date.getMonth()+1;
     let day = date.getDate();
     let hour = that.overTen(date.getHours());
     let minute = that.overTen(date.getMinutes());
