@@ -168,10 +168,10 @@ Page({
       wx.request({
         url: app.globalData.requestURL + '/Menu/getbytime',
         method: 'GET',
-        data: {
-          time: start,
-          timeend: end,
-        },
+        // data: {
+        //   time: start,
+        //   timeend: end,
+        // },
         header: {
           'content-type': 'application/json'
         },
