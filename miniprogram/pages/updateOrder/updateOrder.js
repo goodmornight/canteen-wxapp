@@ -15,7 +15,7 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad:async function (options) {
+  onLoad: async function (options) {
     // //加载动画
     // Toast.loading({
     //   duration:0,
@@ -56,7 +56,7 @@ Page({
   toMe() {
     wx.requestSubscribeMessage({
       //[每日食谱提醒，下单成功]
-      tmplIds: ['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI'],
+      tmplIds: ['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI', 'aQ0JZhTClnUGK6ngDFvEVD64NN35396pJaOCovZxpDc'],
       success: async function (res_mes) {
         console.log(res_mes);
       },
@@ -72,14 +72,14 @@ Page({
     let that = this;
     console.log('toOtherInsideOrder');
     let now = new Date();
-    let deadline = new Date(now.getFullYear(),now.getMonth(),now.getDate(),10,0,0);
+    let deadline = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0, 0);
     //当前时间大于当天10点
-    if(now.getTime()>deadline.getTime()){
+    if (now.getTime() > deadline.getTime()) {
       Toast("抱歉，当前时间已超过10:00，您无法提交报备。")
-    }else{
+    } else {
       wx.requestSubscribeMessage({
         //[每日食谱提醒，下单成功]
-        tmplIds: ['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI'],
+        tmplIds: ['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI','aQ0JZhTClnUGK6ngDFvEVD64NN35396pJaOCovZxpDc'],
         success: async function (res_mes) {
           console.log(res_mes);
         },

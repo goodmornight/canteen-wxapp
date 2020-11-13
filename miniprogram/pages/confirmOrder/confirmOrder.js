@@ -222,7 +222,7 @@ Page({
     console.log(sendValue)
     wx.requestSubscribeMessage({
       //[每日食谱提醒，下单成功]
-      tmplIds: ['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI'],
+      tmplIds: ['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI', 'aQ0JZhTClnUGK6ngDFvEVD64NN35396pJaOCovZxpDc'],
       success: async function (res_mes) {
         console.log(res_mes);
         if (res_mes.q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI == 'accept') {
@@ -250,7 +250,7 @@ Page({
                     })
                   }
                 });
-              }else{
+              } else {
                 Toast.fail('系统错误');
               }
               // if (res.statusCode == 200) {
@@ -296,7 +296,7 @@ Page({
     let that = this;
     date = new Date(date);
     let year = date.getFullYear();
-    let month = date.getMonth()+1;
+    let month = date.getMonth() + 1;
     let day = date.getDate();
     let hour = that.overTen(date.getHours());
     let minute = that.overTen(date.getMinutes());
