@@ -55,6 +55,7 @@ Page({
     }
   },
   toMe() {
+    let that = this
     wx.requestSubscribeMessage({
       //[每日食谱提醒，下单成功]
       tmplIds: that.data.tmpArr,

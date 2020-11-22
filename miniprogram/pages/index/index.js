@@ -248,7 +248,7 @@ Page({
   },
   //就餐报备
   toOtherInsideOrder: async function () {
-    let that = this;
+    const that = this;
     console.log('toOtherInsideOrder');
     let userInfo = wx.getStorageSync('userInfo');
     if (userInfo == {} || userInfo == '') {
@@ -314,6 +314,7 @@ Page({
   },
   //特色外卖
   toTakeAway() {
+    const that = this
     console.log('toTakeAway');
     let now = new Date();
     let deadline = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 16, 0, 0);
@@ -366,10 +367,11 @@ Page({
   },
   //评价意见
   toRate() {
+    let that = this;
     console.log('toRate');
     // Toast('正在加速开发中')
     wx.requestSubscribeMessage({
-      tmplIds: tha.data.tmpArr,
+      tmplIds: that.data.tmpArr,
       success(res) {
         console.log(res)
       },
@@ -383,6 +385,7 @@ Page({
   },
   //跳转我的设置
   toMySetting() {
+    let that = this;
     wx.requestSubscribeMessage({
       tmplIds: that.data.tmpArr,
       success(res) {
