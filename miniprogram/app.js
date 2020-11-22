@@ -16,7 +16,9 @@ App({
     }
     this.globalData = {
       requestURL: 'https://dingcan.meetingcn.cn/dingcan',
-      fileURL:'https://dingcan.meetingcn.cn/'
+      fileURL:'https://dingcan.meetingcn.cn/',
+      tmpArr:['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI', 'aQ0JZhTClnUGK6ngDFvEVD64NN35396pJaOCovZxpDc',
+      '1z9S1AjMjpnc4p0KlOE5dxdash-qJaAKV-CsE_Xdt-k']
     }
     let today = wx.getStorageSync('today');
     wx.setStorageSync('otherInsideOrder', '');

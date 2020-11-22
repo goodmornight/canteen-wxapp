@@ -18,6 +18,7 @@ Page({
     totalNum: 0, //总数
     totalPrice: 0, //总价
     number: '', //输入的编号
+    tmpArr: app.globalData.tmpArr
     // phone: '',//输入的手机号
   },
 
@@ -222,7 +223,7 @@ Page({
     console.log(sendValue)
     wx.requestSubscribeMessage({
       //[每日食谱提醒，下单成功]
-      tmplIds: ['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI', 'aQ0JZhTClnUGK6ngDFvEVD64NN35396pJaOCovZxpDc'],
+      tmplIds: that.data.tmpArr,
       success: async function (res_mes) {
         console.log(res_mes);
         if (res_mes.q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI == 'accept') {

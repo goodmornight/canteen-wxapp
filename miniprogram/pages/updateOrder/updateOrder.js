@@ -10,6 +10,7 @@ Page({
   data: {
     StatusBar: app.globalData.StatusBar,
     CustomBar: app.globalData.CustomBar,
+    tmpArr: app.globalData.tmpArr
   },
 
   /**
@@ -56,7 +57,7 @@ Page({
   toMe() {
     wx.requestSubscribeMessage({
       //[每日食谱提醒，下单成功]
-      tmplIds: ['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI', 'aQ0JZhTClnUGK6ngDFvEVD64NN35396pJaOCovZxpDc'],
+      tmplIds: that.data.tmpArr,
       success: async function (res_mes) {
         console.log(res_mes);
       },
@@ -79,7 +80,7 @@ Page({
     } else {
       wx.requestSubscribeMessage({
         //[每日食谱提醒，下单成功]
-        tmplIds: ['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI','aQ0JZhTClnUGK6ngDFvEVD64NN35396pJaOCovZxpDc'],
+        tmplIds: that.data.tmpArr,
         success: async function (res_mes) {
           console.log(res_mes);
         },
