@@ -16,9 +16,9 @@ App({
     }
     this.globalData = {
       requestURL: 'https://dingcan.meetingcn.cn/dingcan',
-      fileURL:'https://dingcan.meetingcn.cn/',
-      tmpArr:['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI', 'aQ0JZhTClnUGK6ngDFvEVD64NN35396pJaOCovZxpDc',
-      '1z9S1AjMjpnc4p0KlOE5dxdash-qJaAKV-CsE_Xdt-k']
+      fileURL: 'https://dingcan.meetingcn.cn/',
+      tmpArr: ['BIXI9rat6l3Wi2JIDkWjmOX60aBmg2BJcNvSIOJ0TqY', 'q4RztTIlCmks6ZPiJTJ_jxgcxU4NcZnjK4Wvzqi_byI', '1z9S1AjMjpnc4p0KlOE5dxdash-qJaAKV-CsE_Xdt-k'],
+      autoTmpArr: ['1z9S1AjMjpnc4p0KlOE5dxdash-qJaAKV-CsE_Xdt-k', 'aQ0JZhTClnUGK6ngDFvEVD64NN35396pJaOCovZxpDc']
     }
     let today = wx.getStorageSync('today');
     wx.setStorageSync('otherInsideOrder', '');
@@ -29,8 +29,8 @@ App({
       method: 'GET',
       data: {
         year: newDay.getFullYear(),
-        month:newDay.getMonth()+1,
-        date:newDay.getDate()
+        month: newDay.getMonth() + 1,
+        date: newDay.getDate()
       },
       header: {
         'content-type': 'application/json' // 默认值
@@ -46,8 +46,8 @@ App({
       }
     })
     if (today == '') {
-      wx.setStorageSync('today', newDay);//保存进入小程序时间
-      wx.setStorageSync('isNewDay', true);//判断是否是新的一天
+      wx.setStorageSync('today', newDay); //保存进入小程序时间
+      wx.setStorageSync('isNewDay', true); //判断是否是新的一天
     } else {
       if (today.getDate() == newDay.getDate()) {
         wx.setStorageSync('isNewDay', false);

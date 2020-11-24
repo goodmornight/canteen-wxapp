@@ -70,7 +70,8 @@ Page({
     mySetting: mySetting_btn, //我的设置
     birthShow: false,
     birthArr: [],
-    tmpArr: app.globalData.tmpArr
+    tmpArr: app.globalData.tmpArr,
+    autoTmpArr: app.globalData.autoTmpArr
   },
 
   onLoad: async function () {
@@ -234,7 +235,7 @@ Page({
     console.log('toMenu');
     const that = this;
     wx.requestSubscribeMessage({
-      tmplIds: that.data.tmpArr,
+      tmplIds: that.data.autoTmpArr,
       success(res) {
         console.log(res)
       },
@@ -271,7 +272,7 @@ Page({
         start = yesterdayStart;
       }
       wx.requestSubscribeMessage({
-        tmplIds: that.data.tmpArr,
+        tmplIds: that.data.autoTmpArr,
         success(res) {
           console.log(res)
         },
@@ -323,7 +324,7 @@ Page({
       Toast("抱歉，当前时间已超过16:00，您无法购买特色外卖。")
     } else {
       wx.requestSubscribeMessage({
-        tmplIds: that.data.tmpArr,
+        tmplIds: that.data.autoTmpArr,
         success(res) {
           console.log(res)
         },
@@ -371,7 +372,7 @@ Page({
     console.log('toRate');
     // Toast('正在加速开发中')
     wx.requestSubscribeMessage({
-      tmplIds: that.data.tmpArr,
+      tmplIds: that.data.autoTmpArr,
       success(res) {
         console.log(res)
       },
@@ -387,7 +388,7 @@ Page({
   toMySetting() {
     let that = this;
     wx.requestSubscribeMessage({
-      tmplIds: that.data.tmpArr,
+      tmplIds: that.data.autoTmpArr,
       success(res) {
         console.log(res)
       },
