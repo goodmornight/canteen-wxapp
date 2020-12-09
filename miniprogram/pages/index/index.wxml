@@ -55,6 +55,9 @@
 		<template is="indexBtn-temp" data="{{item:mySetting}}"></template>
 	</view>
 </view>
+<view style="color: #6c757d;font-size:26rpx;padding-bottom: 20rpx;">
+	© 西安电子科技大学
+</view>
 <van-dialog use-slot title="" show="{{ birthShow }}" show-cancel-button  confirm-button-color="#5A9367" 
 	bind:close="onBirthClose" bind:confirm="onBirthConfirm">
 	<view style="margin-top:2em">今天是<span style="font-weight:bold">{{birthArr[0]}}月{{birthArr[1]}}日</span>,</view>

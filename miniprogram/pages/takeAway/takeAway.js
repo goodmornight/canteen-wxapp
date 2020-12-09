@@ -15,7 +15,7 @@ Page({
     dishes: [],
     list: [],
     load: true,
-    imgUrl: '../../../../images/test.jpg',
+    imgUrl: '../../../../images/food.svg',
     classes: [], //选择菜的种类
     orderList: [], //选择的菜
     totalPrice: 0, //购物车总价

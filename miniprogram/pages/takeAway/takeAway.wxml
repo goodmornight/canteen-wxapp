@@ -41,16 +41,10 @@
 	</scroll-view>
 </view>
 <van-submit-bar price="{{ totalPrice }}" button-text="挑选完成" bind:submit="onSubmit" custom-class="submit-bar-class" safe-area-inset-bottom="true">
-	<!-- <view class="cu-tag round bg-orange sm">6人</view> -->
 	<view class="cart-btn" bindtap="onCart">
 		<view class="cuIcon-cart{{popup_show?'fill':''}} text-red lg"></view>
 		<text>购物车</text>
 	</view>
-
-	<!-- <van-tag type="primary">标签</van-tag> -->
-	<!-- <view slot="tip">
-		您的收货地址不支持同城送, <text>修改地址</text>
-	</view> -->
 </van-submit-bar>
 <van-popup show="{{ popup_show }}" round close-on-click-overlay z-index="{{2}}" position="bottom" custom-style="height: {{orderList.length<3?calc(orderList.length*100):300}}rpx;bottom:125rpx;padding-top:25rpx;" bind:close="onPopupClose">
 	<scroll-view scroll-y scroll-with-animation style="height: {{orderList.length<3?calc(orderList.length*100):300}}rpx;">

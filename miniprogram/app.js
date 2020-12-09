@@ -78,7 +78,7 @@ App({
         'content-type': 'application/json'
       },
       success(res) {
-        console.log(res.data)
+        // console.log(res.data)
         if (res.data.length != 0) {
           wx.setStorageSync('allDishes', res.data);
         } else {

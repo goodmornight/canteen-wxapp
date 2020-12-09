@@ -143,10 +143,9 @@ Page({
           'content-type': 'application/json'
         },
         success(res) {
-          console.log(res.data)
+          // console.log(res.data)
           if (res.data.length != 0) {
             let dishes = res.data.filter(item => item.isInside == true)
-            console.log(dishes)
             that.setData({
               dishes: dishes
             })
@@ -176,7 +175,7 @@ Page({
           'content-type': 'application/json'
         },
         success(res) {
-          console.log(res.data)
+          // console.log(res.data)
           let requestList = res.data;
           requestList.forEach(item => {
             let time = new Date(item.time).getDay();
