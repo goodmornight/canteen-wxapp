@@ -157,7 +157,8 @@ Page({
         let tempDateList = []; //日期列表
         result.forEach(item => {
           let today = new Date().getTime();
-          let tempDate = new Date(item.createdTime).getTime();
+          // let tempDate = new Date(item.createdTime).getTime();
+          let tempDate = that.dateToTimestamp(item.createdTime);
           let tempDate_format = that.formatDate(tempDate);
 
           if (tempDate >= firstTime && today < finalTime) {
@@ -167,7 +168,7 @@ Page({
           }
           if (item.completedTime) {
             console.log(totalPrice)
-            let completedDate = new Date(item.completedTime).getTime();
+            let completedDate = that.dateToTimestamp(item.completedTime);
             totalPrice += item.totalPrice;
             item.completedTime_format = that.fullFormatDate(completedDate);
             item.completed = 2; //已完成，可评价，需要在后台系统控制
@@ -184,7 +185,7 @@ Page({
           list[i].formatDate = tempDateList[i];
           list[i].items = [];
           result.forEach(item => {
-            let tempDate = new Date(item.createdTime).getTime();
+            let tempDate = that.dateToTimestamp(item.createdTime);
             let tempDate_format = that.formatDate(tempDate);
             if (tempDate_format == tempDateList[i]) {
               list[i].items.push(item)
@@ -350,6 +351,15 @@ Page({
   formatDateforSQL(date) {
     date = new Date(date);
     return `${date.getFullYear()}-${this.overTen(date.getMonth() + 1)}-${this.overTen(date.getDate())} ${this.overTen(date.getHours())}:${this.overTen(date.getMinutes())}:${this.overTen(date.getSeconds())}`;
+  },
+  dateToTimestamp(dateStr) {
+    if (!dateStr) {
+      return ''
+    }
+    let newDataStr = dateStr.replace(/\.|\-/g, '/')
+    let date = new Date(newDataStr);
+    let timestamp = date.getTime();
+    return timestamp
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
