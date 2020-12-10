@@ -6,6 +6,8 @@ page{
 /*下面订单栏的高度*/
 .submit-bar-class{
   height: 125rpx;
+  padding-top: 30rpx;
+  padding-bottom: 20rpx;
 }
 .cart-btn{
   display: flex;

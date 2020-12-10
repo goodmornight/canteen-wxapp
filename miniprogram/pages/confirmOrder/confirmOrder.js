@@ -217,7 +217,7 @@ Page({
       },
       //温馨提示，20个以内字符
       thing5: {
-        value: '取餐时间：16:00~18:00'
+        value: '明日取餐时间：16:00~18:00'
       }
     }
     console.log(sendValue)
