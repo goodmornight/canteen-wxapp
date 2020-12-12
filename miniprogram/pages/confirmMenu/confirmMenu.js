@@ -146,7 +146,7 @@ Page({
       let time = isToday ? that.formatDateforSQL(new Date(createdTime.getFullYear(), createdTime.getMonth(), createdTime.getDate(), menuTime[item - 1], 0, 0)) : that.formatDateforSQL(new Date(createdTime.getFullYear(), createdTime.getMonth(), createdTime.getDate() + 1, menuTime[item.state - 1], 0, 0))
       let temp = {
         // createdTime: createdTimeStr,
-        time: time,
+        // time: time,
         _id: item._id,
         userId: that.data.userInfo.userId,
         number: that.data.checkBox.find(ele => ele == item.state) ? 1 : 0,
