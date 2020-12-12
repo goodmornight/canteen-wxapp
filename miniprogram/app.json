@@ -1,6 +1,5 @@
 {
   "pages": [
-    
     "pages/index/index",
     "pages/otherInsideOrder/otherInsideOrder",
     "pages/confirmMenu/confirmMenu",
@@ -13,14 +12,9 @@
     "pages/eatNum/eatNum",
     "pages/menu/menu",
     "pages/rate/rate",
-    
-    
-    
     "pages/confirmOrder/confirmOrder",
     "pages/privacy/privacy",
     "pages/protocol/protocol"
-    
-    
   ],
   "usingComponents": {
     "cu-custom": "colorui/components/cu-custom",
